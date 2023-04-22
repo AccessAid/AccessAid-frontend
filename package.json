@@ -15,6 +15,7 @@
     "**/*.{js,jsx}": "prettier --write --ignore-unknown"
   },
   "dependencies": {
+    "@material-tailwind/react": "^1.4.2",
     "@reduxjs/toolkit": "^1.9.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -26,13 +27,17 @@
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
     "@vitejs/plugin-react": "^3.1.0",
+    "autoprefixer": "^10.4.14",
     "eslint": "^8.38.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.32.2",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.1",
+    "postcss": "^8.4.23",
     "prettier": "^2.8.7",
+    "prettier-plugin-tailwindcss": "^0.2.7",
+    "tailwindcss": "^3.3.1",
     "vite": "^4.2.0"
   }
 }
