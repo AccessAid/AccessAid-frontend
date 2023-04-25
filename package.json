@@ -9,7 +9,9 @@
     "preview": "vite preview",
     "prepare": "husky install",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx --ignore-path .gitignore . --fix",
-    "format": "prettier --write --ignore-unknown ."
+    "format": "prettier --write --ignore-unknown .",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "lint-staged": {
     "**/*.{js,jsx}": "prettier --write --ignore-unknown"
@@ -24,6 +26,13 @@
     "react-router-dom": "^6.10.0"
   },
   "devDependencies": {
+    "@storybook/addon-essentials": "^7.0.6",
+    "@storybook/addon-interactions": "^7.0.6",
+    "@storybook/addon-links": "^7.0.6",
+    "@storybook/blocks": "^7.0.6",
+    "@storybook/react": "^7.0.6",
+    "@storybook/react-vite": "^7.0.6",
+    "@storybook/testing-library": "^0.0.14-next.2",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
     "@vitejs/plugin-react": "^3.1.0",
@@ -32,6 +41,7 @@
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-storybook": "^0.6.11",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.1",
     "postcss": "^8.4.23",
