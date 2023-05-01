@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { login } from '../actions/authActions';
+import { login, signup } from '../actions/authActions';
 
 const initialState = {
   status: 'idle',
@@ -27,6 +27,21 @@ export const authSlice = createSlice({
         state.status = 'failed';
         state.token = null;
         state.error = action.error.message;
+      })
+      // register
+      .addCase(signup.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(signup.fulfilled, (state) => {
+        state.status = 'succeeded';
+        state.error = null;
+      })
+      .addCase(signup.rejected, (state, action) => {
+        state.status = 'failed';
+        state.token = null;
+        state.error = action.payload
+          ? action.payload.message
+          : action.error.message;
       });
   },
 });
@@ -34,5 +49,7 @@ export const authSlice = createSlice({
 export const selectUserStatus = (state) => state.auth.status;
 
 export const selectUser = (state) => state.auth.user;
+
+export const selectError = (state) => state.auth.error;
 
 export default authSlice.reducer;
