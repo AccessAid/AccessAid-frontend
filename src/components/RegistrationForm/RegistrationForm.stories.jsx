@@ -1,10 +1,10 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { store } from './../../store/index';
-import RegistrationForm from './RegistrationForm';
+import { RegistrationForm } from './RegistrationForm';
 
 export default {
-  title: 'RegistrationForm',
+  title: 'Components/RegistrationForm',
   component: RegistrationForm,
 };
 

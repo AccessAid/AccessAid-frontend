@@ -9,8 +9,8 @@ import {
   Button,
   Typography,
 } from '@material-tailwind/react';
-import InputValidation from '../InputValidation/InputValidation';
-import RadioValidation from '../RadioValidation/RadioValidation';
+import { InputValidation } from '../InputValidation/InputValidation';
+import { RadioValidation } from '../RadioValidation/RadioValidation';
 
 const RegistrationForm = () => {
   const hookFormMethods = useForm();
@@ -154,4 +154,4 @@ const RegistrationForm = () => {
   );
 };
 
-export default RegistrationForm;
+export { RegistrationForm };

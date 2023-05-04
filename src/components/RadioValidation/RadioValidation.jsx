@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Checkbox } from '@material-tailwind/react';
 
@@ -24,4 +25,17 @@ const RadioValidation = ({ nameField, controllerProps, rules, inputProps }) => {
   );
 };
 
-export default RadioValidation;
+RadioValidation.propTypes = {
+  nameField: PropTypes.string.isRequired,
+  controllerProps: PropTypes.object,
+  rules: PropTypes.object,
+  inputProps: PropTypes.object,
+};
+
+RadioValidation.defaultProps = {
+  controllerProps: {},
+  rules: {},
+  inputProps: {},
+};
+
+export { RadioValidation };
