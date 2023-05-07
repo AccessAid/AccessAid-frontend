@@ -17,8 +17,10 @@ import {
   Profile,
   SignUp,
 } from './pages';
+import { ProtectedRoute } from './components/ProtectedRoute/ProtectedRoute';
 
 function App() {
+  const excludedRoutes = [LOGIN, SIGNUP];
   return (
     <BrowserRouter>
       <Routes>
@@ -26,7 +28,9 @@ function App() {
           <Route index element={<Home />} />
           <Route path={LOGIN} element={<Login />} />
           <Route path={SIGNUP} element={<SignUp />} />
-          <Route path={PROFILE} element={<Profile />} />
+          <Route element={<ProtectedRoute excludedRoutes={excludedRoutes} />}>
+            <Route path={PROFILE} element={<Profile />} />
+          </Route>
           <Route path={CONTACT} element={<Contact />} />
           <Route path={NOT_FOUND} element={<NotFound />} />
         </Route>

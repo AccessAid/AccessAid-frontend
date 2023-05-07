@@ -8,7 +8,7 @@
 }
 
 .header .header__container {
-  @apply mx-auto flex items-center md:mx-16;
+  @apply mx-auto flex items-center justify-between md:mx-16 flex-grow;
 }
 
 .header .header__container .header__brand {

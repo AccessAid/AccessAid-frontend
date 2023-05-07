@@ -9,6 +9,7 @@ import { signup } from './../../store/actions/authActions';
 import { InputValidation } from '../InputValidation/InputValidation';
 import { RadioValidation } from '../RadioValidation/RadioValidation';
 import { LOGIN } from '../../config/routes';
+import { Link } from 'react-router-dom';
 
 const RegistrationForm = () => {
   const hookFormMethods = useForm();
@@ -138,12 +139,9 @@ const RegistrationForm = () => {
           </Button>
           <Typography color='gray' className='mt-4 text-center font-normal'>
             Already have an account?{' '}
-            <a
-              href='#'
-              className='font-medium text-blue-500 transition-colors hover:text-blue-700'
-            >
-              Sign In
-            </a>
+            <div className='font-medium text-blue-500 transition-colors hover:text-blue-700'>
+              <Link to={LOGIN}>Sign In</Link>
+            </div>
           </Typography>
         </form>
       </FormProvider>

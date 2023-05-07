@@ -1,34 +1,14 @@
 import React from 'react';
-
+import PropTypes from 'prop-types';
 import { MenuItem, Typography } from '@material-tailwind/react';
-import {
-  UserCircleIcon,
-  CubeTransparentIcon,
-} from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
-
-import { CONTACT, HOME } from '../../../config/routes';
 
 import './NavList.css';
 
-// nav list component
-const navListItems = [
-  {
-    label: 'Home',
-    link: HOME,
-    icon: UserCircleIcon,
-  },
-  {
-    label: 'Contact',
-    link: CONTACT,
-    icon: CubeTransparentIcon,
-  },
-];
-
-const NavList = () => {
+const NavList = ({ navList }) => {
   return (
     <ul className='navlist'>
-      {navListItems.map(({ label, link, icon }, key) => (
+      {navList.map(({ label, link, icon }, key) => (
         <Typography
           key={label}
           as='a'
@@ -47,6 +27,16 @@ const NavList = () => {
       ))}
     </ul>
   );
+};
+
+NavList.propTypes = {
+  navList: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string.isRequired,
+      link: PropTypes.string.isRequired,
+      icon: PropTypes.elementType.isRequired,
+    }),
+  ).isRequired,
 };
 
 export { NavList };

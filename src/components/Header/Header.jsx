@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import {
   Navbar,
   MobileNav,
@@ -8,9 +9,11 @@ import {
 import { Bars2Icon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 
+import useAuthCheck from '../../hooks/useAuthCheck';
 import { ProfileMenu } from './ProfileMenu/ProfileMenu';
 import { NavList } from './NavList/NavList';
 import { HOME } from '../../config/routes';
+import { navListAuthItems, navListItems } from './utils';
 
 import BrandImage from '../../assets/svg/brand_access.svg';
 
@@ -18,9 +21,11 @@ import './Header.css';
 
 const Header = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
-  const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
-
   const [headerColor, setHeaderColor] = useState('bg-transparent');
+
+  const isAuthenticated = useAuthCheck();
+
+  const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -59,7 +64,7 @@ const Header = () => {
         </Link>
 
         <div className='header__links'>
-          <NavList />
+          <NavList navList={navListItems} />
         </div>
         <IconButton
           size='sm'
@@ -70,10 +75,22 @@ const Header = () => {
         >
           <Bars2Icon className='links_icon' />
         </IconButton>
-        <ProfileMenu />
+        {isAuthenticated ? (
+          <div className='header__links header-links-auth'>
+            <ProfileMenu />
+          </div>
+        ) : (
+          <div className='header__links header-links-auth'>
+            <NavList navList={navListAuthItems} />
+          </div>
+        )}
       </div>
       <MobileNav open={isNavOpen} className='header__mobile'>
-        <NavList />
+        {isAuthenticated ? (
+          <NavList navList={navListItems} />
+        ) : (
+          <NavList navList={[...navListItems, ...navListAuthItems]} />
+        )}
       </MobileNav>
     </Navbar>
   );
