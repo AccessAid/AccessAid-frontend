@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { login, signup } from '../actions/authActions';
+import { login, signup, getUserData } from '../actions/authActions';
 
 const initialState = {
   status: 'idle',
@@ -8,10 +8,31 @@ const initialState = {
   error: null,
 };
 
+const PERSIST_KEY_AUTH_TOKEN = 'token-accessaid';
+const PERSIST_KEY_USER = 'user-accessaid';
+
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {},
+  reducers: {
+    persistToken: (state, action) => {
+      const storageToken = localStorage.getItem(PERSIST_KEY_AUTH_TOKEN);
+
+      state.token = storageToken ? storageToken : null;
+    },
+    persistUser: (state, action) => {
+      const storageUser = localStorage.getItem(PERSIST_KEY_USER);
+
+      state.user = storageUser ? storageUser : null;
+    },
+    logout: (state, action) => {
+      state.token = null;
+      state.user = null;
+      state.status = 'idle';
+      localStorage.removeItem(PERSIST_KEY_AUTH_TOKEN);
+      localStorage.removeItem(PERSIST_KEY_USER);
+    },
+  },
   extraReducers: (builder) => {
     builder
 
@@ -19,9 +40,12 @@ export const authSlice = createSlice({
       .addCase(login.pending, (state) => {
         state.status = 'loading';
       })
-      .addCase(login.fulfilled, (state, { payload }) => {
+      .addCase(login.fulfilled, (state, { payload: { token } }) => {
         state.status = 'succeeded';
-        state.token = payload;
+        if (token) {
+          state.token = token;
+          localStorage.setItem(PERSIST_KEY_AUTH_TOKEN, token);
+        }
       })
       .addCase(login.rejected, (state, action) => {
         state.status = 'failed';
@@ -33,12 +57,32 @@ export const authSlice = createSlice({
         state.status = 'loading';
       })
       .addCase(signup.fulfilled, (state) => {
-        state.status = 'succeeded';
+        state.status = 'idle';
         state.error = null;
       })
       .addCase(signup.rejected, (state, action) => {
         state.status = 'failed';
         state.token = null;
+        state.error = action.payload
+          ? action.payload.message
+          : action.error.message;
+      })
+      // getUserData
+      .addCase(getUserData.pending, (state) => {
+        state.status = 'loading';
+        state.user = null;
+      })
+      .addCase(getUserData.fulfilled, (state, { payload }) => {
+        if (Object.keys(payload).length === 3) {
+          state.user = payload;
+          state.error = null;
+          state.status = 'idle';
+          localStorage.setItem(PERSIST_KEY_USER, payload);
+        }
+      })
+      .addCase(getUserData.rejected, (state, action) => {
+        state.status = 'failed';
+        state.user = null;
         state.error = action.payload
           ? action.payload.message
           : action.error.message;
@@ -51,5 +95,7 @@ export const selectUserStatus = (state) => state.auth.status;
 export const selectUser = (state) => state.auth.user;
 
 export const selectError = (state) => state.auth.error;
+
+export const { persistToken, persistUser, logout } = authSlice.actions;
 
 export default authSlice.reducer;

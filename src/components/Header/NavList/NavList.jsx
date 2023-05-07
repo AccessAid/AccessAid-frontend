@@ -11,8 +11,6 @@ const NavList = ({ navList }) => {
       {navList.map(({ label, link, icon }, key) => (
         <Typography
           key={label}
-          as='a'
-          href='#'
           variant='small'
           color='blue-gray'
           className='navlist__link'

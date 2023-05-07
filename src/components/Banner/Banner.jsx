@@ -7,13 +7,11 @@ const Banner = () => {
     <div className='banner-container'>
       <div className='banner-content'>
         <div className='banner-text'>
-          <h1 className='banner-title'>
-            Encuentra lugares accesibles cerca de ti
-          </h1>
+          <h1 className='banner-title'>Find accessible places near you</h1>
 
           <p className='banner-description'>
-            Explora lugares accesibles en tiempo real con nuestra plataforma web
-            especializada en accesibilidad
+            Explore accessible places in real time with our web platform
+            specialized in accessibility
           </p>
         </div>
 

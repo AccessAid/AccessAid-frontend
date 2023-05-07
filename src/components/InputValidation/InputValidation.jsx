@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { Controller, useFormContext } from 'react-hook-form';
-import { Input } from '@material-tailwind/react';
+import { Input, Typography } from '@material-tailwind/react';
 
 const InputValidation = ({ nameField, controllerProps, rules, inputProps }) => {
   const {
@@ -31,9 +31,21 @@ const InputValidation = ({ nameField, controllerProps, rules, inputProps }) => {
         )}
       />
       {Boolean(errors[nameField]) && errors[nameField]?.message && (
-        <p>{errors[nameField]?.message}</p>
+        <Typography
+          variant='small'
+          className='mt-0 flex items-center font-normal text-red-500'
+        >
+          {errors[nameField]?.message}
+        </Typography>
       )}
-      {apiError?.includes(nameField) && <p>{apiError}</p>}
+      {apiError?.includes(nameField) && (
+        <Typography
+          variant='small'
+          className='mt-0 flex items-center font-normal text-red-500'
+        >
+          {apiError}
+        </Typography>
+      )}
     </>
   );
 };

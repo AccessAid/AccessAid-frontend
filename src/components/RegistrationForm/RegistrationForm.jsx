@@ -18,14 +18,19 @@ const RegistrationForm = () => {
 
   const navigate = useNavigate();
 
-  const onSubmit = async (data) => {
-    try {
-      const resultAction = await dispatch(signup(data));
+  const onSubmit = (data) => {
+    dispatch(signup(data))
+      .unwrap()
+      .then((resultAction) => {
+        console.log(`resultAction =`, resultAction);
 
-      if (resultAction) {
-        navigate(LOGIN);
-      }
-    } catch (error) {}
+        if (resultAction?.message.includes('correctamente')) {
+          navigate(LOGIN);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -38,7 +43,7 @@ const RegistrationForm = () => {
       </Typography>
       <FormProvider {...hookFormMethods}>
         <form className='mb-2 mt-8 w-80 max-w-screen-lg sm:w-96'>
-          <div className='mb-4 flex flex-col gap-6'>
+          <div className='mb-4 flex flex-col gap-4'>
             <InputValidation
               nameField='username'
               controllerProps={{ defaultValue: '' }}
@@ -139,9 +144,9 @@ const RegistrationForm = () => {
           </Button>
           <Typography color='gray' className='mt-4 text-center font-normal'>
             Already have an account?{' '}
-            <div className='font-medium text-blue-500 transition-colors hover:text-blue-700'>
+            <span className='font-medium text-blue-500 transition-colors hover:text-blue-700'>
               <Link to={LOGIN}>Sign In</Link>
-            </div>
+            </span>
           </Typography>
         </form>
       </FormProvider>

@@ -22,7 +22,7 @@ const ProtectedRoute = ({ children, excludedRoutes, redirectTo }) => {
 };
 
 ProtectedRoute.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
   redirectTo: PropTypes.string.isRequired,
   excludedRoutes: PropTypes.arrayOf(PropTypes.string),
 };
