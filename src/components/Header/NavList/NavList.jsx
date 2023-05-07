@@ -5,35 +5,44 @@ import {
   UserCircleIcon,
   CubeTransparentIcon,
 } from '@heroicons/react/24/outline';
+import { Link } from 'react-router-dom';
+
+import { CONTACT, HOME } from '../../../config/routes';
+
+import './NavList.css';
 
 // nav list component
 const navListItems = [
   {
     label: 'Home',
+    link: HOME,
     icon: UserCircleIcon,
   },
   {
-    label: 'Contacto',
+    label: 'Contact',
+    link: CONTACT,
     icon: CubeTransparentIcon,
   },
 ];
 
 const NavList = () => {
   return (
-    <ul className='mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center'>
-      {navListItems.map(({ label, icon }, key) => (
+    <ul className='navlist'>
+      {navListItems.map(({ label, link, icon }, key) => (
         <Typography
           key={label}
           as='a'
           href='#'
           variant='small'
           color='blue-gray'
-          className='font-normal'
+          className='navlist__link'
         >
-          <MenuItem className='flex items-center gap-2 lg:rounded-full'>
-            {React.createElement(icon, { className: 'h-[18px] w-[18px]' })}{' '}
-            {label}
-          </MenuItem>
+          <Link to={link}>
+            <MenuItem className='navlist__menuitem'>
+              {React.createElement(icon, { className: 'navlist__link_icon' })}{' '}
+              {label}
+            </MenuItem>
+          </Link>
         </Typography>
       ))}
     </ul>

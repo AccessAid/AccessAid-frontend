@@ -1,5 +1,7 @@
 export const HOME = '/';
 export const LOGIN = '/login';
-export const REGISTER = '/signup';
+export const SIGNUP = '/signup';
+export const CONTACT = '/contact';
+export const PROFILE = '/profile';
 export const MAP = '/map';
 export const NOT_FOUND = '*';

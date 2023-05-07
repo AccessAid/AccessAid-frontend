@@ -7,7 +7,7 @@ import {
   Avatar,
 } from '@material-tailwind/react';
 import { StarIcon } from '@heroicons/react/24/solid';
-const NotificationsCard = () => {
+const NotificationCard = () => {
   return (
     <Card color='transparent' shadow={false} className='w-full max-w-[26rem]'>
       <CardHeader
@@ -49,4 +49,4 @@ const NotificationsCard = () => {
   );
 };
 
-export { NotificationsCard };
+export { NotificationCard };

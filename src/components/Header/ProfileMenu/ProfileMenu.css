@@ -1,0 +1,11 @@
+.profile__avatar {
+  @apply flex items-center gap-1 rounded-full py-0.5 pl-0.5 pr-2 lg:ml-auto;
+}
+
+.profile__avatar .avatar__img {
+  @apply border border-blue-500 p-0.5;
+}
+
+.profile__menulist {
+  @apply p-1;
+}

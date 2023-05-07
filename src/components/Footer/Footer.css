@@ -1,0 +1,23 @@
+footer {
+  @apply w-full bg-white p-8;
+}
+
+footer .footer__container {
+  @apply flex flex-row flex-wrap items-center justify-center gap-x-12 gap-y-6 bg-white text-center md:justify-between;
+}
+
+footer .footer__container .footer__list {
+  @apply flex flex-wrap items-center gap-x-8 gap-y-2;
+}
+
+footer .footer__container .footer__list .footer__link {
+  @apply font-normal transition-colors hover:text-blue-500 focus:text-blue-500;
+}
+
+footer hr {
+  @apply my-8 border-blue-gray-50;
+}
+
+footer .copyright {
+  @apply text-center font-normal;
+}

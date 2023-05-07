@@ -1,18 +1,20 @@
 import React from 'react';
 import { Typography } from '@material-tailwind/react';
 
+import './Footer.css';
+
 const Footer = () => {
   return (
-    <footer className='w-full bg-white p-8'>
-      <div className='flex flex-row flex-wrap items-center justify-center gap-x-12 gap-y-6 bg-white text-center md:justify-between'>
+    <footer>
+      <div className='footer__container'>
         <img src='/img/logo-ct-dark.png' alt='logo-ct' className='w-10' />
-        <ul className='flex flex-wrap items-center gap-x-8 gap-y-2'>
+        <ul className='footer__list'>
           <li>
             <Typography
               as='a'
               href='#'
               color='blue-gray'
-              className='font-normal transition-colors hover:text-blue-500 focus:text-blue-500'
+              className='footer__link'
             >
               About Us
             </Typography>
@@ -22,7 +24,7 @@ const Footer = () => {
               as='a'
               href='#'
               color='blue-gray'
-              className='font-normal transition-colors hover:text-blue-500 focus:text-blue-500'
+              className='footer__link'
             >
               License
             </Typography>
@@ -32,7 +34,7 @@ const Footer = () => {
               as='a'
               href='#'
               color='blue-gray'
-              className='font-normal transition-colors hover:text-blue-500 focus:text-blue-500'
+              className='footer__link'
             >
               Contribute
             </Typography>
@@ -42,19 +44,19 @@ const Footer = () => {
               as='a'
               href='#'
               color='blue-gray'
-              className='font-normal transition-colors hover:text-blue-500 focus:text-blue-500'
+              className='footer__link'
             >
               Contact Us
             </Typography>
           </li>
         </ul>
       </div>
-      <hr className='my-8 border-blue-gray-50' />
-      <Typography color='blue-gray' className='text-center font-normal'>
-        &copy; 2023 Material Tailwind
+      <hr />
+      <Typography color='blue-gray' className='copyright'>
+        &copy; 2023 AccessAid
       </Typography>
     </footer>
   );
 };
 
-export default Footer;
+export { Footer };

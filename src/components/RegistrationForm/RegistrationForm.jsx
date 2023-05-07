@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
-import { useForm, Controller, FormProvider } from 'react-hook-form';
+import { useForm, FormProvider } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
+import { Card, Button, Typography } from '@material-tailwind/react';
+
 import { signup } from './../../store/actions/authActions';
-import {
-  Card,
-  Input,
-  Checkbox,
-  Button,
-  Typography,
-} from '@material-tailwind/react';
 import { InputValidation } from '../InputValidation/InputValidation';
 import { RadioValidation } from '../RadioValidation/RadioValidation';
 
@@ -16,19 +13,18 @@ const RegistrationForm = () => {
   const hookFormMethods = useForm();
 
   const dispatch = useDispatch();
-  const isRegistering = useSelector((state) => state.auth.loading);
-  const apiError = useSelector((state) => state.auth.error);
+
+  const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     try {
-      console.log('data', data);
-
       const resultAction = await dispatch(signup(data));
-      console.log('resultAction', resultAction);
+
+      if (resultAction) {
+        navigate('/login');
+      }
     } catch (error) {}
   };
-
-  console.log('errors', hookFormMethods.formState.errors);
 
   return (
     <Card color='transparent' shadow={false}>

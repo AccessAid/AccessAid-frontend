@@ -1,9 +1,10 @@
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Input, Textarea, Button } from '@material-tailwind/react';
 
 import './ContactForm.css';
 
-export const ContactForm = () => {
+const ContactForm = () => {
   const {
     register,
     handleSubmit,
@@ -40,7 +41,7 @@ export const ContactForm = () => {
         />
         <Textarea
           id='message'
-          minRows={5}
+          rows={5}
           label='Mensaje'
           {...register('message', { required: true })}
           error={errors.message}
@@ -52,3 +53,5 @@ export const ContactForm = () => {
     </div>
   );
 };
+
+export { ContactForm };
