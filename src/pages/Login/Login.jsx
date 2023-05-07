@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
+import LogoImage from '../../assets/man.png';
+import LoginImage from '../../assets/man.png';
 import './Login.css';
 import Input from '../../components/Input/Input';
 
