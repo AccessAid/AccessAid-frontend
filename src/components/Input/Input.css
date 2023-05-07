@@ -1,0 +1,21 @@
+.input-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-input {
+  border: none;
+  height: 30px;
+  width: 100%;
+}
+
+.form-input:invalid ~ .input-error-message {
+  display: block;
+}
+
+.input-error-message {
+  display: none;
+  color: red;
+  width: 100%;
+  font-size: 12px;
+}
