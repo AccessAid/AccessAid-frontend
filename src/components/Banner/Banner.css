@@ -3,7 +3,7 @@
 }
 
 .banner-content {
-  @apply flex flex-wrap items-center px-2 sm:pt-32 md:px-12 lg:pt-0;
+  @apply flex flex-wrap items-center px-2 sm:pt-56 md:px-12 lg:pt-0;
 }
 
 .banner-text {

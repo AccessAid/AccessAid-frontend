@@ -14,6 +14,10 @@ const ProtectedRoute = ({ children, excludedRoutes, redirectTo }) => {
     return <Navigate to={PROFILE} replace />;
   }
 
+  if (!isAuthenticated && isExcludedRoute) {
+    return children ? children : <Outlet />;
+  }
+
   if (!isAuthenticated) {
     return <Navigate to={redirectTo} replace />;
   }

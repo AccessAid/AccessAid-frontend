@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+
 import {
   Typography,
   Button,
@@ -42,7 +43,7 @@ const profileMenuItems = [
 ];
 
 const ProfileMenu = () => {
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <Menu open={isMenuOpen} handler={setIsMenuOpen} placement='bottom-end'>
@@ -67,13 +68,14 @@ const ProfileMenu = () => {
         {profileMenuItems.map(({ label, icon, link }, key) => {
           const isLastItem = key === profileMenuItems.length - 1;
           return (
-            <ProfileItem
-              label={label}
-              icon={icon}
-              link={link}
-              isLastItem={isLastItem}
-              key={label}
-            />
+            <div key={label}>
+              <ProfileItem
+                label={label}
+                icon={icon}
+                link={link}
+                isLastItem={isLastItem}
+              />
+            </div>
           );
         })}
       </MenuList>

@@ -1,11 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
 import { Typography, MenuItem } from '@material-tailwind/react';
 import { Link } from 'react-router-dom';
 
+import { logout } from '../../../../store/slices/authSlice';
+
 const ProfileItem = ({ label, icon, link, isLastItem }) => {
+  const dispatch = useDispatch();
+
+  const logoutHandle = () => {
+    dispatch(logout());
+  };
+
   return (
-    <Link key={label} to={link}>
+    <Link
+      key={label}
+      to={link}
+      onClick={() => {
+        if (label === 'Sign Out') {
+          console.log('SALIR!!');
+          logoutHandle();
+        }
+      }}
+    >
       <MenuItem
         className={`flex items-center gap-2 rounded ${
           isLastItem

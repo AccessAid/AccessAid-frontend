@@ -40,24 +40,26 @@ export const authSlice = createSlice({
       .addCase(login.pending, (state) => {
         state.status = 'loading';
       })
-      .addCase(login.fulfilled, (state, { payload: { token } }) => {
+      .addCase(login.fulfilled, (state, { payload }) => {
         state.status = 'succeeded';
-        if (token) {
-          state.token = token;
-          localStorage.setItem(PERSIST_KEY_AUTH_TOKEN, token);
+        console.log('payload', payload);
+        if (payload?.token) {
+          state.token = payload.token;
+          localStorage.setItem(PERSIST_KEY_AUTH_TOKEN, payload.token);
         }
       })
       .addCase(login.rejected, (state, action) => {
         state.status = 'failed';
         state.token = null;
-        state.error = action.error.message;
+        state.error = action.payload
+          ? action.payload.message
+          : action.error.message;
       })
       // register
       .addCase(signup.pending, (state) => {
         state.status = 'loading';
       })
       .addCase(signup.fulfilled, (state) => {
-        state.status = 'idle';
         state.error = null;
       })
       .addCase(signup.rejected, (state, action) => {
@@ -76,8 +78,7 @@ export const authSlice = createSlice({
         if (Object.keys(payload).length === 3) {
           state.user = payload;
           state.error = null;
-          state.status = 'idle';
-          localStorage.setItem(PERSIST_KEY_USER, payload);
+          localStorage.setItem(PERSIST_KEY_USER, JSON.stringify(payload));
         }
       })
       .addCase(getUserData.rejected, (state, action) => {
@@ -92,7 +93,9 @@ export const authSlice = createSlice({
 
 export const selectUserStatus = (state) => state.auth.status;
 
-export const selectUser = (state) => state.auth.user;
+export const selectToken = (state) => state.auth.token;
+
+export const selectUserData = (state) => state.auth.user;
 
 export const selectError = (state) => state.auth.error;
 

@@ -76,7 +76,7 @@ const Header = () => {
           <Bars2Icon className='links_icon' />
         </IconButton>
         {isAuthenticated ? (
-          <div className='header__links header-links-auth'>
+          <div className='header__avatar'>
             <ProfileMenu />
           </div>
         ) : (
