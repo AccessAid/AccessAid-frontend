@@ -24,7 +24,7 @@ const RegistrationForm = () => {
       .then((resultAction) => {
         console.log(`resultAction =`, resultAction);
 
-        if (resultAction?.message.includes('correctamente')) {
+        if (resultAction?.message.includes('correctly')) {
           navigate(LOGIN);
         }
       })

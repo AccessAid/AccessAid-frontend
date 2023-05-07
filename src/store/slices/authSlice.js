@@ -75,6 +75,7 @@ export const authSlice = createSlice({
         state.user = null;
       })
       .addCase(getUserData.fulfilled, (state, { payload }) => {
+        console.log('payload getUserData', payload);
         if (Object.keys(payload).length === 3) {
           state.user = payload;
           state.error = null;
