@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import './Login.css';
+import Input from '../../components/Input/Input';
 
 export const Login = (props) => {
   const [userData, setUserData] = useState({ email: '', password: '' });
