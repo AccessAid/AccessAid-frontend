@@ -1,6 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Typography, MenuItem } from '@material-tailwind/react';
-
 import { Link } from 'react-router-dom';
 
 const ProfileItem = ({ label, icon, link, isLastItem }) => {
@@ -28,6 +28,17 @@ const ProfileItem = ({ label, icon, link, isLastItem }) => {
       </MenuItem>
     </Link>
   );
+};
+
+ProfileItem.propTypes = {
+  label: PropTypes.string.isRequired,
+  icon: PropTypes.elementType.isRequired,
+  link: PropTypes.string.isRequired,
+  isLastItem: PropTypes.bool,
+};
+
+ProfileItem.defaultProps = {
+  isLastItem: false,
 };
 
 export { ProfileItem };

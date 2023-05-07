@@ -1,13 +1,30 @@
 .header {
-  @apply mx-auto;
+  @apply fixed top-0 z-10 min-w-full bg-gray-300 transition duration-500 ease-in-out;
+  box-shadow: none !important;
+  --tw-backdrop-saturate: 0 !important;
+  border-color: 0 !important;
+  border-radius: 0 !important;
+  border-width: 0 !important;
 }
 
 .header .header__container {
-  @apply relative mx-auto flex items-center text-blue-gray-900;
+  @apply mx-auto flex items-center md:mx-16;
+}
+
+.header .header__container .header__brand {
+  @apply flex items-center space-x-4;
+}
+
+.header .header__container .header__brand .brand__img {
+  @apply h-12 w-12 rounded-lg md:h-14 md:w-14;
+}
+
+.header .header__container .header__brand .brand__title {
+  @apply text-lg text-blue-gray-900  hover:text-quaternary md:text-xl;
 }
 
 .header .header__container .header__links {
-  @apply absolute left-1/4 top-2/4 hidden -translate-x-2/4 -translate-y-2/4 lg:block;
+  @apply hidden lg:ml-14 lg:block;
 }
 
 .header .header__container .button_links {

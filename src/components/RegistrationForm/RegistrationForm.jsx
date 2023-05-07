@@ -8,6 +8,7 @@ import { Card, Button, Typography } from '@material-tailwind/react';
 import { signup } from './../../store/actions/authActions';
 import { InputValidation } from '../InputValidation/InputValidation';
 import { RadioValidation } from '../RadioValidation/RadioValidation';
+import { LOGIN } from '../../config/routes';
 
 const RegistrationForm = () => {
   const hookFormMethods = useForm();
@@ -21,7 +22,7 @@ const RegistrationForm = () => {
       const resultAction = await dispatch(signup(data));
 
       if (resultAction) {
-        navigate('/login');
+        navigate(LOGIN);
       }
     } catch (error) {}
   };
