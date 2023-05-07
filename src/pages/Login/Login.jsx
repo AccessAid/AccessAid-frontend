@@ -23,7 +23,7 @@ export const Login = (props) => {
 
       alert('Acceso correcto, puede continuar ' + userData.email);
     } else {
-      alert('It went wrong');
+      alert('Ups hubo algun problema');
     }
   };
 
@@ -31,13 +31,13 @@ export const Login = (props) => {
     <div>
       <form onSubmit={handleOnSubmit} className='login-card'>
         <img src={LogoImage} alt='logo' />
-        <span>Sign In your account</span>
+        <span>Inicia sesión en tu cuenta</span>
 
         <Input
           className='login-form'
           type='email'
-          placeholder='Email address'
-          errorMessage='You must provide a valid email'
+          placeholder='Correo Electonico'
+          errorMessage='Introduce correo electronico valido'
           name='email'
           value={userData.username}
           onChange={handleOnChange}
@@ -46,18 +46,18 @@ export const Login = (props) => {
         <Input
           className='login-form'
           type='password'
-          placeholder='Password'
+          placeholder='Palabra clave'
           pattern='^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$'
-          errorMessage='Your password must contain 8 characters and at least one letter and one number'
+          errorMessage='Su contraseña debe contener 8 caracteres y al menos una letra y un número'
           name='password'
           value={userData.password}
           onChange={handleOnChange}
         />
 
-        <a href='/'>Forgot your password</a>
+        <a href='/'>Olvidaste tu contraseña</a>
         <button className='login-button'>
           <img src={LoginImage} alt='lock-logo' />
-          <span>Sign In</span>
+          <span>Iniciar Sesion</span>
         </button>
       </form>
     </div>
