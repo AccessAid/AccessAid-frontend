@@ -3,7 +3,7 @@
 }
 
 .contact__form .contact-card {
-  @apply flex h-full w-full flex justify-center;
+  @apply flex flex h-full w-full justify-center;
 }
 
 .contact__form form {

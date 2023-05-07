@@ -1,0 +1,15 @@
+.group-cards-container {
+  @apply container mx-auto px-6 py-28;
+}
+
+.group-cards-title {
+  @apply text-3xl font-semibold capitalize text-gray-800 dark:text-white lg:text-4xl;
+}
+
+.group-cards-description {
+  @apply my-6 max-w-2xl text-gray-500 dark:text-gray-300;
+}
+
+.group-cards-grid {
+  @apply mt-8 grid grid-cols-1 gap-8 md:grid-cols-2 xl:mt-16 xl:grid-cols-3;
+}

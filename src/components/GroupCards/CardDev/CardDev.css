@@ -1,0 +1,29 @@
+.card-dev {
+  @apply flex transform cursor-pointer flex-col items-center rounded-xl p-8 transition-colors duration-300 hover:bg-quaternary-light;
+}
+
+.card-logo {
+  @apply h-32 w-32 rounded-full object-cover ring-4 ring-gray-300;
+}
+
+.card-dev:hover .card-name, /* Agregado */
+.card-dev:hover .card-role {
+  /* Agregado */
+  @apply text-white;
+}
+
+.card-name {
+  @apply mt-4 text-2xl font-semibold capitalize text-gray-700 hover:text-white  dark:text-white;
+}
+
+.card-role {
+  @apply mt-2 capitalize text-gray-500 dark:text-gray-300;
+}
+
+.social-links {
+  @apply -mx-2 mt-3 flex;
+}
+
+.social-link {
+  @apply mx-2 text-gray-600 hover:text-gray-500 group-hover:text-white dark:text-gray-300 dark:hover:text-gray-300;
+}

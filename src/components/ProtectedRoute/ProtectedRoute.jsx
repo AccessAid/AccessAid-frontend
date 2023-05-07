@@ -4,7 +4,7 @@ import { LOGIN, PROFILE } from '../../config/routes';
 import useAuthCheck from '../../hooks/useAuthCheck';
 import { Navigate, useLocation, Outlet } from 'react-router-dom';
 
-const ProtectedRoute = ({ excludedRoutes, redirectTo }) => {
+const ProtectedRoute = ({ children, excludedRoutes, redirectTo }) => {
   const isAuthenticated = useAuthCheck();
   const location = useLocation();
 

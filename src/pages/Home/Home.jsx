@@ -1,6 +1,6 @@
 import React from 'react';
 import { Sponsors } from '../../components/Sponsors/Sponsors';
-import { NotificationCard } from '../../components/NotificationCard/NotificationCard';
+import { GroupCards } from '../../components/GroupCards/GroupCards';
 import { Banner } from '../../components/Banner/Banner';
 
 import './Home.css';
@@ -10,7 +10,7 @@ const Home = () => {
     <div className='home'>
       <Banner />
       <Sponsors />
-      <NotificationCard />
+      <GroupCards />
     </div>
   );
 };

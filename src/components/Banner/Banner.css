@@ -2,30 +2,26 @@
   @apply container mx-auto flex h-screen items-center px-6 text-center;
 }
 
-.content-container {
-  @apply mx-auto max-w-lg;
+.banner-content {
+  @apply flex flex-wrap items-center px-2 sm:pt-32 md:px-12 lg:pt-0;
 }
 
-.heading {
-  @apply text-3xl font-bold text-gray-800 dark:text-white md:text-4xl;
+.banner-text {
+  @apply relative lg:w-6/12 lg:py-24 xl:py-32;
 }
 
-.description {
-  @apply mt-6 text-gray-500 dark:text-gray-300;
+.banner-title {
+  @apply text-4xl font-bold text-quaternary-dark md:text-5xl lg:w-10/12;
 }
 
-.form-container {
-  @apply mx-auto mt-6 w-full max-w-sm rounded-md border bg-transparent focus-within:border-blue-400 focus-within:ring focus-within:ring-blue-300 focus-within:ring-opacity-40 dark:border-gray-700 dark:focus-within:border-blue-300;
+.banner-description {
+  @apply mt-8 text-gray-700 lg:w-10/12;
 }
 
-.form {
-  @apply flex flex-col md:flex-row;
+.banner-image {
+  @apply -mb-24 ml-auto sm:pb-40 lg:-mb-12 lg:w-6/12 lg:pb-0;
 }
 
-.input-field {
-  @apply m-1 h-10 flex-1 appearance-none border-none bg-transparent px-4 py-2 text-gray-700 placeholder-gray-400 focus:placeholder-transparent focus:outline-none focus:ring-0 dark:text-gray-200;
-}
-
-.submit-button {
-  @apply m-1 h-10 transform rounded-md bg-blue-500 px-4 py-2 text-white transition-colors duration-300 hover:bg-blue-400 focus:bg-blue-400 focus:outline-none;
+.banner-map-image {
+  @apply relative;
 }
