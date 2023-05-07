@@ -1,15 +1,15 @@
 .contact__form {
-    @apply flex flex-col items-center justify-center w-full h-full;
+  @apply flex h-full w-full flex-col items-center justify-center;
 }
 
 .contact__form form {
-    @apply flex flex-col gap-2 items-center justify-center max-w-3xl h-full p-2;
+  @apply flex h-full max-w-3xl flex-col items-center justify-center gap-2 p-2;
 }
 
 .contact__form form button {
-    @apply w-full h-10 px-2 border-2 border-gray-300 rounded-md;
+  @apply h-10 w-full rounded-md border-2 border-gray-300 px-2;
 }
 
 .contact__form .error {
-    @apply text-red-500 text-xs m-0;
+  @apply m-0 text-xs text-red-500;
 }
