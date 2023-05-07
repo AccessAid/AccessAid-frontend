@@ -1,12 +1,16 @@
 import React from 'react';
-import Login from './pages/Login/Login';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Home } from './pages';
+import { HOME, NOT_FOUND } from './config/routes';
 
 function App() {
   return (
-    <div className='App bg-gradient-to-r from-white via-secondary-dark to-tertiary-dark dark:from-black dark:via-secondary-light dark:to-tertiary-light'>
-      <h1 className='font-jakarta text-8xl'>Welcome to Access Aid</h1>
-      <Login />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path={HOME} element={<Home />} />
+        <Route path={NOT_FOUND} element={<h1>404: Not Found</h1>} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
