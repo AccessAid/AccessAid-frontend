@@ -41,6 +41,7 @@ const RegistrationForm = () => {
         toast.error('¡There is an error', {
           autoClose: 2000,
         });
+        toast.onChange((payload) => {});
         console.log(error);
       });
   };
