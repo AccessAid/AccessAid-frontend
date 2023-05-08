@@ -1,0 +1,24 @@
+.contact__form {
+  @apply h-full w-full pt-10;
+}
+
+.contact__form .contact-card {
+  @apply flex flex h-full w-full justify-center;
+}
+
+.contact__form form {
+  @apply flex h-full max-w-3xl flex-col items-center justify-center gap-2 p-2;
+  min-height: 60vh;
+}
+
+.contact__form form > div {
+  @apply my-1;
+}
+
+.contact__form form button {
+  @apply h-10 w-full rounded-md border-2 border-gray-300 px-2;
+}
+
+.contact__form .error {
+  @apply m-0 text-xs text-red-500;
+}

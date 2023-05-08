@@ -1,0 +1,40 @@
+.header {
+  @apply fixed top-0 z-10 min-w-full bg-gray-300 transition duration-500 ease-in-out;
+  box-shadow: none !important;
+  --tw-backdrop-saturate: 0 !important;
+  border-color: 0 !important;
+  border-radius: 0 !important;
+  border-width: 0 !important;
+}
+
+.header .header__container {
+  @apply mx-auto flex flex-grow items-center justify-between md:mx-16;
+}
+
+.header .header__container .header__brand {
+  @apply flex items-center space-x-4;
+}
+
+.header .header__container .header__brand .brand__img {
+  @apply h-12 w-12 rounded-lg md:h-14 md:w-14;
+}
+
+.header .header__container .header__brand .brand__title {
+  @apply hidden sm:block text-lg text-blue-gray-900  hover:text-quaternary md:text-xl;
+}
+
+.header .header__container .header__links {
+  @apply hidden lg:ml-14 lg:block;
+}
+
+.header .header__container .button_links {
+  @apply ml-auto mr-6 lg:hidden;
+}
+
+.header .header__container .button_links .links_icon {
+  @apply h-8 w-8;
+}
+
+.header .header__mobile {
+  @apply overflow-scroll;
+}

@@ -1,0 +1,27 @@
+.banner-container {
+  @apply container mx-auto flex h-screen items-center px-6 text-center;
+}
+
+.banner-content {
+  @apply flex flex-wrap items-center px-2 sm:pt-56 md:px-12 lg:pt-0;
+}
+
+.banner-text {
+  @apply relative lg:w-6/12 lg:py-24 xl:py-32;
+}
+
+.banner-title {
+  @apply text-4xl font-bold text-quaternary-dark md:text-5xl lg:w-10/12;
+}
+
+.banner-description {
+  @apply mt-8 text-gray-700 lg:w-10/12;
+}
+
+.banner-image {
+  @apply -mb-24 ml-auto sm:pb-40 lg:-mb-12 lg:w-6/12 lg:pb-0;
+}
+
+.banner-map-image {
+  @apply relative;
+}

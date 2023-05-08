@@ -218,6 +218,7 @@ dist
 !.vscode/launch.json
 !.vscode/extensions.json
 !.vscode/*.code-snippets
+storybook-static/
 
 # Local History for Visual Studio Code
 .history/
