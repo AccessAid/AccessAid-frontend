@@ -1,8 +1,16 @@
 import React from 'react';
 
+import { LoginForm } from '../../components/LoginForm/LoginForm';
+
+import './Login.css';
+
 const Login = () => {
   return (
-    <div className='App bg-gradient-to-r from-white via-secondary-dark to-tertiary-dark dark:from-black dark:via-secondary-light dark:to-tertiary-light'></div>
+    <div className='login-container'>
+      <div className='content-container'>
+        <LoginForm />
+      </div>
+    </div>
   );
 };
 

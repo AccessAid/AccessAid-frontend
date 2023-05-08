@@ -1,0 +1,15 @@
+.navlist {
+  @apply mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center;
+}
+
+.navlist .navlist__link {
+  @apply font-normal;
+}
+
+.navlist .navlist__link .navlist__menuitem {
+  @apply flex items-center gap-2 lg:rounded-full;
+}
+
+.navlist .navlist__link .navlist__menuitem .navlist__link_icon {
+  @apply h-[18px] w-[18px];
+}

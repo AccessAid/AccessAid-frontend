@@ -1,11 +1,16 @@
 import React from 'react';
-import { ContactForm } from '../../components';
+import { Sponsors } from '../../components/Sponsors/Sponsors';
+import { GroupCards } from '../../components/GroupCards/GroupCards';
+import { Banner } from '../../components/Banner/Banner';
+
+import './Home.css';
 
 const Home = () => {
   return (
-    <div className='App bg-gradient-to-r from-white via-secondary-dark to-tertiary-dark dark:from-black dark:via-secondary-light dark:to-tertiary-light'>
-      <h1 className='font-jakarta text-8xl'>Welcome to Access Aid</h1>
-      <ContactForm />
+    <div className='home'>
+      <Banner />
+      <Sponsors />
+      <GroupCards />
     </div>
   );
 };

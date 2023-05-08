@@ -1,9 +1,18 @@
 .contact__form {
-  @apply flex h-full w-full flex-col items-center justify-center;
+  @apply h-full w-full pt-10;
+}
+
+.contact__form .contact-card {
+  @apply flex flex h-full w-full justify-center;
 }
 
 .contact__form form {
   @apply flex h-full max-w-3xl flex-col items-center justify-center gap-2 p-2;
+  min-height: 60vh;
+}
+
+.contact__form form > div {
+  @apply my-1;
 }
 
 .contact__form form button {

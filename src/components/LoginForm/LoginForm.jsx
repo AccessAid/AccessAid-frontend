@@ -1,71 +1,116 @@
-import React, { useState } from 'react';
-import { connect } from 'react-redux';
-import LogoImage from '../../assets/man.png';
-import LoginImage from '../../assets/man.png';
-import './Login.css';
-import Input from '../../components/Input/Input';
+import React from 'react';
+import { useForm, FormProvider } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import { useNavigate, Link } from 'react-router-dom';
+import { Card, Button, Typography } from '@material-tailwind/react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/ReactToastify.min.css';
 
-export const LoginForm = (props) => {
-  const [userData, setUserData] = useState({ email: '', password: '' });
+import { login, getUserData } from './../../store/actions/authActions';
+import { cleanApiError } from '../../store/slices/authSlice';
+import { InputValidation } from '../InputValidation/InputValidation';
+import { HOME, SIGNUP } from '../../config/routes';
 
-  const handleOnChange = ({ target }) => {
-    setUserData((current) => ({ ...current, [target.name]: target.value }));
-  };
+const LoginForm = () => {
+  const hookFormMethods = useForm();
+  const dispatch = useDispatch();
 
-  const handleOnSubmit = (e) => {
-    e.preventDefault();
-    console.log(userData);
-    if (
-      userData.email === 'admin@admin.com' &&
-      userData.password === 'admin1234'
-    ) {
-      // eslint-disable-next-line no-restricted-globals
+  const onSubmit = async (data) => {
+    try {
+      const resultAction = await dispatch(login(data)).unwrap();
+      console.log(`resultAction =`, resultAction);
 
-      alert('Acceso correcto, puede continuar ' + userData.email);
-    } else {
-      alert('Ups hubo algun problema');
+      if (resultAction?.token) {
+        const userDataAction = await dispatch(
+          getUserData(data.username),
+        ).unwrap();
+        if (userDataAction) {
+          console.log(`userDataAction =`, userDataAction);
+        }
+      }
+    } catch (error) {
+      toast.error('¡There is an error', {
+        autoClose: 2000,
+      });
+      console.log(error);
     }
   };
 
   return (
-    <div>
-      <form onSubmit={handleOnSubmit} className='login-card'>
-        <img src={LogoImage} alt='logo' />
-        <span>Inicia sesión en tu cuenta</span>
+    <Card color='transparent' shadow={false}>
+      <Typography variant='h4' color='blue-gray'>
+        Sign In
+      </Typography>
+      <Typography color='gray' className='mt-1 font-normal'>
+        Enter your credentials to sign in.
+      </Typography>
+      <FormProvider {...hookFormMethods}>
+        <form className='mb-2 mt-8 w-80 max-w-screen-lg sm:w-96'>
+          <div className='mb-4 flex flex-col gap-4'>
+            <InputValidation
+              nameField='username'
+              controllerProps={{ defaultValue: '' }}
+              inputProps={{ size: 'lg', label: 'Username', type: 'text' }}
+              rules={{
+                required: {
+                  value: true,
+                  message: 'Por favor, escriba su nombre de usuario.',
+                },
+                minLength: {
+                  value: 3,
+                  message:
+                    'El nombre de usuario debe tener al menos 3 caracteres.',
+                },
+                maxLength: {
+                  value: 20,
+                  message:
+                    'El nombre de usuario debe tener como máximo 20 caracteres.',
+                },
+              }}
+            />
 
-        <Input
-          className='login-form'
-          type='email'
-          placeholder='Correo Electonico'
-          errorMessage='Introduce correo electronico valido'
-          name='email'
-          value={userData.username}
-          onChange={handleOnChange}
-        />
+            <InputValidation
+              nameField='password'
+              controllerProps={{ defaultValue: '' }}
+              inputProps={{ size: 'lg', label: 'Password', type: 'password' }}
+              rules={{
+                required: {
+                  value: true,
+                  message: 'Please enter your password.',
+                },
+                minLength: {
+                  value: 8,
+                  message: 'Password must be at least 8 characters long',
+                },
+              }}
+            />
+          </div>
 
-        <Input
-          className='login-form'
-          type='password'
-          placeholder='Palabra clave'
-          pattern='^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$'
-          errorMessage='Su contraseña debe contener 8 caracteres y al menos una letra y un número'
-          name='password'
-          value={userData.password}
-          onChange={handleOnChange}
-        />
-
-        <a href='/'>Olvidaste tu contraseña</a>
-        <button className='login-button'>
-          <img src={LoginImage} alt='lock-logo' />
-          <span>Iniciar Sesion</span>
-        </button>
-      </form>
-    </div>
+          <Button
+            className='mt-6'
+            fullWidth
+            onClick={hookFormMethods.handleSubmit(onSubmit)}
+            disabled={Object.keys(hookFormMethods.formState.errors).length > 0}
+          >
+            Sign In
+          </Button>
+          <Typography color='gray' className='mt-4 text-center font-normal'>
+            {"Don't have an account?"}
+            <span
+              className='font-medium text-blue-500 transition-colors hover:text-blue-700'
+              onClick={() => {
+                dispatch(cleanApiError());
+              }}
+            >
+              {' '}
+              <Link to={SIGNUP}>Sign Up</Link>
+            </span>
+          </Typography>
+        </form>
+      </FormProvider>
+      <ToastContainer />
+    </Card>
   );
 };
 
-const mapStateToProps = (state) => ({});
-
-const mapDispatchToProps = {};
-
-export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);
+export { LoginForm };

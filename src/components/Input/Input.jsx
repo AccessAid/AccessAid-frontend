@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import './Input.css';
 
 const Input = (props) => {
@@ -14,7 +15,7 @@ const Input = (props) => {
       <input
         required
         className='form-input'
-        focused={focused.toString()}
+        // focused={focused.toString()}
         onBlur={handleOnBlur}
         {...inputProps}
       />
@@ -22,6 +23,16 @@ const Input = (props) => {
       {focused && <span className='input-error-message'> {errorMessage}</span>}
     </div>
   );
+};
+
+Input.propTypes = {
+  errorMessage: PropTypes.string,
+  className: PropTypes.string,
+};
+
+Input.defaultProps = {
+  errorMessage: '',
+  className: '',
 };
 
 export default Input;
