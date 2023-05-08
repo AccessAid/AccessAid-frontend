@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { LOGIN, PROFILE } from '../../config/routes';
+import { LOGIN, HOME } from '../../config/routes';
 import useAuthCheck from '../../hooks/useAuthCheck';
 import { Navigate, useLocation, Outlet } from 'react-router-dom';
 
@@ -11,7 +11,7 @@ const ProtectedRoute = ({ children, excludedRoutes, redirectTo }) => {
   const isExcludedRoute = excludedRoutes.includes(location.pathname);
 
   if (isAuthenticated && isExcludedRoute) {
-    return <Navigate to={PROFILE} replace />;
+    return <Navigate to={HOME} replace />;
   }
 
   if (!isAuthenticated && isExcludedRoute) {

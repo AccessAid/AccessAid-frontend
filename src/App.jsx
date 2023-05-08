@@ -6,6 +6,7 @@ import {
   CONTACT,
   HOME,
   LOGIN,
+  MAP,
   NOT_FOUND,
   PROFILE,
   SIGNUP,
@@ -15,6 +16,7 @@ import {
   Home,
   Layout,
   Login,
+  Map,
   NotFound,
   Profile,
   SignUp,
@@ -45,9 +47,11 @@ function App() {
           <Route index element={<Home />} />
           <Route element={<ProtectedRoute excludedRoutes={excludedRoutes} />}>
             <Route path={PROFILE} element={<Profile />} />
-            <Route path={LOGIN} element={<Login />} />
             <Route path={SIGNUP} element={<SignUp />} />
+            <Route path={LOGIN} element={<Login />} />
+            <Route path={MAP} element={<Map />} />
           </Route>
+
           <Route path={CONTACT} element={<Contact />} />
           <Route path={NOT_FOUND} element={<NotFound />} />
         </Route>

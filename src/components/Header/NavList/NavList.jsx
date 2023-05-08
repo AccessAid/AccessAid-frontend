@@ -8,12 +8,13 @@ import './NavList.css';
 const NavList = ({ navList }) => {
   return (
     <ul className='navlist'>
-      {navList.map(({ label, link, icon }, key) => (
+      {navList.map(({ label, link, icon, onClick }, key) => (
         <Typography
           key={label}
           variant='small'
           color='blue-gray'
           className='navlist__link'
+          onClick={() => onClick()}
         >
           <Link to={link}>
             <MenuItem className='navlist__menuitem'>

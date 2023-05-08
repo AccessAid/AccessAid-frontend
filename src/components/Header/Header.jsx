@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import {
   Navbar,
   MobileNav,
@@ -24,6 +24,7 @@ const Header = () => {
   const [headerColor, setHeaderColor] = useState('bg-transparent');
 
   const isAuthenticated = useAuthCheck();
+  const dispatch = useDispatch();
 
   const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
 

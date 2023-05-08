@@ -25,6 +25,9 @@ export const authSlice = createSlice({
 
       state.user = storageUser ? storageUser : null;
     },
+    cleanApiError: (state, action) => {
+      state.error = null;
+    },
     logout: (state, action) => {
       state.token = null;
       state.user = null;
@@ -100,6 +103,7 @@ export const selectUserData = (state) => state.auth.user;
 
 export const selectError = (state) => state.auth.error;
 
-export const { persistToken, persistUser, logout } = authSlice.actions;
+export const { persistToken, persistUser, cleanApiError, logout } =
+  authSlice.actions;
 
 export default authSlice.reducer;

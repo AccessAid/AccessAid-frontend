@@ -104,9 +104,7 @@ export const signup = createAsyncThunk(
       if (response.ok) {
         return data;
       }
-      return rejectWithValue({
-        message: "This username doesn't exist",
-      });
+      return rejectWithValue(data);
     } catch (err) {
       return rejectWithValue(err.message);
     }

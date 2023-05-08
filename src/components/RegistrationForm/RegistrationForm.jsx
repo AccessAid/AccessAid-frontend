@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 import { Card, Button, Typography } from '@material-tailwind/react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/ReactToastify.min.css';
 
 import { signup } from './../../store/actions/authActions';
+import { cleanApiError } from '../../store/slices/authSlice';
 import { InputValidation } from '../InputValidation/InputValidation';
 import { RadioValidation } from '../RadioValidation/RadioValidation';
 import { LOGIN } from '../../config/routes';
-import { Link } from 'react-router-dom';
 
 const RegistrationForm = () => {
   const hookFormMethods = useForm();
@@ -25,10 +27,20 @@ const RegistrationForm = () => {
         console.log(`resultAction =`, resultAction);
 
         if (resultAction?.message.includes('correctly')) {
-          navigate(LOGIN);
+          toast.success('¡Sign Up Successfully!', {
+            autoClose: 1700,
+          });
+          toast.onChange((payload) => {
+            if (payload.status === 'removed') {
+              navigate(LOGIN);
+            }
+          });
         }
       })
       .catch((error) => {
+        toast.error('¡There is an error', {
+          autoClose: 2000,
+        });
         console.log(error);
       });
   };
@@ -144,12 +156,18 @@ const RegistrationForm = () => {
           </Button>
           <Typography color='gray' className='mt-4 text-center font-normal'>
             Already have an account?{' '}
-            <span className='font-medium text-blue-500 transition-colors hover:text-blue-700'>
+            <span
+              className='font-medium text-blue-500 transition-colors hover:text-blue-700'
+              onClick={() => {
+                dispatch(cleanApiError());
+              }}
+            >
               <Link to={LOGIN}>Sign In</Link>
             </span>
           </Typography>
         </form>
       </FormProvider>
+      <ToastContainer />
     </Card>
   );
 };

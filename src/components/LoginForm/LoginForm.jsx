@@ -1,17 +1,19 @@
 import React from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Card, Button, Typography } from '@material-tailwind/react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/ReactToastify.min.css';
+
 import { login, getUserData } from './../../store/actions/authActions';
+import { cleanApiError } from '../../store/slices/authSlice';
 import { InputValidation } from '../InputValidation/InputValidation';
 import { HOME, SIGNUP } from '../../config/routes';
-import { Link } from 'react-router-dom';
 
 const LoginForm = () => {
   const hookFormMethods = useForm();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     try {
@@ -25,9 +27,11 @@ const LoginForm = () => {
         if (userDataAction) {
           console.log(`userDataAction =`, userDataAction);
         }
-        navigate(HOME);
       }
     } catch (error) {
+      toast.error('¡There is an error', {
+        autoClose: 2000,
+      });
       console.log(error);
     }
   };
@@ -92,13 +96,19 @@ const LoginForm = () => {
           </Button>
           <Typography color='gray' className='mt-4 text-center font-normal'>
             {"Don't have an account?"}
-            <span className='font-medium text-blue-500 transition-colors hover:text-blue-700'>
+            <span
+              className='font-medium text-blue-500 transition-colors hover:text-blue-700'
+              onClick={() => {
+                dispatch(cleanApiError());
+              }}
+            >
               {' '}
               <Link to={SIGNUP}>Sign Up</Link>
             </span>
           </Typography>
         </form>
       </FormProvider>
+      <ToastContainer />
     </Card>
   );
 };
