@@ -1,11 +1,13 @@
 import React from 'react';
 import { Typography } from '@material-tailwind/react';
-import { Bars2Icon } from '@heroicons/react/24/outline';
+import { Link } from 'react-router-dom';
 
 import BrandImage from '../../assets/svg/brand_access.svg';
 import GitHubImage from '../../assets/svg/github.svg';
 import ReactImage from '../../assets/svg/react.svg';
 import SpringImage from '../../assets/svg/spring.svg';
+
+import { CONTACT } from '../../config/routes/index';
 
 import './Footer.css';
 
@@ -16,43 +18,23 @@ const Footer = () => {
         <img src={BrandImage} alt='logo-ct' className='w-16' />
         <ul className='footer__list'>
           <li>
-            <Typography
-              as='a'
-              href='#'
-              color='blue-gray'
-              className='footer__link'
-            >
+            <Typography color='blue-gray' className='footer__link'>
               About Us
             </Typography>
           </li>
           <li>
-            <Typography
-              as='a'
-              href='#'
-              color='blue-gray'
-              className='footer__link'
-            >
+            <Typography color='blue-gray' className='footer__link'>
               License
             </Typography>
           </li>
           <li>
-            <Typography
-              as='a'
-              href='#'
-              color='blue-gray'
-              className='footer__link'
-            >
+            <Typography color='blue-gray' className='footer__link'>
               Contribute
             </Typography>
           </li>
           <li>
-            <Typography
-              as='a'
-              href='#'
-              color='blue-gray'
-              className='footer__link'
-            >
-              Contact Us
+            <Typography color='blue-gray' className='footer__link'>
+              <Link to={CONTACT}>Contact Us</Link>
             </Typography>
           </li>
         </ul>

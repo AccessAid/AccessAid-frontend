@@ -27,7 +27,7 @@ const RegistrationForm = () => {
         console.log(`resultAction =`, resultAction);
 
         if (resultAction?.message.includes('correctly')) {
-          toast.success('¡Sign Up Successfully!', {
+          toast.success('Sign Up Successfully!', {
             autoClose: 1700,
           });
           toast.onChange((payload) => {
@@ -38,10 +38,13 @@ const RegistrationForm = () => {
         }
       })
       .catch((error) => {
-        toast.error('¡There is an error', {
+        toast.error('There is an error!', {
           autoClose: 2000,
         });
-        toast.onChange((payload) => {});
+        toast.onChange((payload) => {
+          if (payload.status === 'removed') {
+          }
+        });
         console.log(error);
       });
   };
@@ -64,17 +67,15 @@ const RegistrationForm = () => {
               rules={{
                 required: {
                   value: true,
-                  message: 'Por favor, escriba su nombre de usuario.',
+                  message: 'Please enter your username',
                 },
                 minLength: {
                   value: 3,
-                  message:
-                    'El nombre de usuario debe tener al menos 3 caracteres.',
+                  message: 'The user name must be at least 3 characters long',
                 },
                 maxLength: {
                   value: 20,
-                  message:
-                    'El nombre de usuario debe tener como máximo 20 caracteres.',
+                  message: 'The user name must not exceed 20 characters',
                 },
               }}
             />
@@ -86,7 +87,7 @@ const RegistrationForm = () => {
               rules={{
                 required: {
                   value: true,
-                  message: 'Por favor, escriba su email.',
+                  message: 'Please enter your email address.',
                 },
                 pattern: {
                   value: /\S+@\S+\.\S+/,
@@ -102,7 +103,7 @@ const RegistrationForm = () => {
               rules={{
                 required: {
                   value: true,
-                  message: 'Por favor, escriba su contraseña',
+                  message: 'Please enter your password',
                 },
                 minLength: {
                   value: 8,
@@ -138,7 +139,7 @@ const RegistrationForm = () => {
             rules={{
               required: {
                 value: true,
-                message: 'Por favor, seleccione esta casilla para continuar.',
+                message: 'Please check this box to continue',
               },
             }}
           />
