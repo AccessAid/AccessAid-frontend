@@ -1,71 +1,123 @@
 import React from 'react';
-import { useForm } from 'react-hook-form';
-import {
-  Input,
-  Textarea,
-  Button,
-  Card,
-  Typography,
-} from '@material-tailwind/react';
+import { useForm, FormProvider } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import { useNavigate, Link } from 'react-router-dom';
+import { Card, Button, Typography } from '@material-tailwind/react';
 
-import './ContactForm.css';
+import { InputValidation } from '../InputValidation/InputValidation';
+import { TextareaValidation } from '../TextareaValidation/TextareaValidation';
+import { LOGIN } from '../../config/routes';
 
 const ContactForm = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  const hookFormMethods = useForm();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const onSubmit = (data) => {
-    console.log(data);
+    console.log('data contact', data);
+    // dispatch(contactAction(data))
+    //   .then(() => {
+    //     navigate(LOGIN);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
   };
 
   return (
-    <div className='contact__form'>
-      <Card color='transparent' shadow={false} className='contact-card'>
-        <Typography variant='h4' color='blue-gray'>
-          Contact us
-        </Typography>
-        <Typography color='gray' className='mt-1 font-normal'>
-          Send us your comments, questions and suggestions about our
-          accessibility platform
-        </Typography>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Input
-            id='name'
-            label='Nombre'
-            variant='outlined'
-            {...register('name', { required: true })}
-            error={errors.name}
-          />
-          <Input
-            id='email'
-            label='Email'
-            variant='outlined'
-            {...register('email', { required: true })}
-            error={errors.message}
-          />
-          <Input
-            id='subject'
-            label='Asunto'
-            variant='outlined'
-            {...register('subject', { required: true })}
-            error={errors.subject}
-          />
-          <Textarea
-            id='message'
-            rows={5}
-            label='Mensaje'
-            {...register('message', { required: true })}
-            error={errors.message}
-          />
-          <Button type='submit' variant='filled'>
-            Enviar
+    <Card color='transparent' shadow={false}>
+      <Typography variant='h4' color='blue-gray'>
+        Contact Us
+      </Typography>
+      <Typography color='gray' className='mt-1 font-normal'>
+        Send us your comments, questions, and suggestions.
+      </Typography>
+      <FormProvider {...hookFormMethods}>
+        <form
+          className='mb-2 mt-8 w-80 max-w-screen-lg sm:w-96'
+          onSubmit={hookFormMethods.handleSubmit(onSubmit)}
+        >
+          <div className='mb-4 flex flex-col gap-4'>
+            <InputValidation
+              nameField='name'
+              controllerProps={{ defaultValue: '' }}
+              inputProps={{ size: 'lg', label: 'Name', type: 'text' }}
+              rules={{
+                required: {
+                  value: true,
+                  message: 'Please enter your name.',
+                },
+                minLength: {
+                  value: 3,
+                  message: 'Name must have at least 3 characters.',
+                },
+                maxLength: {
+                  value: 20,
+                  message: 'Name must have a maximum of 20 characters.',
+                },
+              }}
+            />
+
+            <InputValidation
+              nameField='email'
+              controllerProps={{ defaultValue: '' }}
+              inputProps={{ size: 'lg', label: 'Email', type: 'text' }}
+              rules={{
+                required: {
+                  value: true,
+                  message: 'Please enter your email.',
+                },
+                pattern: {
+                  value: /\S+@\S+\.\S+/,
+                  message: 'Invalid email address',
+                },
+              }}
+            />
+
+            <InputValidation
+              nameField='subject'
+              controllerProps={{ defaultValue: '' }}
+              inputProps={{ size: 'lg', label: 'Subject', type: 'text' }}
+              rules={{
+                required: {
+                  value: true,
+                  message: 'Please enter the subject.',
+                },
+              }}
+            />
+
+            <TextareaValidation
+              nameField='message'
+              controllerProps={{ defaultValue: '' }}
+              inputProps={{ size: 'lg', label: 'Message' }}
+              rules={{
+                required: {
+                  value: true,
+                  message: 'Please enter your message.',
+                },
+                minLength: {
+                  value: 10,
+                  message: 'Message must have at least 10 characters.',
+                },
+                maxLength: {
+                  value: 200,
+                  message: 'Message can have a maximum of 200 characters.',
+                },
+              }}
+            />
+          </div>
+
+          <Button
+            className='mt-6'
+            fullWidth
+            onClick={hookFormMethods.handleSubmit(onSubmit)}
+            disabled={Object.keys(hookFormMethods.formState.errors).length > 0}
+          >
+            Submit
           </Button>
         </form>
-      </Card>
-    </div>
+      </FormProvider>
+    </Card>
   );
 };
 

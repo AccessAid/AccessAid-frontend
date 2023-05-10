@@ -20,7 +20,7 @@
 }
 
 .header .header__container .header__brand .brand__title {
-  @apply hidden sm:block text-lg text-blue-gray-900  hover:text-quaternary md:text-xl;
+  @apply hidden text-lg text-blue-gray-900 hover:text-quaternary  sm:block md:text-xl;
 }
 
 .header .header__container .header__links {

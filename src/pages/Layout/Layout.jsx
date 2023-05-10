@@ -5,17 +5,15 @@ import { Footer } from '../../components/Footer/Footer';
 
 const Layout = () => {
   return (
-    <>
-      <div className='flex min-h-screen flex-col'>
-        <Header />
+    <div className='flex min-h-screen flex-col'>
+      <Header />
 
-        <div className='flex-grow'>
-          <Outlet />
-        </div>
-
-        <Footer />
+      <div className='flex-grow overflow-x-hidden'>
+        <Outlet />
       </div>
-    </>
+
+      <Footer />
+    </div>
   );
 };
 

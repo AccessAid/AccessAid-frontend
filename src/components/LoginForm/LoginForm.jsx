@@ -29,7 +29,7 @@ const LoginForm = () => {
         }
       }
     } catch (error) {
-      toast.error('¡There is an error', {
+      toast.error('There was an error sending the form!', {
         autoClose: 2000,
       });
       console.log(error);
@@ -54,17 +54,15 @@ const LoginForm = () => {
               rules={{
                 required: {
                   value: true,
-                  message: 'Por favor, escriba su nombre de usuario.',
+                  message: 'Please enter your username',
                 },
                 minLength: {
                   value: 3,
-                  message:
-                    'El nombre de usuario debe tener al menos 3 caracteres.',
+                  message: 'The user name must be at least 3 characters long.',
                 },
                 maxLength: {
                   value: 20,
-                  message:
-                    'El nombre de usuario debe tener como máximo 20 caracteres.',
+                  message: 'The user name must be no longer than 20 characters',
                 },
               }}
             />
@@ -76,7 +74,7 @@ const LoginForm = () => {
               rules={{
                 required: {
                   value: true,
-                  message: 'Please enter your password.',
+                  message: 'Please enter your password',
                 },
                 minLength: {
                   value: 8,
