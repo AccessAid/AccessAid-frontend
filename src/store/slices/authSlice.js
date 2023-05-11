@@ -79,7 +79,7 @@ export const authSlice = createSlice({
       })
       .addCase(getUserData.fulfilled, (state, { payload }) => {
         console.log('payload getUserData', payload);
-        if (Object.keys(payload).length === 3) {
+        if (payload?.username) {
           state.user = payload;
           state.error = null;
           localStorage.setItem(PERSIST_KEY_USER, JSON.stringify(payload));
