@@ -1,9 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { login, signup, getUserData } from '../actions/authActions';
+import { UserEmptyState } from '../../models/users/user';
 
 const initialState = {
   status: 'idle',
-  user: null,
+  user: UserEmptyState,
   token: null,
   error: null,
 };
@@ -11,6 +12,7 @@ const initialState = {
 const PERSIST_KEY_AUTH_TOKEN = 'token-accessaid';
 const PERSIST_KEY_USER = 'user-accessaid';
 
+// Redux Toolkit use Immer package to manage state without break immutability
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -23,14 +25,14 @@ export const authSlice = createSlice({
     persistUser: (state, action) => {
       const storageUser = localStorage.getItem(PERSIST_KEY_USER);
 
-      state.user = storageUser ? storageUser : null;
+      state.user = storageUser ? storageUser : UserEmptyState;
     },
     cleanApiError: (state, action) => {
       state.error = null;
     },
     logout: (state, action) => {
       state.token = null;
-      state.user = null;
+      state.user = UserEmptyState;
       state.status = 'idle';
       localStorage.removeItem(PERSIST_KEY_AUTH_TOKEN);
       localStorage.removeItem(PERSIST_KEY_USER);
@@ -75,11 +77,11 @@ export const authSlice = createSlice({
       // getUserData
       .addCase(getUserData.pending, (state) => {
         state.status = 'loading';
-        state.user = null;
+        state.user = UserEmptyState;
       })
       .addCase(getUserData.fulfilled, (state, { payload }) => {
         console.log('payload getUserData', payload);
-        if (payload?.username) {
+        if (payload?.username.length > 0) {
           state.user = payload;
           state.error = null;
           localStorage.setItem(PERSIST_KEY_USER, JSON.stringify(payload));
@@ -87,7 +89,7 @@ export const authSlice = createSlice({
       })
       .addCase(getUserData.rejected, (state, action) => {
         state.status = 'failed';
-        state.user = null;
+        state.user = UserEmptyState;
         state.error = action.payload
           ? action.payload.message
           : action.error.message;

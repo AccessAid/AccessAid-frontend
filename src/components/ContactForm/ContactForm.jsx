@@ -1,16 +1,18 @@
 import React from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { Card, Button, Typography } from '@material-tailwind/react';
 
 import { InputValidation } from '../InputValidation/InputValidation';
 import { TextareaValidation } from '../TextareaValidation/TextareaValidation';
 import { LOGIN } from '../../config/routes';
+import { selectUserData } from '../../store/slices/authSlice';
 
 const ContactForm = () => {
   const hookFormMethods = useForm();
   const dispatch = useDispatch();
+  const userData = useSelector(selectUserData);
   const navigate = useNavigate();
 
   const onSubmit = (data) => {
@@ -23,6 +25,8 @@ const ContactForm = () => {
     //     console.log(error);
     //   });
   };
+
+  console.log('userData', userData);
 
   return (
     <Card color='transparent' shadow={false}>
