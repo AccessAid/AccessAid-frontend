@@ -1,29 +1,54 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { login, signup, getUserData } from '../actions/authActions';
+import { isDatePassed } from '../../commons/utils/dateUtils';
 
 const initialState = {
   status: 'idle',
   user: null,
   token: null,
+  refreshTokenDate: null,
+  isTokenExpired: true,
   error: null,
 };
 
-const PERSIST_KEY_AUTH_TOKEN = 'token-accessaid';
-const PERSIST_KEY_USER = 'user-accessaid';
+export const PERSIST_KEY_AUTH_TOKEN = 'token-accessaid';
+export const PERSIST_KEY_REFRESH_TOKEN_DATE = 'expiration-date-token-accessaid';
+export const PERSIST_KEY_USER = 'user-accessaid';
 
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
     persistToken: (state, action) => {
+      const storageRefreshTokenDate = localStorage.getItem(
+        PERSIST_KEY_REFRESH_TOKEN_DATE,
+      );
       const storageToken = localStorage.getItem(PERSIST_KEY_AUTH_TOKEN);
 
-      state.token = storageToken ? storageToken : null;
+      if (storageRefreshTokenDate && storageToken) {
+        const isExpired = isDatePassed(storageRefreshTokenDate);
+
+        state.isTokenExpired = isExpired;
+
+        if (isExpired) {
+          console.log('PERSIST TOKEN, isExpired TRUE');
+          localStorage.removeItem(PERSIST_KEY_AUTH_TOKEN);
+          localStorage.removeItem(PERSIST_KEY_REFRESH_TOKEN_DATE);
+          localStorage.removeItem(PERSIST_KEY_USER);
+          return;
+        }
+
+        state.refreshTokenDate = storageRefreshTokenDate;
+        state.token = storageToken;
+      }
     },
     persistUser: (state, action) => {
       const storageUser = localStorage.getItem(PERSIST_KEY_USER);
 
-      state.user = storageUser ? storageUser : null;
+      state.user = storageUser ? JSON.parse(storageUser) : null;
+    },
+    setIsTokenExpired: (state, action) => {
+      state.isTokenExpired = action.payload;
     },
     cleanApiError: (state, action) => {
       state.error = null;
@@ -31,8 +56,11 @@ export const authSlice = createSlice({
     logout: (state, action) => {
       state.token = null;
       state.user = null;
+      state.refreshTokenDate = null;
+      state.isTokenExpired = true;
       state.status = 'idle';
       localStorage.removeItem(PERSIST_KEY_AUTH_TOKEN);
+      localStorage.removeItem(PERSIST_KEY_REFRESH_TOKEN_DATE);
       localStorage.removeItem(PERSIST_KEY_USER);
     },
   },
@@ -50,10 +78,20 @@ export const authSlice = createSlice({
           state.token = payload.token;
           localStorage.setItem(PERSIST_KEY_AUTH_TOKEN, payload.token);
         }
+        if (payload?.expiration) {
+          state.refreshTokenDate = payload.expiration;
+          localStorage.setItem(
+            PERSIST_KEY_REFRESH_TOKEN_DATE,
+            payload.expiration,
+          );
+          state.isTokenExpired = false;
+        }
       })
       .addCase(login.rejected, (state, action) => {
         state.status = 'failed';
         state.token = null;
+        state.refreshTokenDate = null;
+        state.isTokenExpired = true;
         state.error = action.payload
           ? action.payload.message
           : action.error.message;
@@ -78,6 +116,7 @@ export const authSlice = createSlice({
         state.user = null;
       })
       .addCase(getUserData.fulfilled, (state, { payload }) => {
+        state.status = 'succeeded';
         console.log('payload getUserData', payload);
         if (payload?.username) {
           state.user = payload;
@@ -99,11 +138,20 @@ export const selectUserStatus = (state) => state.auth.status;
 
 export const selectToken = (state) => state.auth.token;
 
+export const selectRefreshTokenDate = (state) => state.auth.refreshTokenDate;
+
+export const selectIsTokenExpired = (state) => state.auth.isTokenExpired;
+
 export const selectUserData = (state) => state.auth.user;
 
 export const selectError = (state) => state.auth.error;
 
-export const { persistToken, persistUser, cleanApiError, logout } =
-  authSlice.actions;
+export const {
+  persistToken,
+  persistUser,
+  cleanApiError,
+  logout,
+  setIsTokenExpired,
+} = authSlice.actions;
 
 export default authSlice.reducer;

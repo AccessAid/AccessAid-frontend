@@ -27,8 +27,6 @@ In the project directory, you can run the following scripts:
 - `npm run storybook`: Starts the Storybook development server.
 - `npm run build-storybook`: Builds the Storybook as a static web application.
 
-
-
 ## Running the Application
 
 To run the application in development mode, use the following command:
@@ -78,4 +76,3 @@ The built files will be generated in the `dist` directory.
 ## Additional Information
 
 For more information about specific scripts and configurations, refer to the project's `package.json` file.
-
