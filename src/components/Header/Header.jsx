@@ -5,6 +5,7 @@ import {
   MobileNav,
   IconButton,
   Typography,
+  Collapse,
 } from '@material-tailwind/react';
 import { Bars2Icon } from '@heroicons/react/24/outline';
 import { Link, useLocation } from 'react-router-dom';
@@ -110,13 +111,13 @@ const Header = () => {
           </div>
         )}
       </div>
-      <MobileNav open={isNavOpen} className='header__mobile'>
+      <Collapse open={isNavOpen} className='header__mobile'>
         {isAuthenticated ? (
           <NavList navList={navListItems} />
         ) : (
           <NavList navList={[...navListItems, ...navListAuthItems]} />
         )}
-      </MobileNav>
+      </Collapse>
     </Navbar>
   );
 };

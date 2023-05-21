@@ -8,7 +8,6 @@ const ChipAccessibility = ({ value }) => {
     <Chip
       color='indigo'
       value={value}
-      size='xs'
       className='flex w-20 justify-center p-1 text-xs font-normal capitalize'
       icon={<CheckIcon className='h-4 w-4' />}
     />
