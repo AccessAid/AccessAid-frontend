@@ -90,3 +90,38 @@ export const getUserData = createAsyncThunk(
     }
   },
 );
+
+export const refreshTokenAction = createAsyncThunk(
+  'auth/refreshTokenAction',
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/auth/refreshtoken`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+          },
+          body: JSON.stringify(payload),
+        },
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        return data;
+      }
+
+      if (data?.message?.includes('Refresh token was expired')) {
+        return rejectWithValue({
+          message: 'the session has expired',
+        });
+      }
+
+      return rejectWithValue(data);
+    } catch (err) {
+      return rejectWithValue(err.message);
+    }
+  },
+);

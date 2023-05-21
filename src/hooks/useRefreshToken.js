@@ -2,35 +2,36 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   logout,
-  selectRefreshTokenDate,
+  selectRefreshToken,
+  selectTokenExpiredDate,
   selectUserData,
   setIsTokenExpired,
 } from '../store/slices/authSlice';
 import { isDatePassed } from '../commons/utils/dateUtils';
-import { login } from '../store/actions/authActions';
+import { login, refreshTokenAction } from '../store/actions/authActions';
 
 const useRefreshToken = () => {
   const dispatch = useDispatch();
-  const refreshTokenDate = useSelector(selectRefreshTokenDate);
+  const tokenExpiredDate = useSelector(selectTokenExpiredDate);
+  const refreshToken = useSelector(selectRefreshToken);
   const userData = useSelector(selectUserData);
   const [isRefreshTokenDone, setIsRefreshTokenDone] = useState(true);
 
   useEffect(() => {
-    console.log('refreshTokenDate', refreshTokenDate);
-    if (refreshTokenDate && userData) {
-      console.log('estoy dentro de: refreshTokenDate');
+    console.log('tokenExpiredDate', tokenExpiredDate);
+    if (tokenExpiredDate && userData) {
+      console.log('estoy dentro de: tokenExpiredDate');
 
       const minutes = 35;
       const interval = minutes * 60 * 1000;
       const intervalRefreshToken = setInterval(async () => {
-        const isExpired = isDatePassed(refreshTokenDate);
+        const isExpired = isDatePassed(tokenExpiredDate);
         if (isExpired) {
           console.log('está expirado***');
           try {
             const resultAction = await dispatch(
-              login({
-                username: userData?.username,
-                password: '123456789',
+              refreshTokenAction({
+                refreshToken,
               }),
             );
 
@@ -43,7 +44,6 @@ const useRefreshToken = () => {
             }
           } catch (error) {
             console.log('refresh token error: ', error);
-            // dispatch(logout());
             setIsRefreshTokenDone(false);
           }
         }
@@ -51,7 +51,7 @@ const useRefreshToken = () => {
 
       return () => clearInterval(intervalRefreshToken);
     }
-  }, [refreshTokenDate, userData, dispatch]);
+  }, [tokenExpiredDate, userData, dispatch]);
 
   return isRefreshTokenDone;
 };

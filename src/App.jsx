@@ -29,8 +29,8 @@ import { ProtectedRoute } from './components/ProtectedRoute/ProtectedRoute';
 import {
   persistToken,
   persistUser,
+  selectAuthError,
   selectIsTokenExpired,
-  selectRefreshTokenDate,
   setIsTokenExpired,
 } from './store/slices/authSlice';
 
@@ -42,6 +42,7 @@ function App() {
   const isAuthenticated = useAuthCheck();
   const isRefreshTokenDone = useRefreshToken();
   const isTokenExpired = useSelector(selectIsTokenExpired);
+  const authErrorApi = useSelector(selectAuthError);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -56,9 +57,15 @@ function App() {
   useEffect(() => {
     console.log('isRefreshTokenDone', isRefreshTokenDone, isTokenExpired);
     if (!isRefreshTokenDone && isTokenExpired) {
-      toast.error("We're suffering problemas right now, come back later", {
-        autoClose: 2500,
-      });
+      if (authErrorApi && authErrorApi?.includes('session')) {
+        toast.error(authErrorApi, {
+          autoClose: 3000,
+        });
+      } else {
+        toast.error("We're suffering problemas right now, come back later", {
+          autoClose: 2500,
+        });
+      }
     }
   }, [isRefreshTokenDone, isTokenExpired]);
 

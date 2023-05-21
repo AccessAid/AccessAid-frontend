@@ -1,18 +1,25 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { login, signup, getUserData } from '../actions/authActions';
+import {
+  login,
+  signup,
+  getUserData,
+  refreshTokenAction,
+} from '../actions/authActions';
 import { isDatePassed } from '../../commons/utils/dateUtils';
 
 const initialState = {
   status: 'idle',
   user: null,
   token: null,
-  refreshTokenDate: null,
+  refreshToken: null,
+  tokenExpiredDate: null,
   isTokenExpired: true,
   error: null,
 };
 
 export const PERSIST_KEY_AUTH_TOKEN = 'token-accessaid';
-export const PERSIST_KEY_REFRESH_TOKEN_DATE = 'expiration-date-token-accessaid';
+export const PERSIST_KEY_AUTH_REFRESH_TOKEN = 'refresh-token-accessaid';
+export const PERSIST_KEY_TOKEN_EXPIRED_DATE = 'expiration-date-token-accessaid';
 export const PERSIST_KEY_USER = 'user-accessaid';
 
 export const authSlice = createSlice({
@@ -20,26 +27,31 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     persistToken: (state, action) => {
-      const storageRefreshTokenDate = localStorage.getItem(
-        PERSIST_KEY_REFRESH_TOKEN_DATE,
+      const storageTokenExpiredDate = localStorage.getItem(
+        PERSIST_KEY_TOKEN_EXPIRED_DATE,
       );
       const storageToken = localStorage.getItem(PERSIST_KEY_AUTH_TOKEN);
+      const storageRefreshToken = localStorage.getItem(
+        PERSIST_KEY_AUTH_REFRESH_TOKEN,
+      );
 
-      if (storageRefreshTokenDate && storageToken) {
-        const isExpired = isDatePassed(storageRefreshTokenDate);
+      if (storageTokenExpiredDate && storageToken && storageRefreshToken) {
+        const isExpired = isDatePassed(storageTokenExpiredDate);
 
         state.isTokenExpired = isExpired;
 
         if (isExpired) {
           console.log('PERSIST TOKEN, isExpired TRUE');
           localStorage.removeItem(PERSIST_KEY_AUTH_TOKEN);
-          localStorage.removeItem(PERSIST_KEY_REFRESH_TOKEN_DATE);
+          localStorage.removeItem(PERSIST_KEY_TOKEN_EXPIRED_DATE);
           localStorage.removeItem(PERSIST_KEY_USER);
+          localStorage.removeItem(PERSIST_KEY_AUTH_REFRESH_TOKEN);
           return;
         }
 
-        state.refreshTokenDate = storageRefreshTokenDate;
+        state.tokenExpiredDate = storageTokenExpiredDate;
         state.token = storageToken;
+        state.refreshToken = storageRefreshToken;
       }
     },
     persistUser: (state, action) => {
@@ -56,11 +68,11 @@ export const authSlice = createSlice({
     logout: (state, action) => {
       state.token = null;
       state.user = null;
-      state.refreshTokenDate = null;
+      state.tokenExpiredDate = null;
       state.isTokenExpired = true;
       state.status = 'idle';
       localStorage.removeItem(PERSIST_KEY_AUTH_TOKEN);
-      localStorage.removeItem(PERSIST_KEY_REFRESH_TOKEN_DATE);
+      localStorage.removeItem(PERSIST_KEY_TOKEN_EXPIRED_DATE);
       localStorage.removeItem(PERSIST_KEY_USER);
     },
   },
@@ -79,18 +91,27 @@ export const authSlice = createSlice({
           localStorage.setItem(PERSIST_KEY_AUTH_TOKEN, payload.token);
         }
         if (payload?.expiration) {
-          state.refreshTokenDate = payload.expiration;
+          state.tokenExpiredDate = payload.expiration;
           localStorage.setItem(
-            PERSIST_KEY_REFRESH_TOKEN_DATE,
+            PERSIST_KEY_TOKEN_EXPIRED_DATE,
             payload.expiration,
           );
           state.isTokenExpired = false;
+        }
+
+        if (payload?.refreshToken) {
+          state.refreshToken = payload.refreshToken;
+          localStorage.setItem(
+            PERSIST_KEY_AUTH_REFRESH_TOKEN,
+            payload.refreshToken,
+          );
         }
       })
       .addCase(login.rejected, (state, action) => {
         state.status = 'failed';
         state.token = null;
-        state.refreshTokenDate = null;
+        state.refreshToken = null;
+        state.tokenExpiredDate = null;
         state.isTokenExpired = true;
         state.error = action.payload
           ? action.payload.message
@@ -130,6 +151,53 @@ export const authSlice = createSlice({
         state.error = action.payload
           ? action.payload.message
           : action.error.message;
+      })
+      // refreshToken
+      .addCase(refreshTokenAction.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(refreshTokenAction.fulfilled, (state, { payload }) => {
+        state.status = 'succeeded';
+        console.log('payload', payload);
+        if (payload?.token) {
+          state.token = payload.token;
+          localStorage.setItem(PERSIST_KEY_AUTH_TOKEN, payload.token);
+        }
+        if (payload?.expiration) {
+          state.tokenExpiredDate = payload.expiration;
+          localStorage.setItem(
+            PERSIST_KEY_TOKEN_EXPIRED_DATE,
+            payload.expiration,
+          );
+          state.isTokenExpired = false;
+        }
+
+        if (payload?.refreshToken) {
+          state.refreshToken = payload.refreshToken;
+          localStorage.setItem(
+            PERSIST_KEY_AUTH_REFRESH_TOKEN,
+            payload.refreshToken,
+          );
+        }
+      })
+      .addCase(refreshTokenAction.rejected, (state, action) => {
+        console.log('action refreshTokenAction.rejected', action);
+        state.status = 'failed';
+        state.token = null;
+        state.refreshToken = null;
+        state.tokenExpiredDate = null;
+        state.isTokenExpired = true;
+        if (!action.payload) {
+          state.error = action.error.message;
+          return;
+        }
+
+        if (action.payload.refreshToken) {
+          state.error = action.payload.refreshToken;
+          return;
+        }
+
+        state.error = action.payload.message;
       });
   },
 });
@@ -138,13 +206,15 @@ export const selectUserStatus = (state) => state.auth.status;
 
 export const selectToken = (state) => state.auth.token;
 
-export const selectRefreshTokenDate = (state) => state.auth.refreshTokenDate;
+export const selectRefreshToken = (state) => state.auth.refreshToken;
+
+export const selectTokenExpiredDate = (state) => state.auth.tokenExpiredDate;
 
 export const selectIsTokenExpired = (state) => state.auth.isTokenExpired;
 
 export const selectUserData = (state) => state.auth.user;
 
-export const selectError = (state) => state.auth.error;
+export const selectAuthError = (state) => state.auth.error;
 
 export const {
   persistToken,
