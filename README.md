@@ -76,3 +76,17 @@ The built files will be generated in the `dist` directory.
 ## Additional Information
 
 For more information about specific scripts and configurations, refer to the project's `package.json` file.
+
+
+## Environment Variables
+
+For add Environment Variables for use around our app, for example backend url, you must create in root directory of the project the next file: `.env.local`. And add the next lines:
+```
+VITE_API_URL=<REPLACE_THIS_VALUE_WITH_URL_BACKEND>
+VITE_GOOGLE_MAPS_API_KEY=<REPLACE_THIS_VALUE_WITH_API_KEY_GOOGLE>
+```
+For example (this example don't contain any private data):
+```
+VITE_API_URL=http://localhost:8080/api
+VITE_GOOGLE_MAPS_API_KEY=123456
+```

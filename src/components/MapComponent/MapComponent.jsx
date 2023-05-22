@@ -35,16 +35,36 @@ const MapComponent = ({ setMapObject }) => {
   const currentSearchData = useSelector(selectCurrentSearch);
   const coordinatesMap = useSelector(selectCoordinatesMap);
 
-  const getDetailsMarker = () => {};
+  const DEFAULT_COORDINATES = {
+    lat: 40.4167754,
+    lng: -3.7037902,
+  };
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      ({ coords: { latitude, longitude } }) => {
+    const onSuccess = ({ coords: { latitude, longitude } }) => {
+      console.log('FUNCIONA LA GEO!');
+      dispatch(
+        setCurrentSearch({
+          ...currentSearchData,
+          lat: latitude,
+          lng: longitude,
+        }),
+      );
+
+      (async () => {
+        await dispatch(getAccessiblePlaces());
+      })();
+
+      dispatch(setCoordinatesMap({ lat: latitude, lng: longitude }));
+    };
+
+    const onError = (error) => {
+      if (error?.message?.includes('denied geolocation')) {
         dispatch(
           setCurrentSearch({
             ...currentSearchData,
-            lat: latitude,
-            lng: longitude,
+            lat: DEFAULT_COORDINATES.lat,
+            lng: DEFAULT_COORDINATES.lng,
           }),
         );
 
@@ -52,9 +72,11 @@ const MapComponent = ({ setMapObject }) => {
           await dispatch(getAccessiblePlaces());
         })();
 
-        dispatch(setCoordinatesMap({ lat: latitude, lng: longitude }));
-      },
-    );
+        dispatch(setCoordinatesMap(DEFAULT_COORDINATES));
+      }
+    };
+
+    navigator.geolocation.getCurrentPosition(onSuccess, onError);
   }, []);
 
   return (
