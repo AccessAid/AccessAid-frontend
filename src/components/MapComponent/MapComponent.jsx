@@ -59,21 +59,19 @@ const MapComponent = ({ setMapObject }) => {
     };
 
     const onError = (error) => {
-      if (error?.message?.includes('denied geolocation')) {
-        dispatch(
-          setCurrentSearch({
-            ...currentSearchData,
-            lat: DEFAULT_COORDINATES.lat,
-            lng: DEFAULT_COORDINATES.lng,
-          }),
-        );
+      dispatch(
+        setCurrentSearch({
+          ...currentSearchData,
+          lat: DEFAULT_COORDINATES.lat,
+          lng: DEFAULT_COORDINATES.lng,
+        }),
+      );
 
-        (async () => {
-          await dispatch(getAccessiblePlaces());
-        })();
+      (async () => {
+        await dispatch(getAccessiblePlaces());
+      })();
 
-        dispatch(setCoordinatesMap(DEFAULT_COORDINATES));
-      }
+      dispatch(setCoordinatesMap(DEFAULT_COORDINATES));
     };
 
     navigator.geolocation.getCurrentPosition(onSuccess, onError);
