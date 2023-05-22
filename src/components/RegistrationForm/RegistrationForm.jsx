@@ -20,33 +20,31 @@ const RegistrationForm = () => {
 
   const navigate = useNavigate();
 
-  const onSubmit = (data) => {
-    dispatch(signup(data))
-      .unwrap()
-      .then((resultAction) => {
-        console.log(`resultAction =`, resultAction);
+  const onSubmit = async (data) => {
+    try {
+      const resultAction = await dispatch(signup(data));
+      console.log(`resultAction =`, resultAction);
 
-        if (resultAction?.message.includes('correctly')) {
-          toast.success('Sign Up Successfully!', {
-            autoClose: 1700,
-          });
-          toast.onChange((payload) => {
-            if (payload.status === 'removed') {
-              navigate(LOGIN);
-            }
-          });
-        }
-      })
-      .catch((error) => {
-        toast.error('There is an error!', {
-          autoClose: 2000,
+      if (resultAction?.payload?.message.includes('correctly')) {
+        toast.success('Sign Up Successfully!', {
+          autoClose: 1000,
         });
         toast.onChange((payload) => {
           if (payload.status === 'removed') {
+            navigate(LOGIN);
           }
         });
-        console.log(error);
+      }
+    } catch (error) {
+      toast.error('There is an error!', {
+        autoClose: 2000,
       });
+      toast.onChange((payload) => {
+        if (payload.status === 'removed') {
+        }
+      });
+      console.log(error);
+    }
   };
 
   return (
