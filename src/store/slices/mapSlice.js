@@ -21,6 +21,7 @@ const initialState = {
     lat: 0,
     lng: 0,
   },
+  firstTimeRenderMap: false,
   status: 'idle',
   error: null,
 };
@@ -39,6 +40,9 @@ export const mapSlice = createSlice({
     },
     setCoordinatesMap: (state, action) => {
       state.coordinatesMap = action.payload;
+    },
+    setFirstTimeRenderMap: (state, action) => {
+      state.firstTimeRenderMap = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -93,11 +97,13 @@ export const selectCurrentSearch = (state) => state.map.currentSearch;
 export const selectCurrentSearchCoordinates = (state) =>
   state.map.currentSearchCoordinates;
 export const selectCoordinatesMap = (state) => state.map.coordinatesMap;
+export const selectFirstTimeRenderMap = (state) => state.map.firstTimeRenderMap;
 
 export const {
   /* Otros reducers relacionados con el mapa si los necesitas */
   setCurrentSearch,
   setCoordinatesMap,
+  setFirstTimeRenderMap,
 } = mapSlice.actions;
 
 export default mapSlice.reducer;

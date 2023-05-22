@@ -21,9 +21,11 @@ import {
   selectCoordinatesMap,
   selectCurrentSearch,
   selectCurrentSearchCoordinates,
+  selectFirstTimeRenderMap,
   selectPlaceSearched,
   setCoordinatesMap,
   setCurrentSearch,
+  setFirstTimeRenderMap,
 } from '../../store/slices/mapSlice';
 import { getAccessiblePlaces } from '../../store/actions/mapActions';
 import { getAccessiblePlaceDetails } from '../../store/actions/mapActions';
@@ -34,6 +36,7 @@ const MapComponent = ({ setMapObject }) => {
   const currentAccessiblePlaces = useSelector(selectAccessiblePlaces);
   const currentSearchData = useSelector(selectCurrentSearch);
   const coordinatesMap = useSelector(selectCoordinatesMap);
+  const firstTimeRenderMap = useSelector(selectFirstTimeRenderMap);
 
   const DEFAULT_COORDINATES = {
     lat: 40.4167754,
@@ -41,41 +44,51 @@ const MapComponent = ({ setMapObject }) => {
   };
 
   useEffect(() => {
-    const onSuccess = ({ coords: { latitude, longitude } }) => {
-      console.log('FUNCIONA LA GEO!');
-      dispatch(
-        setCurrentSearch({
-          ...currentSearchData,
-          lat: latitude,
-          lng: longitude,
-        }),
-      );
+    if (!firstTimeRenderMap) {
+      const onSuccess = ({ coords: { latitude, longitude } }) => {
+        console.log('FUNCIONA LA GEO!');
+        dispatch(
+          setCurrentSearch({
+            ...currentSearchData,
+            lat: latitude,
+            lng: longitude,
+          }),
+        );
 
-      (async () => {
-        await dispatch(getAccessiblePlaces());
-      })();
+        (async () => {
+          await dispatch(getAccessiblePlaces());
+        })();
 
-      dispatch(setCoordinatesMap({ lat: latitude, lng: longitude }));
-    };
+        dispatch(setCoordinatesMap({ lat: latitude, lng: longitude }));
+        dispatch(setFirstTimeRenderMap(true));
+      };
 
-    const onError = (error) => {
-      dispatch(
-        setCurrentSearch({
-          ...currentSearchData,
-          lat: DEFAULT_COORDINATES.lat,
-          lng: DEFAULT_COORDINATES.lng,
-        }),
-      );
+      const onError = (error) => {
+        dispatch(
+          setCurrentSearch({
+            ...currentSearchData,
+            lat: DEFAULT_COORDINATES.lat,
+            lng: DEFAULT_COORDINATES.lng,
+          }),
+        );
 
-      (async () => {
-        await dispatch(getAccessiblePlaces());
-      })();
+        (async () => {
+          await dispatch(getAccessiblePlaces());
+        })();
 
-      dispatch(setCoordinatesMap(DEFAULT_COORDINATES));
-    };
+        dispatch(setCoordinatesMap(DEFAULT_COORDINATES));
+        dispatch(setFirstTimeRenderMap(true));
+      };
 
-    navigator.geolocation.getCurrentPosition(onSuccess, onError);
+      navigator.geolocation.getCurrentPosition(onSuccess, onError);
+    }
   }, []);
+
+  // useEffect(() => {
+  //   (async () => {
+  //     await dispatch(getAccessiblePlaces());
+  //   })();
+  // }, [currentSearchData]);
 
   return (
     <div className={'map-container-component'}>
