@@ -14,18 +14,17 @@ import { HOME, SIGNUP } from '../../config/routes';
 const LoginForm = () => {
   const hookFormMethods = useForm();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     try {
-      const resultAction = await dispatch(login(data)).unwrap();
-      console.log(`resultAction =`, resultAction);
+      const resultAction = await dispatch(login(data));
 
-      if (resultAction?.token) {
-        const userDataAction = await dispatch(
-          getUserData(data.username),
-        ).unwrap();
-        if (userDataAction) {
-          console.log(`userDataAction =`, userDataAction);
+      if (resultAction?.payload?.token) {
+        const userDataAction = await dispatch(getUserData(data.username));
+        if (userDataAction.payload) {
+          console.log(`userDataAction =`, userDataAction.payload);
+          navigate(HOME);
         }
       }
     } catch (error) {
