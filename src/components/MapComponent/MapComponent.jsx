@@ -151,31 +151,33 @@ const MapComponent = ({ setMapObject }) => {
                     placeDetailsResult.payload.accessibilityData &&
                     placeDetailsResult.payload.formattedAddress
                   ) {
-                    openCardDetails(true);
-
                     if (placeDetailsResult.payload?.id) {
                       dispatch(getPlaceDetailsFromMapSlide());
-                    } else {
-                      // Procesar los resultados de addPlace
-                      const addPlaceResult = await dispatch(
-                        addPlace({ apiPlaceId: place.placeId }),
-                      );
+                      openCardDetails(true);
 
-                      if (addPlaceResult.payload?.id) {
-                        toast.info(
-                          'This place have not been rated or commented yet, be first one',
-                          {
-                            autoClose: 3500,
-                          },
-                        );
-                      } else {
-                        toast.info(
-                          'This site already have been visited by other users',
-                          {
-                            autoClose: 3500,
-                          },
-                        );
-                      }
+                      return;
+                    }
+                    // Procesar los resultados de addPlace
+                    const addPlaceResult = await dispatch(
+                      addPlace({ apiPlaceId: place.placeId }),
+                    );
+
+                    openCardDetails(true);
+
+                    if (addPlaceResult.payload?.id) {
+                      toast.info(
+                        'This place have not been rated or commented yet, be first one',
+                        {
+                          autoClose: 3500,
+                        },
+                      );
+                    } else {
+                      toast.info(
+                        'This site already have been visited by other users',
+                        {
+                          autoClose: 3500,
+                        },
+                      );
                     }
                   } else {
                     toast.error('There was an error opening place details', {
