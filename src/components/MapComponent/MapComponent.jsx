@@ -142,48 +142,45 @@ const MapComponent = ({ setMapObject }) => {
               isPlace
               onClickIcon={async (openCardDetails = () => {}) => {
                 try {
-                  const multipleActions = [
-                    dispatch(getAccessiblePlaceDetails(place.placeId)),
-                    dispatch(addPlace({ apiPlaceId: place.placeId })),
-                  ];
-
-                  const results = await Promise.allSettled(multipleActions);
-
                   // Procesar los resultados de getAccessiblePlaceDetails
-                  const placeDetailsResult = results[0];
+                  const placeDetailsResult = await dispatch(
+                    getAccessiblePlaceDetails(place.placeId),
+                  );
+
                   if (
-                    placeDetailsResult.status === 'fulfilled' &&
-                    placeDetailsResult.value.payload.accessibilityData &&
-                    placeDetailsResult.value.payload.formattedAddress
+                    placeDetailsResult.payload.accessibilityData &&
+                    placeDetailsResult.payload.formattedAddress
                   ) {
                     openCardDetails(true);
-                    dispatch(getPlaceDetailsFromMapSlide());
+
+                    if (placeDetailsResult.payload?.id) {
+                      dispatch(getPlaceDetailsFromMapSlide());
+                    } else {
+                      // Procesar los resultados de addPlace
+                      const addPlaceResult = await dispatch(
+                        addPlace({ apiPlaceId: place.placeId }),
+                      );
+
+                      if (addPlaceResult.payload?.id) {
+                        toast.info(
+                          'This place have not been rated or commented yet, be first one',
+                          {
+                            autoClose: 3500,
+                          },
+                        );
+                      } else {
+                        toast.info(
+                          'This site already have been visited by other users',
+                          {
+                            autoClose: 3500,
+                          },
+                        );
+                      }
+                    }
                   } else {
                     toast.error('There was an error opening place details', {
                       autoClose: 2500,
                     });
-                  }
-
-                  // Procesar los resultados de addPlace
-                  const addPlaceResult = results[1];
-                  if (
-                    addPlaceResult.status === 'fulfilled' &&
-                    addPlaceResult.value.payload.accessibilityData &&
-                    addPlaceResult.value.payload.formattedAddress
-                  ) {
-                    toast.info(
-                      'This place have not been rated or commented yet, be first one',
-                      {
-                        autoClose: 3500,
-                      },
-                    );
-                  } else {
-                    toast.info(
-                      'This site already have been visited by other users',
-                      {
-                        autoClose: 3500,
-                      },
-                    );
                   }
                 } catch (error) {
                   console.log(error);
