@@ -157,6 +157,7 @@ const MapComponent = ({ setMapObject }) => {
                     placeDetailsResult.value.payload.formattedAddress
                   ) {
                     openCardDetails(true);
+                    dispatch(getPlaceDetailsFromMapSlide());
                   } else {
                     toast.error('There was an error opening place details', {
                       autoClose: 2500,
@@ -196,13 +197,13 @@ const MapComponent = ({ setMapObject }) => {
               }}
               onClickMoreDetail={async () => {
                 try {
-                  dispatch(getPlaceDetailsFromMapSlide());
-
                   if (currentIdSelected) {
                     const totalRating = await dispatch(
                       getTotalRatingByPlace(currentIdSelected),
                     );
-                    if (totalRating?.payload?.totalRating) {
+
+                    console.log('totalRating', totalRating);
+                    if (totalRating?.payload?.placeId) {
                       navigate(PLACE_DETAIL);
                     } else {
                       toast.error(

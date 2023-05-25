@@ -117,6 +117,7 @@ export const placesSlice = createSlice({
       })
       .addCase(addPlace.fulfilled, (state, action) => {
         state.status = 'succeeded';
+        state.currentId = action.payload?.id;
         state.error = null;
       })
       .addCase(addPlace.rejected, (state, action) => {

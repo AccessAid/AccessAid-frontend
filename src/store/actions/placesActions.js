@@ -60,12 +60,12 @@ export const getPlaceByCoordinates = createAsyncThunk(
 export const getPlaceDetailsFromMapSlide = createAsyncThunk(
   'places/getAccessiblePlaceDetails',
   async (_, { rejectWithValue, getState }) => {
-    const getPlaceId = getState().map.placeIdSelected;
+    const placeGoogleId = getState().map.placeGoogleId;
     const accessiblePlaces = getState().map.accessiblePlaces;
 
-    if (accessiblePlaces?.length > 0 && getPlaceId) {
+    if (accessiblePlaces?.length > 0 && placeGoogleId) {
       const findPlaceDetails = accessiblePlaces?.find(
-        (place) => place?.placeId === getPlaceId,
+        (place) => place?.placeId === placeGoogleId,
       );
 
       return findPlaceDetails;
