@@ -58,6 +58,10 @@ const SearchLocation = ({ mapObject }) => {
         toast.onChange((payload) => {
           if (payload.status === 'removed') {
           }
+          if (payload.status === 'added') {
+          }
+          if (payload.status === 'updated') {
+          }
         });
 
         dispatch(setCoordinatesMap({ ...coordinatesSearch }));

@@ -1,24 +1,23 @@
 import React, { useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
-import {
-  Card,
-  Button,
-  Typography,
-  Select,
-  Option,
-} from '@material-tailwind/react';
+import { useSelector } from 'react-redux';
+import { Card, Button, Typography } from '@material-tailwind/react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/ReactToastify.min.css';
+import { SelectorValidation } from '../SelectorValidation/SelectorValidation';
+import { countries } from './countries.js';
+import 'flag-icon-css/css/flag-icons.css';
 import { InputValidation } from '../InputValidation/InputValidation';
 
 const ProfileEditForm = ({ initialValues }) => {
   const hookFormMethods = useForm({ defaultValues: initialValues });
+  const userData = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
 
   const onSubmit = (data) => {
-    // Handle form submission logic here
     console.log(data);
+
     toast.success('Profile Updated Successfully!', {
       autoClose: 1700,
     });
@@ -61,7 +60,7 @@ const ProfileEditForm = ({ initialValues }) => {
 
             <InputValidation
               nameField='email'
-              controllerProps={{ defaultValue: '' }}
+              controllerProps={{ defaultValue: userData.email || '' }}
               inputProps={{ size: 'lg', label: 'Email', type: 'text' }}
               rules={{
                 required: {
@@ -77,7 +76,7 @@ const ProfileEditForm = ({ initialValues }) => {
 
             <InputValidation
               nameField='username'
-              controllerProps={{ defaultValue: '' }}
+              controllerProps={{ defaultValue: userData.username || '' }}
               inputProps={{ size: 'lg', label: 'Username', type: 'text' }}
               rules={{
                 required: {
@@ -111,27 +110,32 @@ const ProfileEditForm = ({ initialValues }) => {
               }}
             />
 
-            <Select
-              label='Select Country'
-              animate={{
-                mount: { y: 0 },
-                unmount: { y: 25 },
+            <SelectorValidation
+              nameField='country'
+              controllerProps={{ defaultValue: '' }}
+              selectProps={{
+                label: 'Select Country',
+                options: Object.entries(countries).map(([key, value]) => ({
+                  contentOption: (
+                    <React.Fragment>
+                      <span
+                        className={`flag-icon flag-icon-${value.icon}`}
+                        style={{ marginRight: '0.5rem' }}
+                      ></span>
+                      {value.name}
+                    </React.Fragment>
+                  ),
+                  value: key,
+                })),
+                className: 'centered-options',
               }}
               rules={{
                 required: {
                   value: true,
-                  message: 'Please enter your country',
+                  message: 'Please select an option.',
                 },
               }}
-              className='w-full'
-            >
-              <Option>Spain</Option>
-              <Option>France</Option>
-              <Option>Germany</Option>
-              <Option>Italy</Option>
-              <Option>Portugal</Option>
-              <Option>United Kingdom</Option>
-            </Select>
+            />
           </div>
 
           <div className='mt-3 space-y-4 sm:w-1/2'>
