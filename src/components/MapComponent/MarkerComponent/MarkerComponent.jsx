@@ -32,6 +32,7 @@ const MarkerComponent = ({
   onlyShowTooltip,
   isPlace,
   onClickIcon,
+  onClickMoreDetail,
 }) => {
   const imageRef = useRef(null);
   const [openPopover, setOpenPopover] = useState(false);
@@ -166,14 +167,19 @@ const MarkerComponent = ({
                 >
                   @Website
                 </Typography>
+
                 <Button
                   variant='gradient'
                   color='blue'
                   size='sm'
                   className='mt-3 w-full font-medium capitalize'
+                  onClick={() => {
+                    onClickMoreDetail();
+                  }}
                 >
-                  <Link to={PLACE_DETAIL}>More Details</Link>
+                  More Details
                 </Button>
+
                 <div className='mx-auto mt-4 flex flex-wrap justify-center gap-2'>
                   {accessibilityListChip.map((value, index) => (
                     <ChipAccessibility
