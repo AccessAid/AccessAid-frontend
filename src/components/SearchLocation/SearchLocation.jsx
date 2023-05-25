@@ -55,11 +55,6 @@ const SearchLocation = ({ mapObject }) => {
           autoClose: 1000,
         });
 
-        toast.onChange((payload) => {
-          if (payload.status === 'removed') {
-          }
-        });
-
         dispatch(setCoordinatesMap({ ...coordinatesSearch }));
       }
     } catch (error) {

@@ -7,6 +7,7 @@ import {
 const initialState = {
   placeSearched: {},
   accessiblePlaces: [],
+  placeIdSelected: null,
   currentSearch: {
     address: '',
     placeType: 'restaurant',
@@ -44,6 +45,9 @@ export const mapSlice = createSlice({
     setFirstTimeRenderMap: (state, action) => {
       state.firstTimeRenderMap = action.payload;
     },
+    setPlaceIdSelected: (state, action) => {
+      state.placeIdSelected = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -71,6 +75,7 @@ export const mapSlice = createSlice({
       })
       .addCase(getAccessiblePlaceDetails.fulfilled, (state, action) => {
         state.status = 'succeeded';
+        state.placeIdSelected = action.payload.placeId;
         state.accessiblePlaces = state.accessiblePlaces?.map((place) => {
           if (place?.placeId === action.payload.placeId) {
             return action.payload;
@@ -81,6 +86,7 @@ export const mapSlice = createSlice({
       })
       .addCase(getAccessiblePlaceDetails.rejected, (state, action) => {
         state.status = 'failed';
+        state.placeIdSelected = null;
         state.error = action.payload
           ? action.payload.message
           : action.error.message;
@@ -104,6 +110,7 @@ export const {
   setCurrentSearch,
   setCoordinatesMap,
   setFirstTimeRenderMap,
+  setPlaceIdSelected,
 } = mapSlice.actions;
 
 export default mapSlice.reducer;

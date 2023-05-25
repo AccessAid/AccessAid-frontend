@@ -29,20 +29,13 @@ const RegistrationForm = () => {
         toast.success('Sign Up Successfully!', {
           autoClose: 1000,
         });
-        toast.onChange((payload) => {
-          if (payload.status === 'removed') {
-            navigate(LOGIN);
-          }
-        });
+        navigate(LOGIN);
       }
     } catch (error) {
       toast.error('There is an error!', {
         autoClose: 2000,
       });
-      toast.onChange((payload) => {
-        if (payload.status === 'removed') {
-        }
-      });
+
       console.log(error);
     }
   };

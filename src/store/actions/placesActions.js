@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 export const addPlace = createAsyncThunk(
   'places/addPlace',
-  async (placeData, { rejectWithValue, getState }) => {
+  async (placeQuery, { rejectWithValue, getState }) => {
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/places`, {
         method: 'POST',
@@ -11,7 +11,7 @@ export const addPlace = createAsyncThunk(
           'Access-Control-Allow-Origin': '*',
           Authorization: `Bearer ${getState().auth.token}`,
         },
-        body: JSON.stringify(placeData),
+        body: JSON.stringify(placeQuery),
       });
 
       const data = await response.json();
@@ -19,6 +19,7 @@ export const addPlace = createAsyncThunk(
       if (response.ok) {
         return data;
       }
+
       return rejectWithValue(data);
     } catch (err) {
       return rejectWithValue(err.message);
@@ -53,6 +54,27 @@ export const getPlaceByCoordinates = createAsyncThunk(
     } catch (err) {
       return rejectWithValue(err.message);
     }
+  },
+);
+
+export const getPlaceDetailsFromMapSlide = createAsyncThunk(
+  'places/getAccessiblePlaceDetails',
+  async (_, { rejectWithValue, getState }) => {
+    const getPlaceId = getState().map.placeIdSelected;
+    const accessiblePlaces = getState().map.accessiblePlaces;
+
+    if (accessiblePlaces?.length > 0 && getPlaceId) {
+      const findPlaceDetails = accessiblePlaces?.find(
+        (place) => place?.placeId === getPlaceId,
+      );
+
+      return findPlaceDetails;
+    }
+
+    return rejectWithValue({
+      message:
+        'There is a problem, come back later when the problem has been solved.',
+    });
   },
 );
 
