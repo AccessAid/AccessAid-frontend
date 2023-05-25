@@ -1,4 +1,5 @@
 import { Chip, Tooltip, Typography } from '@material-tailwind/react';
+import { accessibilityListDescription } from '../../MapComponent/MarkerComponent/util';
 
 const AccessibilityDetails = () => {
   const triggers = {
