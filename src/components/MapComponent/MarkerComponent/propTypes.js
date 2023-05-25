@@ -22,6 +22,7 @@ export const propTypes = {
   onlyShowTooltip: PropTypes.bool,
   isPlace: PropTypes.bool,
   onClickIcon: PropTypes.func,
+  onClickMoreDetail: PropTypes.func,
 };
 
 export const defaultProps = {
@@ -42,4 +43,5 @@ export const defaultProps = {
   onlyShowTooltip: false,
   isPlace: false,
   onClickIcon: () => {},
+  onClickMoreDetail: () => {},
 };

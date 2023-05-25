@@ -12,7 +12,7 @@ import 'react-toastify/ReactToastify.min.css';
 import { login, getUserData } from './../../store/actions/authActions';
 import { cleanApiError } from '../../store/slices/authSlice';
 import { InputValidation } from '../InputValidation/InputValidation';
-import { HOME, SIGNUP } from '../../config/routes';
+import { HOME, PLACE_DETAIL, SIGNUP } from '../../config/routes';
 
 import './MapComponent.css';
 import { MarkerComponent } from './MarkerComponent/MarkerComponent';
@@ -29,14 +29,22 @@ import {
 } from '../../store/slices/mapSlice';
 import { getAccessiblePlaces } from '../../store/actions/mapActions';
 import { getAccessiblePlaceDetails } from '../../store/actions/mapActions';
+import {
+  addPlace,
+  getPlaceDetailsFromMapSlide,
+  getTotalRatingByPlace,
+} from '../../store/actions/placesActions';
+import { selectCurrentIdSelected } from '../../store/slices/placesSlice';
 
 const MapComponent = ({ setMapObject }) => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const currentPlaceSearched = useSelector(selectPlaceSearched);
   const currentAccessiblePlaces = useSelector(selectAccessiblePlaces);
   const currentSearchData = useSelector(selectCurrentSearch);
   const coordinatesMap = useSelector(selectCoordinatesMap);
   const firstTimeRenderMap = useSelector(selectFirstTimeRenderMap);
+  const currentIdSelected = useSelector(selectCurrentIdSelected);
 
   const DEFAULT_COORDINATES = {
     lat: 40.4167754,
@@ -134,22 +142,92 @@ const MapComponent = ({ setMapObject }) => {
               isPlace
               onClickIcon={async (openCardDetails = () => {}) => {
                 try {
-                  const result = await dispatch(
-                    getAccessiblePlaceDetails(place.placeId),
-                  );
+                  const multipleActions = [
+                    dispatch(getAccessiblePlaceDetails(place.placeId)),
+                    dispatch(addPlace({ apiPlaceId: place.placeId })),
+                  ];
 
+                  const results = await Promise.allSettled(multipleActions);
+
+                  // Procesar los resultados de getAccessiblePlaceDetails
+                  const placeDetailsResult = results[0];
                   if (
-                    result?.payload?.accessibilityData &&
-                    result?.payload?.formattedAddress
+                    placeDetailsResult.status === 'fulfilled' &&
+                    placeDetailsResult.value.payload.accessibilityData &&
+                    placeDetailsResult.value.payload.formattedAddress
                   ) {
                     openCardDetails(true);
+                    dispatch(getPlaceDetailsFromMapSlide());
                   } else {
                     toast.error('There was an error opening place details', {
-                      autoClose: 2000,
+                      autoClose: 2500,
                     });
+                  }
+
+                  // Procesar los resultados de addPlace
+                  const addPlaceResult = results[1];
+                  if (
+                    addPlaceResult.status === 'fulfilled' &&
+                    addPlaceResult.value.payload.accessibilityData &&
+                    addPlaceResult.value.payload.formattedAddress
+                  ) {
+                    toast.info(
+                      'This place have not been rated or commented yet, be first one',
+                      {
+                        autoClose: 3500,
+                      },
+                    );
+                  } else {
+                    toast.info(
+                      'This site already have been visited by other users',
+                      {
+                        autoClose: 3500,
+                      },
+                    );
                   }
                 } catch (error) {
                   console.log(error);
+                  toast.error(
+                    "We're suffering problems on load this place, come back later",
+                    {
+                      autoClose: 3500,
+                    },
+                  );
+                }
+              }}
+              onClickMoreDetail={async () => {
+                try {
+                  if (currentIdSelected) {
+                    const totalRating = await dispatch(
+                      getTotalRatingByPlace(currentIdSelected),
+                    );
+
+                    console.log('totalRating', totalRating);
+                    if (totalRating?.payload?.placeId) {
+                      navigate(PLACE_DETAIL);
+                    } else {
+                      toast.error(
+                        "We're suffering problems on load total rating of this place, come back later",
+                        {
+                          autoClose: 3500,
+                        },
+                      );
+                    }
+                  } else {
+                    toast.error(
+                      "We're suffering problems on load total rating of this place, come back later",
+                      {
+                        autoClose: 3500,
+                      },
+                    );
+                  }
+                } catch (error) {
+                  toast.error(
+                    "We're suffering problems on load total rating of this place, come back later",
+                    {
+                      autoClose: 3500,
+                    },
+                  );
                 }
               }}
             />
