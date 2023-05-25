@@ -26,7 +26,11 @@ const initialState = {
 export const placesSlice = createSlice({
   name: 'places',
   initialState,
-  reducers: {},
+  reducers: {
+    setCurrentId: (state, action) => {
+      state.currentId = action?.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       // get current place details
@@ -117,7 +121,9 @@ export const placesSlice = createSlice({
       })
       .addCase(addPlace.fulfilled, (state, action) => {
         state.status = 'succeeded';
+        console.log('action!!!!!!!', action);
         state.currentId = action.payload?.id;
+        state.currentPlaceDetail = action.payload;
         state.error = null;
       })
       .addCase(addPlace.rejected, (state, action) => {
@@ -142,6 +148,6 @@ export const selectUsersByPLace = (state) => state.places.usersByPLace;
 export const selectCurrentIdSelected = (state) => state.places.currentId;
 export const selectPlaceError = (state) => state.places.error;
 
-export const {} = placesSlice.actions;
+export const { setCurrentId } = placesSlice.actions;
 
 export default placesSlice.reducer;
