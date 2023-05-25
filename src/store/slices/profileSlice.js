@@ -16,12 +16,7 @@ const initialState = {
 export const profileSlice = createSlice({
   name: 'profile',
   initialState,
-  reducers: {
-    // Otros reducers relacionados con "Profiles" si los necesitas
-    // setProfileEditData: (state, action) => {
-    //   state.currentSearch = action.payload;
-    // },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       // getProfileByUser
@@ -31,7 +26,7 @@ export const profileSlice = createSlice({
       .addCase(getProfileByUser.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.currentUserProfile = action.payload;
-        // state.userId = action.payload?.id;
+        state.error = null;
       })
       .addCase(getProfileByUser.rejected, (state, action) => {
         state.status = 'failed';
@@ -46,6 +41,7 @@ export const profileSlice = createSlice({
       .addCase(addProfile.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.currentUserProfile = action.payload;
+        state.error = null;
         // state.userId = action.payload?.id;
       })
       .addCase(addProfile.rejected, (state, action) => {
@@ -61,6 +57,7 @@ export const profileSlice = createSlice({
       .addCase(updateProfile.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.currentUserProfile = action.payload;
+        state.error = null;
         // state.userId = action.payload?.id;
       })
       .addCase(updateProfile.rejected, (state, action) => {
@@ -76,7 +73,7 @@ export const profileSlice = createSlice({
       .addCase(deleteProfile.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.currentUserProfile = null;
-        // state.userId = action.payload?.id;
+        state.error = null;
       })
       .addCase(deleteProfile.rejected, (state, action) => {
         state.status = 'failed';
@@ -93,9 +90,6 @@ export const selectCurrentUserProfile = (state) =>
 
 export const selectProfileError = (state) => state.profile.error;
 
-export const {
-  /* Otros reducers relacionados con el mapa si los necesitas */
-  // setCurrentSearch,
-} = profileSlice.actions;
+export const {} = profileSlice.actions;
 
 export default profileSlice.reducer;
