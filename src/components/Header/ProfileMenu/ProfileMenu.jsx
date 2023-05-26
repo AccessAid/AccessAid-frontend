@@ -18,7 +18,6 @@ import {
   ChevronDownIcon,
 } from '@heroicons/react/24/outline';
 
-import './ProfileMenu.css';
 import { LOGIN, MAP, PROFILE } from '../../../config/routes';
 import { Link } from 'react-router-dom';
 import { ProfileItem } from './ProfileItem/ProfileItem';
@@ -41,6 +40,8 @@ const profileMenuItems = [
     link: LOGIN,
   },
 ];
+
+import './ProfileMenu.css';
 
 const ProfileMenu = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
