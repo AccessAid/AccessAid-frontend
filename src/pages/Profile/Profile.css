@@ -1,8 +1,10 @@
 .profile-container {
-  @apply container flex h-screen items-center bg-white-dark px-6 text-center;
+  @apply container flex items-center h-screen px-6 text-center bg-white-dark;
   min-width: 100vw;
 }
 
 .content-container {
-  @apply mx-auto max-w-lg;
+  @apply max-w-lg mx-auto h-2/4;
+  
 }
+

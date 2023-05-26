@@ -22,7 +22,7 @@ const useRefreshToken = () => {
     if (tokenExpiredDate && userData) {
       console.log('estoy dentro de: tokenExpiredDate');
 
-      const minutes = 35;
+      const minutes = 33;
       const interval = minutes * 60 * 1000;
       const intervalRefreshToken = setInterval(async () => {
         const isExpired = isDatePassed(tokenExpiredDate);
