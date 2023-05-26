@@ -9,6 +9,8 @@ import { SelectorValidation } from '../SelectorValidation/SelectorValidation';
 import { countries } from './countries.js';
 import 'flag-icon-css/css/flag-icons.css';
 import { InputValidation } from '../InputValidation/InputValidation';
+import { selectUserData } from '../../store/slices/authSlice';
+
 import {
   addProfile,
   deleteProfile,
@@ -17,12 +19,12 @@ import {
 } from '../../store/actions/profileActions';
 
 const ProfileEditForm = () => {
+  const userData = useSelector(selectUserData);
   const emptyProfileDate = {
-    id: 0,
     firstName: '',
     lastName: '',
-    email: '',
-    username: '',
+    email: userData.email,
+    username: userData.username,
     avatarPath: '',
     streetAddress: '',
     city: '',
@@ -35,7 +37,6 @@ const ProfileEditForm = () => {
     useState(emptyProfileDate);
   const [isProfileExist, setIsProfileExist] = useState(false);
   const hookFormMethods = useForm();
-  const userData = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -76,7 +77,7 @@ const ProfileEditForm = () => {
     console.log(data);
 
     try {
-      if (isProfileExist) {
+      if (isProfileExist && defaultProfileData.id !== 0) {
         const resultUpdated = await dispatch(
           updateProfile({
             profileId: defaultProfileData.id,
@@ -181,29 +182,17 @@ const ProfileEditForm = () => {
               nameField='firstName'
               controllerProps={{ defaultValue: defaultProfileData.firstName }}
               inputProps={{ size: 'lg', label: 'First Name', type: 'text' }}
-              rules={{
-                required: {
-                  value: true,
-                  message: 'Please enter your first name',
-                },
-              }}
             />
 
             <InputValidation
               nameField='lastName'
               controllerProps={{ defaultValue: defaultProfileData.lastName }}
               inputProps={{ size: 'lg', label: 'Last Name', type: 'text' }}
-              rules={{
-                required: {
-                  value: true,
-                  message: 'Please enter your last name',
-                },
-              }}
             />
 
             <InputValidation
               nameField='email'
-              controllerProps={{ defaultValue: userData.email || '' }}
+              controllerProps={{ defaultValue: emptyProfileDate?.email }}
               inputProps={{ size: 'lg', label: 'Email', type: 'text' }}
               rules={{
                 required: {
@@ -219,7 +208,7 @@ const ProfileEditForm = () => {
 
             <InputValidation
               nameField='username'
-              controllerProps={{ defaultValue: userData.username || '' }}
+              controllerProps={{ defaultValue: emptyProfileDate?.username }}
               inputProps={{ size: 'lg', label: 'Username', type: 'text' }}
               rules={{
                 required: {
@@ -242,10 +231,6 @@ const ProfileEditForm = () => {
               controllerProps={{ defaultValue: defaultProfileData.avatarPath }}
               inputProps={{ size: 'lg', label: 'Avatar URL', type: 'text' }}
               rules={{
-                required: {
-                  value: true,
-                  message: 'Please enter your avatar URL',
-                },
                 pattern: {
                   value: /^https?:\/\/.*$/i,
                   message: 'Invalid URL format',
@@ -272,12 +257,6 @@ const ProfileEditForm = () => {
                 })),
                 className: 'centered-options',
               }}
-              rules={{
-                required: {
-                  value: true,
-                  message: 'Please select an option.',
-                },
-              }}
             />
           </div>
 
@@ -292,36 +271,18 @@ const ProfileEditForm = () => {
                 label: 'Street Address',
                 type: 'text',
               }}
-              rules={{
-                required: {
-                  value: true,
-                  message: 'Please enter your street address',
-                },
-              }}
             />
 
             <InputValidation
               nameField='city'
               controllerProps={{ defaultValue: defaultProfileData.city }}
               inputProps={{ size: 'lg', label: 'City', type: 'text' }}
-              rules={{
-                required: {
-                  value: true,
-                  message: 'Please enter your city',
-                },
-              }}
             />
 
             <InputValidation
               nameField='zipCode'
               controllerProps={{ defaultValue: defaultProfileData.zipCode }}
-              inputProps={{ size: 'lg', label: 'ZIP Code', type: 'text' }}
-              rules={{
-                required: {
-                  value: true,
-                  message: 'Please enter your ZIP code',
-                },
-              }}
+              inputProps={{ size: 'lg', label: 'ZIP Code', type: 'number' }}
             />
 
             <InputValidation
@@ -329,9 +290,9 @@ const ProfileEditForm = () => {
               controllerProps={{ defaultValue: defaultProfileData.phone }}
               inputProps={{ size: 'lg', label: 'Phone', type: 'text' }}
               rules={{
-                required: {
-                  value: true,
-                  message: 'Please enter your phone number',
+                pattern: {
+                  value: /^\+\d{1,3} \d{3,14}$/i,
+                  message: 'Invalid Phone format',
                 },
               }}
             />
@@ -344,12 +305,6 @@ const ProfileEditForm = () => {
                 label: 'About',
                 type: 'textarea',
                 rows: 4,
-              }}
-              rules={{
-                required: {
-                  value: true,
-                  message: 'Please enter some information about yourself',
-                },
               }}
             />
 
