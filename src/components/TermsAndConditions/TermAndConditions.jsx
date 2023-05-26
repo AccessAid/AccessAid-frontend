@@ -15,11 +15,13 @@ const TermAndConditions = () => {
   const [open, setOpen] = useState(1);
 
   const handleOpen = () => setOpen(!open);
-  
+
   return (
-    <div>
-      
-    </div>
+    <Fragment>
+      <Dialog size = 'xxl+' open={open} handler={handleOpen}>
+        <DialogHeader>Terms and conditions</DialogHeader>
+      </Dialog>
+    </Fragment>
   )
 }
 
