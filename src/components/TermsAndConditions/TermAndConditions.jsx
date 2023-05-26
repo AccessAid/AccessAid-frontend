@@ -10,3 +10,17 @@ import {
   DialogFooter,
   Typography,
 } from '@material-tailwind/react';
+
+const TermAndConditions = () => {
+  const [open, setOpen] = useState(1);
+
+  const handleOpen = () => setOpen(!open);
+  
+  return (
+    <div>
+      
+    </div>
+  )
+}
+
+export default TermAndConditions
