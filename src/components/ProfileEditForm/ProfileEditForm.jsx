@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
@@ -9,18 +9,161 @@ import { SelectorValidation } from '../SelectorValidation/SelectorValidation';
 import { countries } from './countries.js';
 import 'flag-icon-css/css/flag-icons.css';
 import { InputValidation } from '../InputValidation/InputValidation';
+import {
+  addProfile,
+  deleteProfile,
+  getProfileByUser,
+  updateProfile,
+} from '../../store/actions/profileActions';
 
-const ProfileEditForm = ({ initialValues }) => {
-  const hookFormMethods = useForm({ defaultValues: initialValues });
+const ProfileEditForm = () => {
+  const emptyProfileDate = {
+    id: 0,
+    firstName: '',
+    lastName: '',
+    email: '',
+    username: '',
+    avatarPath: '',
+    streetAddress: '',
+    city: '',
+    country: '',
+    zipCode: '',
+    phone: '',
+    about: '',
+  };
+  const [defaultProfileData, setDefaultProfileData] =
+    useState(emptyProfileDate);
+  const [isProfileExist, setIsProfileExist] = useState(false);
+  const hookFormMethods = useForm();
   const userData = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
 
-  const onSubmit = (data) => {
+  useEffect(() => {
+    (async () => {
+      try {
+        const result = await dispatch(getProfileByUser(userData.id));
+
+        if (result?.payload?.message?.includes('not found')) {
+          toast.info(
+            'Your profile is empty, we recommend to add more information',
+            {
+              autoClose: 3500,
+            },
+          );
+          return;
+        }
+
+        if (result?.payload?.id) {
+          setDefaultProfileData(result.payload);
+          setIsProfileExist(true);
+        }
+      } catch (error) {
+        toast.error(
+          "We're having troubles get your profile information, come back later",
+          {
+            autoClose: 1700,
+          },
+        );
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    hookFormMethods.reset(defaultProfileData);
+  }, [defaultProfileData]);
+
+  const onSubmit = async (data) => {
     console.log(data);
 
-    toast.success('Profile Updated Successfully!', {
-      autoClose: 1700,
-    });
+    try {
+      if (isProfileExist) {
+        const resultUpdated = await dispatch(
+          updateProfile({
+            profileId: defaultProfileData.id,
+            profileData: {
+              ...data,
+              user: {
+                id: userData.id,
+              },
+            },
+          }),
+        );
+
+        if (resultUpdated?.payload?.id) {
+          toast.success('Profile Updated Successfully!', {
+            autoClose: 1700,
+          });
+        } else {
+          toast.error(
+            "We're having troubles adding your profile, come back later",
+            {
+              autoClose: 1700,
+            },
+          );
+        }
+      } else {
+        const resultAdded = await dispatch(
+          addProfile({
+            ...data,
+            user: {
+              id: userData.id,
+            },
+          }),
+        );
+
+        if (resultAdded?.payload?.id) {
+          toast.success('Profile Updated Successfully!', {
+            autoClose: 1700,
+          });
+        } else {
+          toast.error(
+            "We're having troubles adding your profile, come back later",
+            {
+              autoClose: 1700,
+            },
+          );
+        }
+      }
+    } catch (error) {
+      toast.error(
+        "We're having troubles adding your profile, come back later",
+        {
+          autoClose: 1700,
+        },
+      );
+    }
+  };
+
+  const handleDeleteProfile = async () => {
+    if (defaultProfileData.id !== 0) {
+      try {
+        const resultDelete = await dispatch(
+          deleteProfile(defaultProfileData.id),
+        );
+
+        if (resultDelete) {
+          const { username, email, ...restOfFields } = emptyProfileDate;
+          hookFormMethods.reset(restOfFields);
+          toast.success('Profile Removed Successfully!', {
+            autoClose: 1700,
+          });
+        } else {
+          toast.error(
+            "We're having troubles deleting your profile, come back later",
+            {
+              autoClose: 1700,
+            },
+          );
+        }
+      } catch (error) {
+        toast.error(
+          "We're having troubles deleting your profile, come back later",
+          {
+            autoClose: 1700,
+          },
+        );
+      }
+    }
   };
 
   return (
@@ -36,7 +179,7 @@ const ProfileEditForm = ({ initialValues }) => {
           <div className='mt-3 space-y-4 sm:w-1/2'>
             <InputValidation
               nameField='firstName'
-              controllerProps={{ defaultValue: '' }}
+              controllerProps={{ defaultValue: defaultProfileData.firstName }}
               inputProps={{ size: 'lg', label: 'First Name', type: 'text' }}
               rules={{
                 required: {
@@ -48,7 +191,7 @@ const ProfileEditForm = ({ initialValues }) => {
 
             <InputValidation
               nameField='lastName'
-              controllerProps={{ defaultValue: '' }}
+              controllerProps={{ defaultValue: defaultProfileData.lastName }}
               inputProps={{ size: 'lg', label: 'Last Name', type: 'text' }}
               rules={{
                 required: {
@@ -96,7 +239,7 @@ const ProfileEditForm = ({ initialValues }) => {
 
             <InputValidation
               nameField='avatarPath'
-              controllerProps={{ defaultValue: '' }}
+              controllerProps={{ defaultValue: defaultProfileData.avatarPath }}
               inputProps={{ size: 'lg', label: 'Avatar URL', type: 'text' }}
               rules={{
                 required: {
@@ -112,7 +255,7 @@ const ProfileEditForm = ({ initialValues }) => {
 
             <SelectorValidation
               nameField='country'
-              controllerProps={{ defaultValue: '' }}
+              controllerProps={{ defaultValue: defaultProfileData.country }}
               selectProps={{
                 label: 'Select Country',
                 options: Object.entries(countries).map(([key, value]) => ({
@@ -141,7 +284,9 @@ const ProfileEditForm = ({ initialValues }) => {
           <div className='mt-3 space-y-4 sm:w-1/2'>
             <InputValidation
               nameField='streetAddress'
-              controllerProps={{ defaultValue: '' }}
+              controllerProps={{
+                defaultValue: defaultProfileData.streetAddress,
+              }}
               inputProps={{
                 size: 'lg',
                 label: 'Street Address',
@@ -157,7 +302,7 @@ const ProfileEditForm = ({ initialValues }) => {
 
             <InputValidation
               nameField='city'
-              controllerProps={{ defaultValue: '' }}
+              controllerProps={{ defaultValue: defaultProfileData.city }}
               inputProps={{ size: 'lg', label: 'City', type: 'text' }}
               rules={{
                 required: {
@@ -169,7 +314,7 @@ const ProfileEditForm = ({ initialValues }) => {
 
             <InputValidation
               nameField='zipCode'
-              controllerProps={{ defaultValue: '' }}
+              controllerProps={{ defaultValue: defaultProfileData.zipCode }}
               inputProps={{ size: 'lg', label: 'ZIP Code', type: 'text' }}
               rules={{
                 required: {
@@ -181,7 +326,7 @@ const ProfileEditForm = ({ initialValues }) => {
 
             <InputValidation
               nameField='phone'
-              controllerProps={{ defaultValue: '' }}
+              controllerProps={{ defaultValue: defaultProfileData.phone }}
               inputProps={{ size: 'lg', label: 'Phone', type: 'text' }}
               rules={{
                 required: {
@@ -193,7 +338,7 @@ const ProfileEditForm = ({ initialValues }) => {
 
             <InputValidation
               nameField='about'
-              controllerProps={{ defaultValue: '' }}
+              controllerProps={{ defaultValue: defaultProfileData.about }}
               inputProps={{
                 size: 'lg',
                 label: 'About',
@@ -215,8 +360,19 @@ const ProfileEditForm = ({ initialValues }) => {
                 Object.keys(hookFormMethods.formState.errors).length > 0
               }
             >
-              Update Profile
+              {isProfileExist ? 'Update Profile' : 'Add Profile'}
             </Button>
+
+            {isProfileExist && (
+              <Button
+                color='secondary'
+                variant='contained'
+                fullWidth
+                onClick={handleDeleteProfile}
+              >
+                Delete Profile
+              </Button>
+            )}
           </div>
         </form>
       </FormProvider>

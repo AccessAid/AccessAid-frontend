@@ -163,13 +163,6 @@ export const getProfileByUser = createAsyncThunk(
         return data;
       }
 
-      if (data?.message?.includes('not found')) {
-        return rejectWithValue({
-          message:
-            'Your profile is empty, we recommend to add more information',
-        });
-      }
-
       return rejectWithValue(data);
     } catch (err) {
       return rejectWithValue(err.message);
