@@ -4,6 +4,8 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
+import { toast } from 'react-toastify';
+import 'react-toastify/ReactToastify.min.css';
 import { HOME } from '../../config/routes';
 import { contactAction } from '../../store/actions/contactActions';
 import { InputValidation } from '../InputValidation/InputValidation';
@@ -18,6 +20,9 @@ const ContactForm = () => {
     console.log('data contact', data);
     dispatch(contactAction(data))
       .then(() => {
+        toast.success('Message sent', {
+          autoClose: 2500,
+        });
         navigate(HOME);
       })
       .catch((error) => {
