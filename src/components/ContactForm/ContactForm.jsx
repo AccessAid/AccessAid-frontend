@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/ReactToastify.min.css';
 import { HOME } from '../../config/routes';
-import { contactAction } from '../../store/actions/contactActions';
+import { contactAddAction } from '../../store/actions/contactActions';
 import { InputValidation } from '../InputValidation/InputValidation';
 import { TextareaValidation } from '../TextareaValidation/TextareaValidation';
 
@@ -18,15 +18,30 @@ const ContactForm = () => {
 
   const onSubmit = (data) => {
     console.log('data contact', data);
-    dispatch(contactAction(data))
-      .then(() => {
-        toast.success('Message sent', {
-          autoClose: 2500,
-        });
-        navigate(HOME);
+    dispatch(contactAddAction(data))
+      .then((result) => {
+        if (result?.payload?.id) {
+          toast.success('Message sent, thanks for contact us', {
+            autoClose: 2500,
+          });
+          navigate(HOME);
+          return;
+        }
+        toast.error(
+          'There was a problem sending your message. Come back later',
+          {
+            autoClose: 2500,
+          },
+        );
       })
       .catch((error) => {
         console.log(error);
+        toast.error(
+          'There was a problem sending your message. Come back later',
+          {
+            autoClose: 2500,
+          },
+        );
       });
   };
 

@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-export const contactAction = createAsyncThunk(
+export const contactAddAction = createAsyncThunk(
   'contact/submitForm',
   async (formData, { rejectWithValue }) => {
     try {
