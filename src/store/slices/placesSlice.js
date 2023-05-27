@@ -1,20 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
 import {
   addPlace,
-  getPlaceByCoordinates,
-  deletePlace,
-  getUsersByPlace,
-  getTotalRatingByPlace,
-  getRatingsByPlace,
   getCommentsByPlace,
-  getPlacesByUser,
   getPlaceDetailsFromMapSlide,
+  getPlacesByUser,
+  getRatingsByPlace,
+  getTotalRatingByPlace,
+  getUsersByPlace,
 } from '../actions/placesActions';
 
 const initialState = {
   currentPlaceDetail: null,
   currentId: null,
-  totalRatingByPlace: 0,
+  totalRatingByPlace: null,
   ratingsByPlace: [],
   commentsByPlace: [],
   placesByUser: [],
@@ -38,6 +36,7 @@ export const placesSlice = createSlice({
         if (action.payload) {
           state.currentPlaceDetail = action.payload;
           state.currentId = action.payload?.id;
+          state.totalRatingByPlace = action.payload?.totalRating;
         }
       })
       .addCase(getPlaceDetailsFromMapSlide.rejected, (state, action) => {

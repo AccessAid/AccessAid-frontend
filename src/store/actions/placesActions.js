@@ -155,7 +155,8 @@ export const getTotalRatingByPlace = createAsyncThunk(
       const data = await response.json();
 
       if (response.ok) {
-        return data;
+        const { totalRating } = data;
+        return totalRating;
       }
       return rejectWithValue(data);
     } catch (err) {

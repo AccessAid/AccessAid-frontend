@@ -1,40 +1,35 @@
 /* eslint-disable react/no-unknown-property */
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { useForm, FormProvider } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
 import GoogleMapReact from 'google-map-react';
-import { useNavigate, Link } from 'react-router-dom';
-import { Card, Button, Typography } from '@material-tailwind/react';
-import { toast, ToastContainer } from 'react-toastify';
+import PropTypes from 'prop-types';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/ReactToastify.min.css';
 
-import { login, getUserData } from './../../store/actions/authActions';
-import { cleanApiError } from '../../store/slices/authSlice';
-import { InputValidation } from '../InputValidation/InputValidation';
-import { HOME, PLACE_DETAIL, SIGNUP } from '../../config/routes';
+import { PLACE_DETAIL } from '../../config/routes';
 
-import './MapComponent.css';
-import { MarkerComponent } from './MarkerComponent/MarkerComponent';
+import {
+  getAccessiblePlaceDetails,
+  getAccessiblePlaces,
+} from '../../store/actions/mapActions';
+import {
+  addPlace,
+  getPlaceDetailsFromMapSlide,
+} from '../../store/actions/placesActions';
 import {
   selectAccessiblePlaces,
   selectCoordinatesMap,
   selectCurrentSearch,
-  selectCurrentSearchCoordinates,
   selectFirstTimeRenderMap,
   selectPlaceSearched,
   setCoordinatesMap,
   setCurrentSearch,
   setFirstTimeRenderMap,
 } from '../../store/slices/mapSlice';
-import { getAccessiblePlaces } from '../../store/actions/mapActions';
-import { getAccessiblePlaceDetails } from '../../store/actions/mapActions';
-import {
-  addPlace,
-  getPlaceDetailsFromMapSlide,
-  getTotalRatingByPlace,
-} from '../../store/actions/placesActions';
 import { selectCurrentIdSelected } from '../../store/slices/placesSlice';
+import './MapComponent.css';
+import { MarkerComponent } from './MarkerComponent/MarkerComponent';
 
 const MapComponent = ({ setMapObject }) => {
   const navigate = useNavigate();
@@ -194,40 +189,8 @@ const MapComponent = ({ setMapObject }) => {
                   );
                 }
               }}
-              onClickMoreDetail={async () => {
-                try {
-                  if (currentIdSelected) {
-                    const totalRating = await dispatch(
-                      getTotalRatingByPlace(currentIdSelected),
-                    );
-
-                    console.log('totalRating', totalRating);
-                    if (totalRating?.payload?.placeId) {
-                      navigate(PLACE_DETAIL);
-                    } else {
-                      toast.error(
-                        "We're suffering problems on load total rating of this place, come back later",
-                        {
-                          autoClose: 3500,
-                        },
-                      );
-                    }
-                  } else {
-                    toast.error(
-                      "We're suffering problems on load total rating of this place, come back later",
-                      {
-                        autoClose: 3500,
-                      },
-                    );
-                  }
-                } catch (error) {
-                  toast.error(
-                    "We're suffering problems on load total rating of this place, come back later",
-                    {
-                      autoClose: 3500,
-                    },
-                  );
-                }
+              onClickMoreDetail={() => {
+                navigate(PLACE_DETAIL);
               }}
             />
           </div>

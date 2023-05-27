@@ -21,6 +21,7 @@
     "@emotion/styled": "^11.10.6",
     "@heroicons/react": "^2.0.17",
     "@material-tailwind/react": "^2.0.0",
+    "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.12.1",
     "@react-google-maps/api": "^2.18.1",
     "@reduxjs/toolkit": "^1.9.5",

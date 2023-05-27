@@ -1,26 +1,23 @@
-/* eslint-disable react/prop-types */
 import { Typography } from '@material-tailwind/react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 const AddressDetails = ({ name, address, phone, website }) => {
   return (
     <>
       <div>
-        <Typography
-          variant='h4'
-          color='gray'
-          className='justify-start font-bold'
-        >
+        <Typography variant='h4' color='gray' className='flex font-bold'>
           {name}
         </Typography>
-        <Typography variant='normal' color='gray' className='flex '>
+        <Typography variant='paragraph' color='gray' className='flex'>
           {address}
         </Typography>
-        <Typography variant='normal' color='gray' className='flex font-bold'>
+        <Typography variant='paragraph' color='gray' className='flex font-bold'>
           {' '}
           Phone: <span className='font-normal'>{phone}</span>
         </Typography>
         <Typography
-          variant='normal'
+          variant='paragraph'
           as='a'
           href={website}
           target='_blank'
@@ -34,4 +31,10 @@ const AddressDetails = ({ name, address, phone, website }) => {
   );
 };
 
+AddressDetails.propTypes = {
+  name: PropTypes.string.isRequired,
+  address: PropTypes.string.isRequired,
+  phone: PropTypes.string,
+  website: PropTypes.string,
+};
 export default AddressDetails;

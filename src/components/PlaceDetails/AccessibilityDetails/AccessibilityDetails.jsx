@@ -2,12 +2,6 @@ import { Chip, Tooltip, Typography } from '@material-tailwind/react';
 import { accessibilityListDescription } from '../../MapComponent/MarkerComponent/util';
 
 const AccessibilityDetails = () => {
-  const triggers = {
-    onMouseEnter: () => {
-      setOpenTooltip(true);
-    },
-    onMouseLeave: () => setOpenTooltip(false),
-  };
   return (
     <div className='align-center group mx-auto mt-8 flex flex-wrap justify-around gap-8'>
       {accessibilityListDescription.map(({ name, description }) => (
@@ -30,7 +24,6 @@ const AccessibilityDetails = () => {
             color='indigo'
             value={name}
             className='flex w-20 justify-center p-1 text-xs font-normal capitalize'
-            {...triggers}
           />
         </Tooltip>
       ))}
