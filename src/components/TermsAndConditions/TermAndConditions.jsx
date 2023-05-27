@@ -1,5 +1,6 @@
-import React from 'react';
-import { Fragment, useState } from 'react';
+import React, { useEffect, Fragment, useState } from 'react';
+import PropTypes from 'prop-types';
+
 import { Link } from 'react-router-dom';
 import { SIGNUP } from '../../config/routes';
 import {
@@ -11,21 +12,46 @@ import {
   Typography,
 } from '@material-tailwind/react';
 
-const TermAndConditions = () => {
-  const [open, setOpen] = useState(1);
+const TermAndConditions = ({ open, handleOpen }) => {
+  const [size, setSize] = useState('md'); // Tamaño inicial del Dialog
 
-  const handleOpen = () => setOpen(!open);
+  useEffect(() => {
+    const handleResize = () => {
+      const viewportWidth = window.innerWidth;
+      const dialogWidth = Math.floor(viewportWidth * 0.85); // Calcula el 85% del ancho del viewport
+
+      let newSize = 'md'; // Valor predeterminado si el tamaño calculado no coincide con los valores disponibles
+
+      if (dialogWidth <= 768) {
+        newSize = 'xl';
+      } else if (dialogWidth <= 1024) {
+        newSize = 'lg';
+      } else {
+        newSize = 'md';
+      }
+
+      setSize(newSize); // Establece el tamaño del Dialog según el tamaño calculado
+    };
+
+    handleResize(); // Llama a la función inicialmente para establecer el tamaño correcto
+
+    window.addEventListener('resize', handleResize); // Agrega un listener para manejar los cambios de tamaño de la pantalla
+
+    return () => {
+      window.removeEventListener('resize', handleResize); // Limpia el listener cuando el componente se desmonta
+    };
+  }, []);
 
   return (
     <Fragment>
-      <Dialog size = 'xxl+' open={open} handler={handleOpen}>
+      <Dialog open={open} size={size} handler={handleOpen}>
         <DialogHeader>Terms and conditions</DialogHeader>
-        <DialogBody divider className='h-[40rem] overflow-scroll'>
-        <Typography variant='small'>
+        <DialogBody divider className='h-[38rem] overflow-scroll'>
+          <Typography variant='small'>
             <span>Terms and conditions of use</span>
-            <br />
-            RELEVANT INFORMATION
-            <br />
+            <Typography variant='h6' className='mb-1 mt-3 font-bold'>
+              RELEVANT INFORMATION
+            </Typography>
             It is a necessary requirement for the acquisition of the products
             offered on this site, that you read and accept the following Terms
             and Conditions that are written below. The use of our services as
@@ -54,20 +80,22 @@ const TermAndConditions = () => {
             <br />
             The prices of the products offered in this Online Store are valid
             only for purchases made on this website.
-            <br />
-            LICENSE
-            <br />
+            <Typography variant='h6' className='mb-1 mt-3 font-bold'>
+              LICENSE
+            </Typography>
             Access Aid through its website grants a license for users to use the
             products that are sold on this website in accordance with the Terms
             and Conditions described in this document.
-            <br />
-            UNAUTHORIZED USE
-            <br />
+            <Typography variant='h6' className='mb-1 mt-3 font-bold'>
+              UNAUTHORIZED USE
+            </Typography>
             If applicable (for sale of software, templates, or other design and
             programming products) you may not place one of our products,
             modified or unmodified, on a CD, website, or any other media and
             offer them for redistribution or resale of any kind.
-            <br /> PROPERTY <br />
+            <Typography variant='h6' className='mb-1 mt-3 font-bold'>
+              PROPERTY
+            </Typography>
             You cannot declare intellectual or exclusive property to any of our
             products, modified or unmodified. All products are the property of
             the content providers. Unless otherwise specified, our products are
@@ -76,8 +104,9 @@ const TermAndConditions = () => {
             not limited to, direct, indirect, special, incidental or
             consequential damages or other losses resulting from the use or
             inability to use our products
-            <br />
-            REFUND AND WARRANTY POLICY <br />
+            <Typography variant='h6' className='mb-1 mt-3 font-bold'>
+              REFUND AND WARRANTY POLICY
+            </Typography>
             In the case of products that are non-tangible irrevocable
             merchandise, we do not issue refunds after the product is shipped,
             you have the responsibility to understand before purchasing. We ask
@@ -93,26 +122,21 @@ const TermAndConditions = () => {
             these terms will only become effective if the equipment has been
             used correctly.
             <br />
-            This includes: <br />
-            – According to the technical specifications indicated for each
-            product – Under environmental conditions in accordance with the
-            specifications indicated by the manufacturer – In specific use for
-            the function with which it was designed from the factory – Under
-            electrical operating conditions in accordance with the
-            specifications and tolerances indicated.
-            <br />
-            <br />
-            ANTI-FRAUD CHECK
-            <br />
-            <br />
-            The customer's purchase may be deferred for anti-fraud checking It
-            can also be suspended for a longer time for a more rigorous
+            This includes: <br />– According to the technical specifications
+            indicated for each product – Under environmental conditions in
+            accordance with the specifications indicated by the manufacturer –
+            In specific use for the function with which it was designed from the
+            factory – Under electrical operating conditions in accordance with
+            the specifications and tolerances indicated.
+            <Typography variant='h6' className='mb-1 mt-3 font-bold'>
+              ANTI-FRAUD CHECK
+            </Typography>
+            The {"customer's"} purchase may be deferred for anti-fraud checking
+            It can also be suspended for a longer time for a more rigorous
             investigation, to prevent fraudulent transactions.
-            <br />
-            <br />
-            PRIVACY
-            <br />
-            <br />
+            <Typography variant='h6' className='mb-1 mt-3 font-bold'>
+              PRIMARY
+            </Typography>
             This www.accessaid.es guarantees that sevilla fc news personal
             information that you submit has the necessary security. The data
             entered by the user or in the case of requiring a validation of the
@@ -131,10 +155,19 @@ const TermAndConditions = () => {
             conditions of use example.com.
           </Typography>
         </DialogBody>
-        <DialogFooter></DialogFooter>
       </Dialog>
     </Fragment>
-  )
-}
+  );
+};
 
-export default TermAndConditions
+TermAndConditions.propTypes = {
+  open: PropTypes.bool,
+  handleOpen: PropTypes.func,
+};
+
+TermAndConditions.defaultProps = {
+  open: false,
+  handleOpen: () => {},
+};
+
+export { TermAndConditions };

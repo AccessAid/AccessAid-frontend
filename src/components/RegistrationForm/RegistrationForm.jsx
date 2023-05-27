@@ -12,13 +12,18 @@ import { cleanApiError } from '../../store/slices/authSlice';
 import { InputValidation } from '../InputValidation/InputValidation';
 import { RadioValidation } from '../RadioValidation/RadioValidation';
 import { LOGIN } from '../../config/routes';
+import { TermAndConditions } from '../TermsAndConditions/TermAndConditions';
 
 const RegistrationForm = () => {
   const hookFormMethods = useForm();
 
   const dispatch = useDispatch();
-
   const navigate = useNavigate();
+
+  const [openTermsAndConditions, setOpenTermsAndConditions] = useState(false);
+
+  const handleOpenTermsAndConditions = () =>
+    setOpenTermsAndConditions(!openTermsAndConditions);
 
   const onSubmit = async (data) => {
     try {
@@ -117,13 +122,18 @@ const RegistrationForm = () => {
                   color='gray'
                   className='flex items-center font-normal'
                 >
-                  I agree the
-                  <a
+                  I agree the{' '}
+                  <span
                     href='#'
                     className='font-medium transition-colors hover:text-blue-500'
+                    onClick={handleOpenTermsAndConditions}
                   >
                     &nbsp;Terms and Conditions
-                  </a>
+                  </span>
+                  <TermAndConditions
+                    open={openTermsAndConditions}
+                    handleOpen={handleOpenTermsAndConditions}
+                  />
                 </Typography>
               ),
             }}
