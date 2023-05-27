@@ -126,6 +126,7 @@ const RatingByUser = () => {
     }
   };
 
+  // Get rating by user info
   useEffect(() => {
     (async () => {
       try {
@@ -141,6 +142,7 @@ const RatingByUser = () => {
             console.log('getRatingByOneUser', getRatingByOneUser);
             if (getRatingByOneUser) {
               setRatedByUser(getRatingByOneUser);
+              setButtonText('Update Rating');
             }
           }
         }
@@ -155,6 +157,7 @@ const RatingByUser = () => {
     })();
   }, [place]);
 
+  // Get total rating info
   useEffect(() => {
     (async () => {
       try {
