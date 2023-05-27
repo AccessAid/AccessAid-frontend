@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Chip } from '@material-tailwind/react';
+import { Chip, Typography } from '@material-tailwind/react';
 import { PaperAirplaneIcon } from '@heroicons/react/24/outline';
 
 import MarkerWhiteIconImage from '../../assets/svg/marker-icon-white.svg';
@@ -9,6 +9,9 @@ import './HelperMap.css';
 const HelperMap = () => {
   return (
     <>
+      <Typography color='gray' className='mt-1 font-normal'>
+        Map Legend
+      </Typography>
       <Chip
         className='my-2 w-full'
         color='blue'

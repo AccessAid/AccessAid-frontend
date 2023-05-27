@@ -45,11 +45,11 @@ export const placesSlice = createSlice({
       .addCase(persistCurrentPlaceDetails.fulfilled, (state, action) => {
         const storagePlaceDetails = action?.payload;
 
-        if (storagePlaceDetails && state.currentId) {
+        if (state.currentId) {
           return;
         }
 
-        if (storagePlaceDetails && !state.currentId) {
+        if (storagePlaceDetails) {
           state.currentId = storagePlaceDetails?.id;
           state.currentPlaceDetail = storagePlaceDetails;
         }
