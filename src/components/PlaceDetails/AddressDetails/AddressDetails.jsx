@@ -5,14 +5,14 @@ import React from 'react';
 const AddressDetails = ({ name, address, phone, website }) => {
   return (
     <>
-      <div>
-        <Typography variant='h4' color='gray' className='flex font-bold'>
+      <div className='m-9 text-center'>
+        <Typography variant='h4' color='gray' className='mb-6 font-bold'>
           {name}
         </Typography>
-        <Typography variant='paragraph' color='gray' className='flex'>
+        <Typography variant='paragraph' color='gray'>
           {address}
         </Typography>
-        <Typography variant='paragraph' color='gray' className='flex font-bold'>
+        <Typography variant='paragraph' color='gray' className='font-bold'>
           {' '}
           Phone: <span className='font-normal'>{phone}</span>
         </Typography>
@@ -22,7 +22,7 @@ const AddressDetails = ({ name, address, phone, website }) => {
           href={website}
           target='_blank'
           color='gray'
-          className='flex cursor-pointer items-center gap-1 text-sm font-bold'
+          className='flex cursor-pointer items-center justify-center gap-1 text-sm font-bold'
         >
           @Website
         </Typography>
