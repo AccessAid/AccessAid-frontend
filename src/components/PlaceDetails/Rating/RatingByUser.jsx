@@ -35,7 +35,7 @@ const RatingByUser = () => {
   const userData = useSelector(selectUserData);
 
   const defaultRatedByUser = {
-    id: 0,
+    id: -1,
     rating: 0,
   };
   const [disabled, setDisabled] = useState(true);
@@ -43,9 +43,9 @@ const RatingByUser = () => {
   const [buttonText, setButtonText] = useState('Give a Rating!');
 
   const handleRated = async (event, newValue) => {
+    console.log('newValue', newValue);
     try {
-      if (ratedByUser.id === 0) {
-        console.log('HOLA');
+      if (ratedByUser.id === -1) {
         const addRatingResult = await dispatch(
           addRating({
             rating: newValue,
@@ -105,14 +105,14 @@ const RatingByUser = () => {
   const handleButtonClick = () => {
     if (buttonText === 'Give a Rating!' || buttonText === 'Update Rating') {
       setDisabled(false);
-      if (ratedByUser.id === 0) {
+      if (ratedByUser.id === -1) {
         setButtonText('Update Rating');
       }
     }
   };
 
   const handleResetRating = async () => {
-    if (ratedByUser.id !== 0) {
+    if (ratedByUser.id !== -1) {
       const deleteRatingResult = await dispatch(deleteRating(ratedByUser.id));
       console.log('deleteRatingResult', deleteRatingResult, ratedByUser.id);
       if (deleteRatingResult?.payload?.message.includes('deleted')) {
@@ -129,17 +129,19 @@ const RatingByUser = () => {
   useEffect(() => {
     (async () => {
       try {
-        const result = await dispatch(getRatingsByPlace(place?.id));
-        console.log('result!!!!!!!!', result);
-        if (result && result?.payload?.content?.length > 0) {
-          const getRatingByOneUser = result.payload.content.find(
-            (rating) =>
-              rating.userId === userData.id && rating.placeId === place.id,
-          );
+        if (place?.id) {
+          const result = await dispatch(getRatingsByPlace(place?.id));
+          console.log('result!!!!!!!!', result);
+          if (result && result?.payload?.content?.length > 0) {
+            const getRatingByOneUser = result.payload.content.find(
+              (rating) =>
+                rating.userId === userData.id && rating.placeId === place.id,
+            );
 
-          console.log('getRatingByOneUser', getRatingByOneUser);
-          if (getRatingByOneUser) {
-            setRatedByUser(getRatingByOneUser);
+            console.log('getRatingByOneUser', getRatingByOneUser);
+            if (getRatingByOneUser) {
+              setRatedByUser(getRatingByOneUser);
+            }
           }
         }
       } catch (error) {
@@ -151,12 +153,12 @@ const RatingByUser = () => {
         );
       }
     })();
-  }, []);
+  }, [place]);
 
   useEffect(() => {
     (async () => {
       try {
-        if (place?.id && ratedByUser.id !== 0) {
+        if (place?.id) {
           const newTotalRating = await dispatch(
             getTotalRatingByPlace(place.id),
           );
@@ -180,15 +182,6 @@ const RatingByUser = () => {
 
   return (
     <div className='flex flex-col items-center justify-center md:flex-row lg:justify-around'>
-      {/* <div>
-        <StyledRating
-          value={userRating}
-          getLabelText={(value) => `${value} Heart${value !== 1 ? 's' : ''}`}
-          precision={0.25}
-          icon={<FavoriteIcon fontSize='inherit' />}
-          emptyIcon={<FavoriteBorderIcon fontSize='inherit' />}
-        />
-      </div> */}
       <div className='flex items-center justify-around'>
         <Button
           className='mt-3 w-full font-medium capitalize'

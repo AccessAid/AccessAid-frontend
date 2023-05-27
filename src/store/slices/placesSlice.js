@@ -7,6 +7,7 @@ import {
   getRatingsByPlace,
   getTotalRatingByPlace,
   getUsersByPlace,
+  persistCurrentPlaceDetails,
 } from '../actions/placesActions';
 
 const initialState = {
@@ -21,22 +22,50 @@ const initialState = {
   error: null,
 };
 
+export const PERSIST_KEY_CURRENT_PLACE = 'current-place-details';
+
 export const placesSlice = createSlice({
   name: 'places',
   initialState,
   reducers: {
-    setCurrentId: (state, action) => {
-      state.currentId = action?.payload;
+    cleanPersistPlaceDetails: (state, action) => {
+      const storagePlaceDetails = sessionStorage.getItem(
+        PERSIST_KEY_CURRENT_PLACE,
+      );
+
+      if (storagePlaceDetails) {
+        sessionStorage.removeItem(PERSIST_KEY_CURRENT_PLACE);
+      }
     },
   },
+
   extraReducers: (builder) => {
     builder
+      // get persist place details
+      .addCase(persistCurrentPlaceDetails.fulfilled, (state, action) => {
+        const storagePlaceDetails = action?.payload;
+
+        if (storagePlaceDetails) {
+          state.currentId = storagePlaceDetails?.id;
+          state.currentPlaceDetail = storagePlaceDetails;
+        }
+      })
+      .addCase(persistCurrentPlaceDetails.rejected, (state, action) => {
+        state.error = action.payload
+          ? action.payload.message
+          : action.error.message;
+      })
       // get current place details
       .addCase(getPlaceDetailsFromMapSlide.fulfilled, (state, action) => {
         if (action.payload) {
           state.currentPlaceDetail = action.payload;
           state.currentId = action.payload?.id;
           state.totalRatingByPlace = action.payload?.totalRating;
+
+          sessionStorage.setItem(
+            PERSIST_KEY_CURRENT_PLACE,
+            JSON.stringify(action.payload),
+          );
         }
       })
       .addCase(getPlaceDetailsFromMapSlide.rejected, (state, action) => {
@@ -147,6 +176,6 @@ export const selectUsersByPLace = (state) => state.places.usersByPLace;
 export const selectCurrentIdSelected = (state) => state.places.currentId;
 export const selectPlaceError = (state) => state.places.error;
 
-export const { setCurrentId } = placesSlice.actions;
+export const { cleanPersistPlaceDetails } = placesSlice.actions;
 
 export default placesSlice.reducer;

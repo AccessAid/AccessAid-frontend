@@ -2,18 +2,16 @@ import { Card, CardBody, CardFooter } from '@material-tailwind/react';
 import React from 'react';
 
 import { useSelector } from 'react-redux';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/ReactToastify.min.css';
 import { selectCurrentPlaceDetail } from '../../store/slices/placesSlice';
 import { PlacePhoto } from '../PlacePhoto/PlacePhoto';
 import AccessibilityDetails from './AccessibilityDetails/AccessibilityDetails';
 import AddressDetails from './AddressDetails/AddressDetails';
 import OpeningHours from './OpeningHours/OpeningHours';
-import './PlaceDetails.css';
+import './PlaceDetailsCard.css';
 import RatingByUser from './Rating/RatingByUser';
 import TotalRating from './Rating/TotalRating';
 
-const PlaceDetails = () => {
+const PlaceDetailsCard = () => {
   const place = useSelector(selectCurrentPlaceDetail);
 
   return (
@@ -66,12 +64,10 @@ const PlaceDetails = () => {
             </div>
             <AccessibilityDetails />
           </CardBody>
-          <CardFooter></CardFooter>
         </Card>
       </div>
-      <ToastContainer />
     </div>
   );
 };
 
-export default PlaceDetails;
+export { PlaceDetailsCard };
