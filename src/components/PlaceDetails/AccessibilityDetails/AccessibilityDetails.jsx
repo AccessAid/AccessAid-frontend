@@ -3,7 +3,7 @@ import { accessibilityListDescription } from '../../MapComponent/MarkerComponent
 
 const AccessibilityDetails = () => {
   return (
-    <div className='align-center group mx-auto mt-8 flex flex-wrap justify-around gap-8'>
+    <div className='group mx-auto mt-8 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4'>
       {accessibilityListDescription.map(({ name, description }) => (
         <Tooltip
           key={name}
@@ -14,7 +14,7 @@ const AccessibilityDetails = () => {
               </Typography>
             </div>
           }
-          className='cursor-default'
+          className='flex cursor-default items-center justify-center'
           animate={{
             mount: { scale: 1, y: 0 },
             unmount: { scale: 0, y: 25 },
@@ -23,7 +23,7 @@ const AccessibilityDetails = () => {
           <Chip
             color='indigo'
             value={name}
-            className='flex w-20 justify-center p-1 text-xs font-normal capitalize'
+            className='flex w-full justify-center p-1 text-lg font-medium capitalize'
           />
         </Tooltip>
       ))}
