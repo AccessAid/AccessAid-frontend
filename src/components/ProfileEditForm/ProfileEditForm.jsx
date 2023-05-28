@@ -210,7 +210,10 @@ const ProfileEditForm = () => {
         Edit Profile
       </Typography>
       <Typography color='gray' className='mt-1 font-normal'>
-        Update your profile information.
+        Update your profile information{' '}
+        <Typography variant='h5' className='font-bold'>
+          {userData?.username}
+        </Typography>
       </Typography>
 
       {!profileExist && <UserInformationForm />}
