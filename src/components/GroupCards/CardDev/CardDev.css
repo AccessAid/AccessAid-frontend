@@ -6,9 +6,8 @@
   @apply h-32 w-32 rounded-full object-cover ring-4 ring-gray-300;
 }
 
-.card-dev:hover .card-name, /* Agregado */
+.card-dev:hover .card-name,
 .card-dev:hover .card-role {
-  /* Agregado */
   @apply text-white;
 }
 

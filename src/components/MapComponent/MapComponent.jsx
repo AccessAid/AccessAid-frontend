@@ -1,39 +1,38 @@
 /* eslint-disable react/no-unknown-property */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+
 import PropTypes from 'prop-types';
-import { useForm, FormProvider } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import GoogleMapReact from 'google-map-react';
-import { useNavigate, Link } from 'react-router-dom';
-import { Card, Button, Typography } from '@material-tailwind/react';
+import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/ReactToastify.min.css';
 
-import { cleanApiError } from '../../store/slices/authSlice';
-import { InputValidation } from '../InputValidation/InputValidation';
-import { HOME, PLACE_DETAIL, SIGNUP } from '../../config/routes';
+import { PLACE_DETAIL } from '../../config/routes';
 
-import './MapComponent.css';
 import { MarkerComponent } from './MarkerComponent/MarkerComponent';
 import {
   selectAccessiblePlaces,
   selectCoordinatesMap,
   selectCurrentSearch,
-  selectCurrentSearchCoordinates,
   selectFirstTimeRenderMap,
   selectPlaceSearched,
   setCoordinatesMap,
   setCurrentSearch,
   setFirstTimeRenderMap,
 } from '../../store/slices/mapSlice';
-import { getAccessiblePlaces } from '../../store/actions/mapActions';
-import { getAccessiblePlaceDetails } from '../../store/actions/mapActions';
+import {
+  getAccessiblePlaces,
+  getAccessiblePlaceDetails,
+} from '../../store/actions/mapActions';
 import {
   addPlace,
   getPlaceDetailsFromMapSlide,
   getTotalRatingByPlace,
 } from '../../store/actions/placesActions';
 import { selectCurrentIdSelected } from '../../store/slices/placesSlice';
+
+import './MapComponent.css';
 
 const MapComponent = ({ setMapObject }) => {
   const navigate = useNavigate();
@@ -53,7 +52,6 @@ const MapComponent = ({ setMapObject }) => {
   useEffect(() => {
     if (!firstTimeRenderMap) {
       const onSuccess = ({ coords: { latitude, longitude } }) => {
-        console.log('FUNCIONA LA GEO!');
         dispatch(
           setCurrentSearch({
             ...currentSearchData,
@@ -91,12 +89,6 @@ const MapComponent = ({ setMapObject }) => {
     }
   }, []);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     await dispatch(getAccessiblePlaces());
-  //   })();
-  // }, [currentSearchData]);
-
   return (
     <div className={'map-container-component'}>
       <GoogleMapReact
@@ -112,7 +104,6 @@ const MapComponent = ({ setMapObject }) => {
         }}
         yesIWantToUseGoogleMapApiInternals
         onGoogleApiLoaded={({ map, maps }) => {
-          console.log('mappp', map);
           setMapObject(map);
         }}
       >
@@ -141,7 +132,6 @@ const MapComponent = ({ setMapObject }) => {
               isPlace
               onClickIcon={async (openCardDetails = () => {}) => {
                 try {
-                  // Procesar los resultados de getAccessiblePlaceDetails
                   const placeDetailsResult = await dispatch(
                     getAccessiblePlaceDetails(place.placeId),
                   );
@@ -156,7 +146,6 @@ const MapComponent = ({ setMapObject }) => {
 
                       return;
                     }
-                    // Procesar los resultados de addPlace
                     const addPlaceResult = await dispatch(
                       addPlace({ apiPlaceId: place.placeId }),
                     );
@@ -184,7 +173,6 @@ const MapComponent = ({ setMapObject }) => {
                     });
                   }
                 } catch (error) {
-                  console.log(error);
                   toast.error(
                     "We're suffering problems on load this place, come back later",
                     {
@@ -200,7 +188,6 @@ const MapComponent = ({ setMapObject }) => {
                       getTotalRatingByPlace(currentIdSelected),
                     );
 
-                    console.log('totalRating', totalRating);
                     if (totalRating?.payload?.placeId) {
                       navigate(PLACE_DETAIL);
                     } else {

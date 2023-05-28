@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+
 import { useDispatch, useSelector } from 'react-redux';
 import useAuthCheck from './hooks/useAuthCheck';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -25,15 +26,12 @@ import {
   Profile,
   SignUp,
 } from './pages';
-import { ProtectedRoute } from './components/ProtectedRoute/ProtectedRoute';
 import {
   persistToken,
   persistUser,
   selectAuthError,
   selectIsTokenExpired,
-  setIsTokenExpired,
 } from './store/slices/authSlice';
-
 import useRefreshToken from './hooks/useRefreshToken';
 import PlaceDetail from './pages/PlaceDetail/PlaceDetail';
 
@@ -46,16 +44,13 @@ function App() {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      // Restaurar el token de autenticación almacenado
       dispatch(persistToken());
 
-      // Restaurar los datos del usuario almacenados
       dispatch(persistUser());
     }
   }, []);
 
   useEffect(() => {
-    console.log('isRefreshTokenDone', isRefreshTokenDone, isTokenExpired);
     if (!isRefreshTokenDone && isTokenExpired) {
       if (authErrorApi && authErrorApi?.includes('session')) {
         toast.error(authErrorApi, {

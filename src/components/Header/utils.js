@@ -13,7 +13,6 @@ const dispatchAction = (action) => {
   store.dispatch(action);
 };
 
-// nav list component
 const navListItems = [
   {
     label: 'Home',

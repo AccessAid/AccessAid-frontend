@@ -7,7 +7,6 @@ import {
 } from '../actions/profileActions';
 
 const initialState = {
-  // userId: null,
   currentUserProfile: null,
   profileExist: false,
   status: 'idle',
@@ -51,7 +50,6 @@ export const profileSlice = createSlice({
         state.currentUserProfile = action.payload;
         state.profileExist = true;
         state.error = null;
-        // state.userId = action.payload?.id;
       })
       .addCase(addProfile.rejected, (state, action) => {
         state.status = 'failed';
@@ -70,7 +68,6 @@ export const profileSlice = createSlice({
         state.currentUserProfile = action.payload;
         state.profileExist = true;
         state.error = null;
-        // state.userId = action.payload?.id;
       })
       .addCase(updateProfile.rejected, (state, action) => {
         state.status = 'failed';
@@ -94,7 +91,6 @@ export const profileSlice = createSlice({
           ? action.payload.message
           : action.error.message;
       });
-    // Agregar otros casos extraReducers para los demás actions según tus necesidades
   },
 });
 

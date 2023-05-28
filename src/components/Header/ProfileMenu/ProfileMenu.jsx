@@ -1,46 +1,18 @@
 import React, { useState } from 'react';
 
 import {
-  Typography,
   Button,
   Menu,
   MenuHandler,
   MenuList,
-  MenuItem,
   Avatar,
 } from '@material-tailwind/react';
-import {
-  UserCircleIcon,
-  Cog6ToothIcon,
-  InboxArrowDownIcon,
-  LifebuoyIcon,
-  PowerIcon,
-  ChevronDownIcon,
-} from '@heroicons/react/24/outline';
+import { ChevronDownIcon } from '@heroicons/react/24/outline';
 
-import './ProfileMenu.css';
-import { LOGIN, MAP, PROFILE } from '../../../config/routes';
-import { Link } from 'react-router-dom';
+import { profileMenuItems } from './utils';
 import { ProfileItem } from './ProfileItem/ProfileItem';
 
-// profile menu component
-const profileMenuItems = [
-  {
-    label: 'Edit Profile',
-    icon: Cog6ToothIcon,
-    link: PROFILE,
-  },
-  {
-    label: 'Map',
-    icon: InboxArrowDownIcon,
-    link: MAP,
-  },
-  {
-    label: 'Sign Out',
-    icon: PowerIcon,
-    link: LOGIN,
-  },
-];
+import './ProfileMenu.css';
 
 const ProfileMenu = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

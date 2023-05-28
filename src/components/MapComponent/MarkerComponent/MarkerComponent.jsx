@@ -1,31 +1,24 @@
 import React, { useEffect, useRef, useState } from 'react';
+
 import {
   Popover,
   PopoverHandler,
   PopoverContent,
   Button,
   Typography,
-  Avatar,
-  Chip,
   Tooltip,
 } from '@material-tailwind/react';
-import {
-  BuildingOffice2Icon,
-  CheckIcon,
-  MapIcon,
-  MapPinIcon,
-} from '@heroicons/react/24/outline';
+import { useDispatch } from 'react-redux';
+
 import MarkerIconImage from '../../../assets/svg/marker-icon.svg';
 import MarkerPurpleIconImage from '../../../assets/svg/marker-icon-purple.svg';
 
-import './MarkerComponent.css';
 import { PlacePhoto } from '../../PlacePhoto/PlacePhoto';
 import { accessibilityListChip } from './util';
 import { defaultProps, propTypes } from './propTypes';
 import { ChipAccessibility } from './ChipAccessibility/ChipAccessibility';
-import { useDispatch } from 'react-redux';
-import { PLACE_DETAIL } from '../../../config/routes';
-import { Link } from 'react-router-dom';
+
+import './MarkerComponent.css';
 
 const MarkerComponent = ({
   placesDetails,
@@ -37,8 +30,6 @@ const MarkerComponent = ({
   const imageRef = useRef(null);
   const [openPopover, setOpenPopover] = useState(false);
   const [openTooltip, setOpenTooltip] = useState(false);
-
-  const dispatch = useDispatch();
 
   const triggers = {
     onMouseEnter: () => {

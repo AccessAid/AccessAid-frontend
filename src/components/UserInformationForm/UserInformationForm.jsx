@@ -1,17 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+
 import { useForm, FormProvider } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, Link } from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom';
 import { Card, Button, Typography } from '@material-tailwind/react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/ReactToastify.min.css';
 
 import { GroupInputsCredentials } from './GroupInputsCredentials/GroupInputsCredentials';
-import { InputValidation } from '../InputValidation/InputValidation';
 import {
-  PERSIST_KEY_USER,
-  logout,
   selectRefreshToken,
   selectUserData,
 } from '../../store/slices/authSlice';
@@ -20,7 +17,6 @@ import {
   refreshTokenAction,
   updateBasicCredentials,
 } from '../../store/actions/authActions';
-import { selectProfileError } from '../../store/slices/profileSlice';
 
 const UserInformationForm = () => {
   const userData = useSelector(selectUserData);
@@ -33,13 +29,8 @@ const UserInformationForm = () => {
 
   const onSubmit = async (data) => {
     try {
-      console.log('data************', data);
       const resultUpdateCredentials = await dispatch(
         updateBasicCredentials({ userId: userData?.id, userBasicData: data }),
-      );
-      console.log(
-        `resultUpdateCredentials update credentials =`,
-        resultUpdateCredentials,
       );
 
       if (resultUpdateCredentials?.payload?.id) {
@@ -72,8 +63,6 @@ const UserInformationForm = () => {
       toast.error('There is an error updating credentials!', {
         autoClose: 2000,
       });
-
-      console.log(error);
     }
   };
 

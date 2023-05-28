@@ -1,22 +1,23 @@
 import React, { useState, useEffect } from 'react';
+
 import { useForm, FormProvider } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Card, Button, Typography } from '@material-tailwind/react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/ReactToastify.min.css';
 import 'flag-icon-css/css/flag-icons.css';
+import { useNavigate } from 'react-router-dom';
+
 import { InputValidation } from '../InputValidation/InputValidation';
+import { UserInformationForm } from '../UserInformationForm/UserInformationForm';
 import {
   logout,
   selectRefreshToken,
   selectUserData,
 } from '../../store/slices/authSlice';
-import { UserInformationForm } from '../UserInformationForm/UserInformationForm';
 import {
   addProfile,
   deleteProfile,
-  getProfileByUser,
   updateProfile,
 } from '../../store/actions/profileActions';
 import { GroupInputsCredentials } from '../UserInformationForm/GroupInputsCredentials/GroupInputsCredentials';
@@ -27,10 +28,8 @@ import {
   getUserData,
   refreshTokenAction,
 } from '../../store/actions/authActions';
-import { useNavigate } from 'react-router-dom';
 import {
   cleanProfileError,
-  selectProfileError,
   selectProfileExist,
   setProfileExist,
 } from '../../store/slices/profileSlice';
@@ -90,8 +89,6 @@ const ProfileEditForm = () => {
   }, []);
 
   useEffect(() => {
-    console.log('defaultProfileData?.payload', defaultProfileData);
-
     hookFormMethods.reset(defaultProfileData);
   }, [defaultProfileData]);
 

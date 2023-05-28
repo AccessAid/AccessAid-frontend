@@ -121,7 +121,6 @@ export const placesSlice = createSlice({
       })
       .addCase(addPlace.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        console.log('action!!!!!!!', action);
         state.currentId = action.payload?.id;
         state.currentPlaceDetail = action.payload;
         state.error = null;
@@ -132,8 +131,6 @@ export const placesSlice = createSlice({
           ? action.payload.message
           : action.error.message;
       });
-    //
-    // Agregar otros casos extraReducers para los demás actions según tus necesidades
   },
 });
 

@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
+
 import PropTypes from 'prop-types';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
@@ -36,8 +37,6 @@ const SearchLocation = ({ mapObject }) => {
   });
 
   const onSubmit = async (data) => {
-    console.log('data SearchLocation', data);
-
     dispatch(
       setCurrentSearch({
         ...currentSearchData,
@@ -49,8 +48,6 @@ const SearchLocation = ({ mapObject }) => {
       const resultAction = await dispatch(getAccessiblePlaces());
 
       if (resultAction.payload) {
-        console.log(`resultAction =`, resultAction.payload);
-
         toast.success('Search done successfully!', {
           autoClose: 1000,
         });
@@ -58,7 +55,6 @@ const SearchLocation = ({ mapObject }) => {
         dispatch(setCoordinatesMap({ ...coordinatesSearch }));
       }
     } catch (error) {
-      console.log(error);
       toast.error('There is an error!', {
         autoClose: 1500,
       });

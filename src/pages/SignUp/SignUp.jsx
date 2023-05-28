@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { RegistrationForm } from '../../components/RegistrationForm/RegistrationForm';
 
 import './SignUp.css';

@@ -1,6 +1,8 @@
 import React from 'react';
+
 import { CardDev } from './CardDev/CardDev';
 import { cardItems } from './utils';
+
 import './GroupCards.css';
 
 const GroupCards = () => {

@@ -1,11 +1,13 @@
 import React from 'react';
+
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { Controller, useFormContext } from 'react-hook-form';
-import { Input, Typography } from '@material-tailwind/react';
+import { Typography } from '@material-tailwind/react';
 import Autocomplete from 'react-google-autocomplete';
 
 import './AutoCompleteValidation.css';
+
 const AutoCompleteValidation = ({
   nameField,
   controllerProps,
@@ -44,7 +46,6 @@ const AutoCompleteValidation = ({
               }}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
-                  // Prevent default 'Enter' behavior.
                   e.preventDefault();
                 }
               }}

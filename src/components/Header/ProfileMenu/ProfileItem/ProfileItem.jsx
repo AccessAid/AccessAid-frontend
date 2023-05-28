@@ -1,4 +1,5 @@
 import React from 'react';
+
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { Typography, MenuItem } from '@material-tailwind/react';
@@ -21,7 +22,6 @@ const ProfileItem = ({ label, icon, link, isLastItem }) => {
       to={link}
       onClick={() => {
         if (label === 'Sign Out') {
-          console.log('SALIR!!');
           logoutHandle();
         }
       }}

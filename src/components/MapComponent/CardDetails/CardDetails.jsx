@@ -1,18 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import {
-  Popover,
-  PopoverHandler,
-  PopoverContent,
-  Button,
-  Typography,
-  Avatar,
-} from '@material-tailwind/react';
-import {
-  BuildingOffice2Icon,
-  MapIcon,
-  MapPinIcon,
-} from '@heroicons/react/24/outline';
+import React, { useState } from 'react';
 
 import './CardDetails.css';
 
@@ -41,13 +27,5 @@ const CardDetails = () => {
     </>
   );
 };
-
-// CardDetails.propTypes = {
-//   text: PropTypes.string.isRequired,
-// };
-
-// CardDetails.defaultProps = {
-//   text: '',
-// };
 
 export { CardDetails };

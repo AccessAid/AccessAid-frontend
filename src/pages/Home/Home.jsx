@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { Sponsors } from '../../components/Sponsors/Sponsors';
 import { GroupCards } from '../../components/GroupCards/GroupCards';
 import { Banner } from '../../components/Banner/Banner';
