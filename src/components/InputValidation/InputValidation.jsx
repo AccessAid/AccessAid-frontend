@@ -67,6 +67,7 @@ InputValidation.propTypes = {
   rules: PropTypes.object,
   inputProps: PropTypes.object,
   selectorApiError: PropTypes.func,
+  customValidation: PropTypes.func,
 };
 
 InputValidation.defaultProps = {

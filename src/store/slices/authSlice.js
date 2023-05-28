@@ -60,6 +60,9 @@ export const authSlice = createSlice({
 
       state.user = storageUser ? JSON.parse(storageUser) : null;
     },
+    setUserData: (state, action) => {
+      state.user = action.payload;
+    },
     setIsTokenExpired: (state, action) => {
       state.isTokenExpired = action.payload;
     },
@@ -135,7 +138,6 @@ export const authSlice = createSlice({
       // getUserData
       .addCase(getUserData.pending, (state) => {
         state.status = 'loading';
-        state.user = null;
       })
       .addCase(getUserData.fulfilled, (state, { payload }) => {
         state.status = 'succeeded';
@@ -148,7 +150,6 @@ export const authSlice = createSlice({
       })
       .addCase(getUserData.rejected, (state, action) => {
         state.status = 'failed';
-        state.user = null;
         state.error = action.payload
           ? action.payload.message
           : action.error.message;
@@ -238,6 +239,7 @@ export const selectAuthError = (state) => state.auth.error;
 export const {
   persistToken,
   persistUser,
+  setUserData,
   cleanApiError,
   logout,
   setIsTokenExpired,

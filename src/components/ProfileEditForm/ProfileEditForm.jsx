@@ -7,7 +7,11 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/ReactToastify.min.css';
 import 'flag-icon-css/css/flag-icons.css';
 import { InputValidation } from '../InputValidation/InputValidation';
-import { selectUserData } from '../../store/slices/authSlice';
+import {
+  logout,
+  selectRefreshToken,
+  selectUserData,
+} from '../../store/slices/authSlice';
 import { UserInformationForm } from '../UserInformationForm/UserInformationForm';
 import {
   addProfile,
@@ -19,13 +23,23 @@ import { GroupInputsCredentials } from '../UserInformationForm/GroupInputsCreden
 import { TextareaValidation } from '../TextareaValidation/TextareaValidation';
 import { SelectorValidation } from '../SelectorValidation/SelectorValidation';
 import { countries } from '../../commons/utils/countries';
-import { getUserData } from '../../store/actions/authActions';
+import {
+  getUserData,
+  refreshTokenAction,
+} from '../../store/actions/authActions';
 import { useNavigate } from 'react-router-dom';
-import { selectProfileError } from '../../store/slices/profileSlice';
+import {
+  selectProfileError,
+  selectProfileExist,
+  setProfileExist,
+} from '../../store/slices/profileSlice';
+import { LOGIN } from '../../config/routes';
 
 const ProfileEditForm = () => {
   const userData = useSelector(selectUserData);
-  const emptyProfileDate = {
+  const profileExist = useSelector(selectProfileExist);
+  const refreshToken = useSelector(selectRefreshToken);
+  const emptyProfileData = {
     firstName: '',
     lastName: '',
     avatarPath: '',
@@ -37,7 +51,7 @@ const ProfileEditForm = () => {
     about: '',
   };
   const [defaultProfileData, setDefaultProfileData] =
-    useState(emptyProfileDate);
+    useState(emptyProfileData);
   const hookFormMethods = useForm();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -60,6 +74,7 @@ const ProfileEditForm = () => {
         }
 
         if (resultUserDataAction?.payload?.profile) {
+          dispatch(setProfileExist(true));
           setDefaultProfileData(resultUserDataAction.payload.profile);
         }
       } catch (error) {
@@ -74,6 +89,8 @@ const ProfileEditForm = () => {
   }, []);
 
   useEffect(() => {
+    console.log('defaultProfileData?.payload', defaultProfileData);
+
     hookFormMethods.reset(defaultProfileData);
   }, [defaultProfileData]);
 
@@ -81,7 +98,7 @@ const ProfileEditForm = () => {
     console.log(data);
 
     try {
-      if (userData?.profile && defaultProfileData.id !== 0) {
+      if (profileExist && defaultProfileData.id !== 0) {
         const resultUpdated = await dispatch(
           updateProfile({
             profileId: defaultProfileData.id,
@@ -93,18 +110,36 @@ const ProfileEditForm = () => {
         );
 
         if (resultUpdated?.payload?.id) {
-          toast.success('Profile Updated Successfully!', {
-            autoClose: 1700,
-          });
-          // navigate(0);
-        } else {
-          toast.error(
-            "We're having troubles adding your profile, come back later",
-            {
+          const resultRefreshToken = await dispatch(
+            refreshTokenAction({
+              refreshToken,
+            }),
+          );
+
+          if (resultRefreshToken?.payload?.token) {
+            setDefaultProfileData(resultUpdated?.payload);
+            toast.success('Profile Updated Successfully!', {
               autoClose: 1700,
+            });
+            return;
+          }
+          toast.error(
+            'Your credentials were updated but there was a problem, please log in again!',
+            {
+              autoClose: 3500,
             },
           );
+          dispatch(logout());
+          navigate(LOGIN);
+          return;
         }
+
+        toast.error(
+          "We're having troubles adding your profile, come back later",
+          {
+            autoClose: 1700,
+          },
+        );
       } else {
         const resultAdded = await dispatch(
           addProfile({
@@ -116,18 +151,20 @@ const ProfileEditForm = () => {
         );
 
         if (resultAdded?.payload?.id) {
+          setDefaultProfileData(resultAdded?.payload);
+
           toast.success('Profile Updated Successfully!', {
             autoClose: 1700,
           });
-          navigate(0);
-        } else {
-          toast.error(
-            "We're having troubles adding your profile, come back later",
-            {
-              autoClose: 1700,
-            },
-          );
+
+          return;
         }
+        toast.error(
+          "We're having troubles adding your profile, come back later",
+          {
+            autoClose: 1700,
+          },
+        );
       }
     } catch (error) {
       toast.error(
@@ -147,11 +184,10 @@ const ProfileEditForm = () => {
         );
 
         if (resultDelete?.payload?.message.includes('deleted')) {
-          // hookFormMethods.reset(emptyProfileDate);
+          setDefaultProfileData(emptyProfileData);
           toast.success('Profile Removed Successfully!', {
             autoClose: 1700,
           });
-          navigate(0);
         } else {
           toast.error(resultDelete?.payload?.message, {
             autoClose: 1700,
@@ -168,13 +204,6 @@ const ProfileEditForm = () => {
     }
   };
 
-  const validateFillNewPassword = (value, watch) => {
-    if (value !== '' && watch('newPassword') === '') {
-      return 'If you want to update your password, please write the new password'; // return error message if confirm password is null
-    }
-    return true; // return true if validation passes
-  };
-
   return (
     <Card color='transparent' shadow={false}>
       <Typography variant='h4' color='blue-gray'>
@@ -184,87 +213,16 @@ const ProfileEditForm = () => {
         Update your profile information.
       </Typography>
 
-      {!userData?.profile && <UserInformationForm />}
+      {!profileExist && <UserInformationForm />}
 
       <FormProvider {...hookFormMethods}>
         <form className='mb-2 mt-2 max-w-screen-xl '>
-          {userData?.profile && (
+          {profileExist && (
             <div className='mb-9'>
               <Typography color='gray' className='mb-7 mt-9 font-normal'>
                 Basic Credentials
               </Typography>
-              <div className='mb-4 grid grid-cols-1 gap-5 gap-y-5 sm:grid-cols-2'>
-                <InputValidation
-                  nameField='email'
-                  controllerProps={{
-                    defaultValue: defaultProfileData?.email,
-                  }}
-                  inputProps={{ size: 'lg', label: 'Email', type: 'text' }}
-                  rules={{
-                    pattern: {
-                      value: /\S+@\S+\.\S+/,
-                      message: 'Invalid email address',
-                    },
-                  }}
-                />
-
-                <InputValidation
-                  nameField='username'
-                  controllerProps={{
-                    defaultValue: defaultProfileData?.username,
-                  }}
-                  inputProps={{ size: 'lg', label: 'Username', type: 'text' }}
-                  rules={{
-                    minLength: {
-                      value: 3,
-                      message:
-                        'The username must be at least 3 characters long',
-                    },
-                    maxLength: {
-                      value: 20,
-                      message: 'The username must not exceed 20 characters',
-                    },
-                  }}
-                />
-
-                <InputValidation
-                  nameField='oldPassword'
-                  controllerProps={{
-                    defaultValue: '',
-                  }}
-                  inputProps={{
-                    size: 'lg',
-                    label: 'Old Password',
-                    type: 'password',
-                  }}
-                  rules={{
-                    minLength: {
-                      value: 8,
-                      message: 'Password must be at least 8 characters long',
-                    },
-                  }}
-                  selectorApiError={selectProfileError}
-                  customValidation={validateFillNewPassword}
-                />
-
-                <InputValidation
-                  nameField='newPassword'
-                  controllerProps={{
-                    defaultValue: '',
-                  }}
-                  inputProps={{
-                    size: 'lg',
-                    label: 'New Password',
-                    type: 'password',
-                  }}
-                  rules={{
-                    minLength: {
-                      value: 8,
-                      message: 'Password must be at least 8 characters long',
-                    },
-                  }}
-                />
-              </div>
+              <GroupInputsCredentials />
             </div>
           )}
 
@@ -342,17 +300,25 @@ const ProfileEditForm = () => {
           </div>
 
           <div className='mb-4 grid grid-cols-1 gap-5 gap-y-5 sm:grid-cols-2'>
-            <InputValidation
-              nameField='phone'
-              controllerProps={{ defaultValue: defaultProfileData.phone }}
-              inputProps={{ size: 'lg', label: 'Phone', type: 'text' }}
-              rules={{
-                pattern: {
-                  value: /^\+\d{1,3} \d{3,14}$/i,
-                  message: 'Invalid Phone format, example: +34 657324511',
-                },
-              }}
-            />
+            <div>
+              <InputValidation
+                nameField='phone'
+                controllerProps={{ defaultValue: defaultProfileData.phone }}
+                inputProps={{ size: 'lg', label: 'Phone', type: 'text' }}
+                rules={{
+                  pattern: {
+                    value: /^\+\d{1,3} \d{3,14}$/i,
+                    message: 'Invalid Phone format, example: +34 657324511',
+                  },
+                }}
+              />
+              <Typography
+                variant='small'
+                className='font-norma mt-2 flex items-center text-gray-400'
+              >
+                Example: +34 655447699
+              </Typography>
+            </div>
 
             <InputValidation
               nameField='avatarPath'
@@ -367,7 +333,7 @@ const ProfileEditForm = () => {
             />
           </div>
 
-          <div className='w-full pb-6 pt-2'>
+          <div className='w-full pb-6'>
             <TextareaValidation
               nameField='about'
               controllerProps={{ defaultValue: defaultProfileData.about }}
@@ -385,7 +351,7 @@ const ProfileEditForm = () => {
             />
           </div>
 
-          {userData?.profile && (
+          {profileExist && (
             <Button
               color='secondary'
               variant='contained'
@@ -401,7 +367,7 @@ const ProfileEditForm = () => {
             onClick={hookFormMethods.handleSubmit(onSubmit)}
             disabled={Object.keys(hookFormMethods.formState.errors).length > 0}
           >
-            {userData?.profile
+            {profileExist
               ? 'Update Profile and basic credentials'
               : 'Add Profile'}
           </Button>

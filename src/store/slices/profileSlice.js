@@ -9,6 +9,7 @@ import {
 const initialState = {
   // userId: null,
   currentUserProfile: null,
+  profileExist: false,
   status: 'idle',
   error: null,
 };
@@ -16,7 +17,11 @@ const initialState = {
 export const profileSlice = createSlice({
   name: 'profile',
   initialState,
-  reducers: {},
+  reducers: {
+    setProfileExist: (state, action) => {
+      state.profileExist = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       // getProfileByUser
@@ -41,11 +46,14 @@ export const profileSlice = createSlice({
       .addCase(addProfile.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.currentUserProfile = action.payload;
+        state.profileExist = true;
         state.error = null;
         // state.userId = action.payload?.id;
       })
       .addCase(addProfile.rejected, (state, action) => {
         state.status = 'failed';
+        state.profileExist = false;
+
         state.error = action.payload
           ? action.payload.message
           : action.error.message;
@@ -57,11 +65,13 @@ export const profileSlice = createSlice({
       .addCase(updateProfile.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.currentUserProfile = action.payload;
+        state.profileExist = true;
         state.error = null;
         // state.userId = action.payload?.id;
       })
       .addCase(updateProfile.rejected, (state, action) => {
         state.status = 'failed';
+        state.profileExist = false;
         state.error = action.payload
           ? action.payload.message
           : action.error.message;
@@ -73,6 +83,7 @@ export const profileSlice = createSlice({
       .addCase(deleteProfile.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.currentUserProfile = null;
+        state.profileExist = false;
         state.error = null;
       })
       .addCase(deleteProfile.rejected, (state, action) => {
@@ -88,8 +99,9 @@ export const profileSlice = createSlice({
 export const selectCurrentUserProfile = (state) =>
   state.profile.currentUserProfile;
 
+export const selectProfileExist = (state) => state.profile.profileExist;
 export const selectProfileError = (state) => state.profile.error;
 
-export const {} = profileSlice.actions;
+export const { setProfileExist } = profileSlice.actions;
 
 export default profileSlice.reducer;

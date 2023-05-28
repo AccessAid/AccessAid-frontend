@@ -9,52 +9,65 @@ import 'react-toastify/ReactToastify.min.css';
 
 import { GroupInputsCredentials } from './GroupInputsCredentials/GroupInputsCredentials';
 import { InputValidation } from '../InputValidation/InputValidation';
-import { PERSIST_KEY_USER, selectUserData } from '../../store/slices/authSlice';
-import { updateBasicCredentials } from '../../store/actions/authActions';
+import {
+  PERSIST_KEY_USER,
+  logout,
+  selectRefreshToken,
+  selectUserData,
+} from '../../store/slices/authSlice';
+import { LOGIN } from '../../config/routes/index';
+import {
+  refreshTokenAction,
+  updateBasicCredentials,
+} from '../../store/actions/authActions';
 import { selectProfileError } from '../../store/slices/profileSlice';
 
 const UserInformationForm = () => {
   const userData = useSelector(selectUserData);
-  const emptyCredentialsData = {
-    username: userData?.username,
-    email: userData?.email,
-    oldPassword: '',
-    newPassword: '',
-  };
-  const [defaultCredentialsData, setDefaultCredentialsData] =
-    useState(emptyCredentialsData);
+  const refreshToken = useSelector(selectRefreshToken);
 
   const hookFormMethods = useForm();
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // const watchNewPassword = hookFormMethods.watch('newPassword');
-
-  const validateFillNewPassword = (value, watch) => {
-    if (value !== '' && watch('newPassword') === '') {
-      return 'If you want to update your password, please write the new password'; // return error message if confirm password is null
-    }
-    return true; // return true if validation passes
-  };
-
   const onSubmit = async (data) => {
     try {
       console.log('data************', data);
-      const resultAction = await dispatch(
+      const resultUpdateCredentials = await dispatch(
         updateBasicCredentials({ userId: userData?.id, userBasicData: data }),
       );
-      console.log(`resultAction update credentials =`, resultAction);
+      console.log(
+        `resultUpdateCredentials update credentials =`,
+        resultUpdateCredentials,
+      );
 
-      if (resultAction?.payload?.id) {
-        toast.success('Update credentials successfully!', {
-          autoClose: 1000,
-        });
-      } else {
-        toast.error('There is an error updating credentials!', {
-          autoClose: 2000,
-        });
+      if (resultUpdateCredentials?.payload?.id) {
+        const resultRefreshToken = await dispatch(
+          refreshTokenAction({
+            refreshToken,
+          }),
+        );
+
+        if (resultRefreshToken?.payload?.token) {
+          toast.success('Update credentials successfully!', {
+            autoClose: 1700,
+          });
+          return;
+        }
+        toast.error(
+          'Your credentials were updated but there was a problem, please log in again!',
+          {
+            autoClose: 3500,
+          },
+        );
+        dispatch(logout());
+        navigate(LOGIN);
+        return;
       }
+      toast.error('There is an error updating credentials, come back later', {
+        autoClose: 2000,
+      });
     } catch (error) {
       toast.error('There is an error updating credentials!', {
         autoClose: 2000,
@@ -64,17 +77,6 @@ const UserInformationForm = () => {
     }
   };
 
-  useEffect(() => {
-    const userData = localStorage.getItem(PERSIST_KEY_USER);
-    if (userData) {
-      hookFormMethods.reset({
-        ...defaultCredentialsData,
-        username: JSON.parse(userData)?.username,
-        email: JSON.parse(userData)?.email,
-      });
-    }
-  }, [defaultCredentialsData, userData]);
-
   return (
     <Card color='transparent' shadow={false}>
       <Typography color='gray' className='mt-9 font-normal'>
@@ -83,74 +85,7 @@ const UserInformationForm = () => {
 
       <FormProvider {...hookFormMethods}>
         <form className='mb-2 mt-8 max-w-screen-lg'>
-          <div className='mb-4 grid grid-cols-1 gap-5 gap-y-5 sm:grid-cols-2'>
-            <InputValidation
-              nameField='email'
-              controllerProps={{ defaultValue: defaultCredentialsData.email }}
-              inputProps={{ size: 'lg', label: 'Email', type: 'text' }}
-              rules={{
-                pattern: {
-                  value: /\S+@\S+\.\S+/,
-                  message: 'Invalid email address',
-                },
-              }}
-            />
-
-            <InputValidation
-              nameField='username'
-              controllerProps={{
-                defaultValue: defaultCredentialsData.username,
-              }}
-              inputProps={{ size: 'lg', label: 'Username', type: 'text' }}
-              rules={{
-                minLength: {
-                  value: 3,
-                  message: 'The username must be at least 3 characters long',
-                },
-                maxLength: {
-                  value: 20,
-                  message: 'The username must not exceed 20 characters',
-                },
-              }}
-            />
-
-            <InputValidation
-              nameField='oldPassword'
-              controllerProps={{
-                defaultValue: defaultCredentialsData.oldPassword,
-              }}
-              inputProps={{
-                size: 'lg',
-                label: 'Old Password',
-                type: 'password',
-              }}
-              rules={{
-                minLength: {
-                  value: 8,
-                  message: 'Password must be at least 8 characters long',
-                },
-              }}
-              customValidation={validateFillNewPassword}
-            />
-
-            <InputValidation
-              nameField='newPassword'
-              controllerProps={{
-                defaultValue: defaultCredentialsData.newPassword,
-              }}
-              inputProps={{
-                size: 'lg',
-                label: 'New Password',
-                type: 'password',
-              }}
-              rules={{
-                minLength: {
-                  value: 8,
-                  message: 'Password must be at least 8 characters long',
-                },
-              }}
-            />
-          </div>
+          <GroupInputsCredentials />
 
           <Button
             className='mt-6'
