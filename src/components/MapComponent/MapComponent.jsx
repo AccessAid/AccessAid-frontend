@@ -1,10 +1,9 @@
 /* eslint-disable react/no-unknown-property */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import GoogleMapReact from 'google-map-react';
-import { Loader } from '@googlemaps/js-api-loader';
 import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/ReactToastify.min.css';
@@ -53,22 +52,11 @@ const MapComponent = ({ setMapObject }) => {
   const coordinatesMap = useSelector(selectCoordinatesMap);
   const firstTimeRenderMap = useSelector(selectFirstTimeRenderMap);
   const currentIdSelected = useSelector(selectCurrentIdSelected);
-  const [loaded, setLoaded] = useState(false);
 
   const DEFAULT_COORDINATES = {
     lat: 40.4167754,
     lng: -3.7037902,
   };
-
-  useEffect(() => {
-    const loader = new Loader({
-      apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
-    });
-
-    loader.load().then(() => {
-      setLoaded(true);
-    });
-  }, []);
 
   useEffect(() => {
     if (!firstTimeRenderMap) {
@@ -112,118 +100,107 @@ const MapComponent = ({ setMapObject }) => {
 
   return (
     <div className={'map-container-component'}>
-      {loaded && (
-        <GoogleMapReact
-          mapContainer
-          bootstrapURLKeys={{ key: import.meta.env.VITE_GOOGLE_MAPS_API_KEY }}
-          center={coordinatesMap}
-          zoom={16}
-          options={{
-            fullscreenControl: false,
-          }}
-          onChange={(e) => {
-            dispatch(
-              setCoordinatesMap({ lat: e.center.lat, lng: e.center.lng }),
-            );
-          }}
-          yesIWantToUseGoogleMapApiInternals
-          onGoogleApiLoaded={({ map, maps }) => {
-            setMapObject(map);
-          }}
-        >
-          {/* Marcador para la ubicación del usuario */}
-          <MarkerBasic lat={currentSearchData.lat} lng={currentSearchData.lng}>
-            {' '}
+      <GoogleMapReact
+        mapContainer
+        bootstrapURLKeys={{ key: import.meta.env.VITE_GOOGLE_MAPS_API_KEY }}
+        center={coordinatesMap}
+        zoom={16}
+        options={{
+          fullscreenControl: false,
+        }}
+        onChange={(e) => {
+          dispatch(setCoordinatesMap({ lat: e.center.lat, lng: e.center.lng }));
+        }}
+        yesIWantToUseGoogleMapApiInternals
+        onGoogleApiLoaded={({ map, maps }) => {
+          setMapObject(map);
+        }}
+      >
+        {/* Marcador para la ubicación del usuario */}
+        <MarkerBasic lat={currentSearchData.lat} lng={currentSearchData.lng}>
+          {' '}
+          <MarkerComponent
+            onlyShowTooltip
+            placesDetails={{
+              name: currentSearchData?.address
+                ? currentSearchData.address
+                : currentPlaceSearched?.name,
+              latitude: currentSearchData.lat,
+              longitude: currentSearchData.lng,
+            }}
+          />
+        </MarkerBasic>
+
+        {/* Marcadores para los lugares relacionados con la búsqueda */}
+        {currentAccessiblePlaces?.map((place) => (
+          <MarkerBasic
+            key={place.placeId}
+            lat={place.latitude ? place.latitude : place.lat}
+            lng={place.longitude ? place.longitude : place.lng}
+          >
             <MarkerComponent
-              onlyShowTooltip
-              placesDetails={{
-                name: currentSearchData?.address
-                  ? currentSearchData.address
-                  : currentPlaceSearched?.name,
-                latitude: currentSearchData.lat,
-                longitude: currentSearchData.lng,
-              }}
-            />
-          </MarkerBasic>
+              placesDetails={place}
+              isPlace
+              onClickIcon={async (openCardDetails = () => {}) => {
+                try {
+                  const placeDetailsResult = await dispatch(
+                    getAccessiblePlaceDetails(place.placeId),
+                  );
 
-          {/* Marcadores para los lugares relacionados con la búsqueda */}
-          {currentAccessiblePlaces?.map((place) => (
-            <MarkerBasic
-              key={place.placeId}
-              lat={place.latitude ? place.latitude : place.lat}
-              lng={place.longitude ? place.longitude : place.lng}
-            >
-              <MarkerComponent
-                placesDetails={place}
-                isPlace
-                onClickIcon={async (openCardDetails = () => {}) => {
-                  try {
-                    const placeDetailsResult = await dispatch(
-                      getAccessiblePlaceDetails(place.placeId),
-                    );
-
-                    if (
-                      placeDetailsResult.payload.accessibilityData &&
-                      placeDetailsResult.payload.formattedAddress
-                    ) {
-                      if (placeDetailsResult.payload?.id) {
-                        dispatch(getPlaceDetailsFromMapSlide());
-                        openCardDetails(true);
-
-                        return;
-                      }
-                      const addPlaceResult = await dispatch(
-                        addPlace({ apiPlaceId: place.placeId }),
-                      );
-
+                  if (
+                    placeDetailsResult.payload.accessibilityData &&
+                    placeDetailsResult.payload.formattedAddress
+                  ) {
+                    if (placeDetailsResult.payload?.id) {
+                      dispatch(getPlaceDetailsFromMapSlide());
                       openCardDetails(true);
 
-                      if (addPlaceResult.payload?.id) {
-                        toast.info(
-                          'This place have not been rated or commented yet, be first one',
-                          {
-                            autoClose: 3500,
-                          },
-                        );
-                      } else {
-                        toast.info(
-                          'This site already have been visited by other users',
-                          {
-                            autoClose: 3500,
-                          },
-                        );
-                      }
-                    } else {
-                      toast.error('There was an error opening place details', {
-                        autoClose: 2500,
-                      });
+                      return;
                     }
-                  } catch (error) {
-                    toast.error(
-                      "We're suffering problems on load this place, come back later",
-                      {
-                        autoClose: 3500,
-                      },
+                    const addPlaceResult = await dispatch(
+                      addPlace({ apiPlaceId: place.placeId }),
                     );
-                  }
-                }}
-                onClickMoreDetail={async () => {
-                  try {
-                    if (currentIdSelected) {
-                      const totalRating = await dispatch(
-                        getTotalRatingByPlace(currentIdSelected),
-                      );
 
-                      if (totalRating?.payload?.placeId) {
-                        navigate(PLACE_DETAIL);
-                      } else {
-                        toast.error(
-                          "We're suffering problems on load total rating of this place, come back later",
-                          {
-                            autoClose: 3500,
-                          },
-                        );
-                      }
+                    openCardDetails(true);
+
+                    if (addPlaceResult.payload?.id) {
+                      toast.info(
+                        'This place have not been rated or commented yet, be first one',
+                        {
+                          autoClose: 3500,
+                        },
+                      );
+                    } else {
+                      toast.info(
+                        'This site already have been visited by other users',
+                        {
+                          autoClose: 3500,
+                        },
+                      );
+                    }
+                  } else {
+                    toast.error('There was an error opening place details', {
+                      autoClose: 2500,
+                    });
+                  }
+                } catch (error) {
+                  toast.error(
+                    "We're suffering problems on load this place, come back later",
+                    {
+                      autoClose: 3500,
+                    },
+                  );
+                }
+              }}
+              onClickMoreDetail={async () => {
+                try {
+                  if (currentIdSelected) {
+                    const totalRating = await dispatch(
+                      getTotalRatingByPlace(currentIdSelected),
+                    );
+
+                    if (totalRating?.payload?.placeId) {
+                      navigate(PLACE_DETAIL);
                     } else {
                       toast.error(
                         "We're suffering problems on load total rating of this place, come back later",
@@ -232,7 +209,7 @@ const MapComponent = ({ setMapObject }) => {
                         },
                       );
                     }
-                  } catch (error) {
+                  } else {
                     toast.error(
                       "We're suffering problems on load total rating of this place, come back later",
                       {
@@ -240,12 +217,19 @@ const MapComponent = ({ setMapObject }) => {
                       },
                     );
                   }
-                }}
-              />
-            </MarkerBasic>
-          ))}
-        </GoogleMapReact>
-      )}
+                } catch (error) {
+                  toast.error(
+                    "We're suffering problems on load total rating of this place, come back later",
+                    {
+                      autoClose: 3500,
+                    },
+                  );
+                }
+              }}
+            />
+          </MarkerBasic>
+        ))}
+      </GoogleMapReact>
       <ToastContainer />
     </div>
   );
