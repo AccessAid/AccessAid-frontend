@@ -1,13 +1,13 @@
 .sponsors__container {
-  @apply bg-white py-24 sm:py-16 -m-14;
+  @apply -m-14 bg-white py-24 sm:py-16;
 }
 
 .sponsors__content {
-  @apply mx-auto max-w-7xl px-6 lg:px-8  -m-8;
+  @apply -m-8 mx-auto max-w-7xl px-6  lg:px-8;
 }
 
 .sponsors__title {
-  @apply text-center text-3xl font-semibold leading-8 text-gray-900 mb-4;
+  @apply mb-4 text-center text-3xl font-semibold leading-8 text-gray-900;
 }
 
 .sponsors__logos {
