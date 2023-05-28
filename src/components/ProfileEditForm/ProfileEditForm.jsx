@@ -5,26 +5,43 @@ import { useSelector } from 'react-redux';
 import { Card, Button, Typography } from '@material-tailwind/react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/ReactToastify.min.css';
-import { SelectorValidation } from '../SelectorValidation/SelectorValidation';
-import { countries } from './countries.js';
 import 'flag-icon-css/css/flag-icons.css';
 import { InputValidation } from '../InputValidation/InputValidation';
-import { selectUserData } from '../../store/slices/authSlice';
-
+import {
+  logout,
+  selectRefreshToken,
+  selectUserData,
+} from '../../store/slices/authSlice';
+import { UserInformationForm } from '../UserInformationForm/UserInformationForm';
 import {
   addProfile,
   deleteProfile,
   getProfileByUser,
   updateProfile,
 } from '../../store/actions/profileActions';
+import { GroupInputsCredentials } from '../UserInformationForm/GroupInputsCredentials/GroupInputsCredentials';
+import { TextareaValidation } from '../TextareaValidation/TextareaValidation';
+import { SelectorValidation } from '../SelectorValidation/SelectorValidation';
+import { countries } from '../../commons/utils/countries';
+import {
+  getUserData,
+  refreshTokenAction,
+} from '../../store/actions/authActions';
+import { useNavigate } from 'react-router-dom';
+import {
+  selectProfileError,
+  selectProfileExist,
+  setProfileExist,
+} from '../../store/slices/profileSlice';
+import { LOGIN } from '../../config/routes';
 
 const ProfileEditForm = () => {
   const userData = useSelector(selectUserData);
-  const emptyProfileDate = {
+  const profileExist = useSelector(selectProfileExist);
+  const refreshToken = useSelector(selectRefreshToken);
+  const emptyProfileData = {
     firstName: '',
     lastName: '',
-    email: userData.email,
-    username: userData.username,
     avatarPath: '',
     streetAddress: '',
     city: '',
@@ -34,17 +51,19 @@ const ProfileEditForm = () => {
     about: '',
   };
   const [defaultProfileData, setDefaultProfileData] =
-    useState(emptyProfileDate);
-  const [isProfileExist, setIsProfileExist] = useState(false);
+    useState(emptyProfileData);
   const hookFormMethods = useForm();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
       try {
-        const result = await dispatch(getProfileByUser(userData.id));
+        const resultUserDataAction = await dispatch(
+          getUserData(userData.username),
+        );
 
-        if (result?.payload?.message?.includes('not found')) {
+        if (!resultUserDataAction?.payload?.profile) {
           toast.info(
             'Your profile is empty, we recommend to add more information',
             {
@@ -54,9 +73,9 @@ const ProfileEditForm = () => {
           return;
         }
 
-        if (result?.payload?.id) {
-          setDefaultProfileData(result.payload);
-          setIsProfileExist(true);
+        if (resultUserDataAction?.payload?.profile) {
+          dispatch(setProfileExist(true));
+          setDefaultProfileData(resultUserDataAction.payload.profile);
         }
       } catch (error) {
         toast.error(
@@ -70,39 +89,63 @@ const ProfileEditForm = () => {
   }, []);
 
   useEffect(() => {
+    console.log('defaultProfileData?.payload', defaultProfileData);
+
     hookFormMethods.reset(defaultProfileData);
   }, [defaultProfileData]);
 
   const onSubmit = async (data) => {
-    console.log(data);
-
     try {
-      if (isProfileExist && defaultProfileData.id !== 0) {
+      if (profileExist && defaultProfileData.id !== 0) {
         const resultUpdated = await dispatch(
           updateProfile({
             profileId: defaultProfileData.id,
             profileData: {
               ...data,
-              user: {
-                id: userData.id,
-              },
+              userId: userData.id,
             },
           }),
         );
 
         if (resultUpdated?.payload?.id) {
-          toast.success('Profile Updated Successfully!', {
-            autoClose: 1700,
-          });
-        } else {
-          toast.error(
-            "We're having troubles adding your profile, come back later",
-            {
+          const resultRefreshToken = await dispatch(
+            refreshTokenAction({
+              refreshToken,
+            }),
+          );
+
+          if (resultRefreshToken?.payload?.token) {
+            setDefaultProfileData(resultUpdated?.payload);
+            toast.success('Profile Updated Successfully!', {
               autoClose: 1700,
+            });
+            return;
+          }
+          toast.error(
+            'Your credentials were updated but there was a problem, please log in again!',
+            {
+              autoClose: 3500,
             },
           );
+          dispatch(logout());
+          navigate(LOGIN);
+          return;
         }
+
+        toast.error(
+          "We're having troubles adding your profile, come back later",
+          {
+            autoClose: 1700,
+          },
+        );
       } else {
+        if (Object.values(hookFormMethods.getValues()).every((x) => x === '')) {
+          toast.error('Select at least one field', {
+            autoClose: 2500,
+          });
+          return;
+        }
+
         const resultAdded = await dispatch(
           addProfile({
             ...data,
@@ -113,17 +156,20 @@ const ProfileEditForm = () => {
         );
 
         if (resultAdded?.payload?.id) {
+          setDefaultProfileData(resultAdded?.payload);
+
           toast.success('Profile Updated Successfully!', {
             autoClose: 1700,
           });
-        } else {
-          toast.error(
-            "We're having troubles adding your profile, come back later",
-            {
-              autoClose: 1700,
-            },
-          );
+
+          return;
         }
+        toast.error(
+          "We're having troubles adding your profile, come back later",
+          {
+            autoClose: 1700,
+          },
+        );
       }
     } catch (error) {
       toast.error(
@@ -142,19 +188,15 @@ const ProfileEditForm = () => {
           deleteProfile(defaultProfileData.id),
         );
 
-        if (resultDelete) {
-          const { username, email, ...restOfFields } = emptyProfileDate;
-          hookFormMethods.reset(restOfFields);
+        if (resultDelete?.payload?.message.includes('deleted')) {
+          setDefaultProfileData(emptyProfileData);
           toast.success('Profile Removed Successfully!', {
             autoClose: 1700,
           });
         } else {
-          toast.error(
-            "We're having troubles deleting your profile, come back later",
-            {
-              autoClose: 1700,
-            },
-          );
+          toast.error(resultDelete?.payload?.message, {
+            autoClose: 1700,
+          });
         }
       } catch (error) {
         toast.error(
@@ -173,11 +215,32 @@ const ProfileEditForm = () => {
         Edit Profile
       </Typography>
       <Typography color='gray' className='mt-1 font-normal'>
-        Update your profile information.
+        Update your profile information{' '}
+        <Typography variant='h5' className='font-bold'>
+          {userData?.username}
+        </Typography>
       </Typography>
+
+      {!profileExist && <UserInformationForm />}
+
       <FormProvider {...hookFormMethods}>
-        <form className='mb-2 mt-8 max-w-screen-lg sm:flex sm:gap-4 '>
-          <div className='mt-3 space-y-4 sm:w-1/2'>
+        <form className='mb-2 mt-2 max-w-screen-xl '>
+          {profileExist && (
+            <div className='mb-9'>
+              <Typography color='gray' className='mb-7 mt-9 font-normal'>
+                Basic Credentials
+              </Typography>
+              <GroupInputsCredentials />
+            </div>
+          )}
+
+          <hr className='mb-5 mt-2' />
+
+          <Typography color='gray' className='my-8 mt-1 font-normal'>
+            Personal Information <span className='font-bold'>(Optional)</span>
+          </Typography>
+
+          <div className='mb-4 grid grid-cols-1 gap-5 gap-y-5 sm:grid-cols-2'>
             <InputValidation
               nameField='firstName'
               controllerProps={{ defaultValue: defaultProfileData.firstName }}
@@ -189,55 +252,9 @@ const ProfileEditForm = () => {
               controllerProps={{ defaultValue: defaultProfileData.lastName }}
               inputProps={{ size: 'lg', label: 'Last Name', type: 'text' }}
             />
+          </div>
 
-            <InputValidation
-              nameField='email'
-              controllerProps={{ defaultValue: emptyProfileDate?.email }}
-              inputProps={{ size: 'lg', label: 'Email', type: 'text' }}
-              rules={{
-                required: {
-                  value: true,
-                  message: 'Please enter your email address',
-                },
-                pattern: {
-                  value: /\S+@\S+\.\S+/,
-                  message: 'Invalid email address',
-                },
-              }}
-            />
-
-            <InputValidation
-              nameField='username'
-              controllerProps={{ defaultValue: emptyProfileDate?.username }}
-              inputProps={{ size: 'lg', label: 'Username', type: 'text' }}
-              rules={{
-                required: {
-                  value: true,
-                  message: 'Please enter your username',
-                },
-                minLength: {
-                  value: 3,
-                  message: 'The username must be at least 3 characters long',
-                },
-                maxLength: {
-                  value: 20,
-                  message: 'The username must not exceed 20 characters',
-                },
-              }}
-            />
-
-            <InputValidation
-              nameField='avatarPath'
-              controllerProps={{ defaultValue: defaultProfileData.avatarPath }}
-              inputProps={{ size: 'lg', label: 'Avatar URL', type: 'text' }}
-              rules={{
-                pattern: {
-                  value: /^https?:\/\/.*$/i,
-                  message: 'Invalid URL format',
-                },
-              }}
-            />
-
+          <div className='mb-4 grid grid-cols-1 gap-5 gap-y-5 sm:grid-cols-2'>
             <SelectorValidation
               nameField='country'
               controllerProps={{ defaultValue: defaultProfileData.country }}
@@ -258,77 +275,110 @@ const ProfileEditForm = () => {
                 className: 'centered-options',
               }}
             />
+
+            <InputValidation
+              nameField='city'
+              controllerProps={{ defaultValue: defaultProfileData.city }}
+              inputProps={{ size: 'xs', label: 'City', type: 'text' }}
+            />
           </div>
 
-          <div className='mt-3 space-y-4 sm:w-1/2'>
+          <div className='mb-4 grid grid-cols-1 gap-5 gap-y-5 sm:grid-cols-2'>
+            <InputValidation
+              nameField='zipCode'
+              controllerProps={{ defaultValue: defaultProfileData.zipCode }}
+              inputProps={{
+                size: 'xs',
+                label: 'Zip/Code Postal',
+                type: 'number',
+              }}
+            />
+
             <InputValidation
               nameField='streetAddress'
               controllerProps={{
                 defaultValue: defaultProfileData.streetAddress,
               }}
               inputProps={{
-                size: 'lg',
+                size: 'xs',
                 label: 'Street Address',
                 type: 'text',
               }}
             />
+          </div>
+
+          <div className='mb-4 grid grid-cols-1 gap-5 gap-y-5 sm:grid-cols-2'>
+            <div>
+              <InputValidation
+                nameField='phone'
+                controllerProps={{ defaultValue: defaultProfileData.phone }}
+                inputProps={{ size: 'lg', label: 'Phone', type: 'text' }}
+                rules={{
+                  pattern: {
+                    value: /^\+\d{1,3} \d{3,14}$/i,
+                    message: 'Invalid Phone format, example: +34 657324511',
+                  },
+                }}
+              />
+              <Typography
+                variant='small'
+                className='font-norma mt-2 flex items-center text-gray-400'
+              >
+                Example: +34 655447699
+              </Typography>
+            </div>
 
             <InputValidation
-              nameField='city'
-              controllerProps={{ defaultValue: defaultProfileData.city }}
-              inputProps={{ size: 'lg', label: 'City', type: 'text' }}
-            />
-
-            <InputValidation
-              nameField='zipCode'
-              controllerProps={{ defaultValue: defaultProfileData.zipCode }}
-              inputProps={{ size: 'lg', label: 'ZIP Code', type: 'number' }}
-            />
-
-            <InputValidation
-              nameField='phone'
-              controllerProps={{ defaultValue: defaultProfileData.phone }}
-              inputProps={{ size: 'lg', label: 'Phone', type: 'text' }}
+              nameField='avatarPath'
+              controllerProps={{ defaultValue: defaultProfileData.avatarPath }}
+              inputProps={{ size: 'lg', label: 'Avatar URL', type: 'text' }}
               rules={{
                 pattern: {
-                  value: /^\+\d{1,3} \d{3,14}$/i,
-                  message: 'Invalid Phone format',
+                  value: /^https?:\/\/.*$/i,
+                  message: 'Invalid URL format',
                 },
               }}
             />
+          </div>
 
-            <InputValidation
+          <div className='w-full pb-6'>
+            <TextareaValidation
               nameField='about'
               controllerProps={{ defaultValue: defaultProfileData.about }}
-              inputProps={{
-                size: 'lg',
-                label: 'About',
-                type: 'textarea',
-                rows: 4,
+              inputProps={{ size: 'lg', label: 'About' }}
+              rules={{
+                minLength: {
+                  value: 10,
+                  message: 'Message must have at least 10 characters.',
+                },
+                maxLength: {
+                  value: 200,
+                  message: 'Message can have a maximum of 200 characters.',
+                },
               }}
             />
-
-            <Button
-              fullWidth
-              onClick={hookFormMethods.handleSubmit(onSubmit)}
-              disabled={
-                Object.keys(hookFormMethods.formState.errors).length > 0
-              }
-            >
-              {isProfileExist ? 'Update Profile' : 'Add Profile'}
-            </Button>
-
-            {isProfileExist && (
-              <Button
-                color='secondary'
-                variant='contained'
-                fullWidth
-                onClick={handleDeleteProfile}
-              >
-                Delete Profile
-              </Button>
-            )}
           </div>
+
+          {profileExist && (
+            <Button
+              color='secondary'
+              variant='contained'
+              onClick={handleDeleteProfile}
+            >
+              Delete Profile
+            </Button>
+          )}
+
+          <Button
+            className='ml-2'
+            variant='contained'
+            onClick={hookFormMethods.handleSubmit(onSubmit)}
+            disabled={Object.keys(hookFormMethods.formState.errors).length > 0}
+          >
+            {profileExist
+              ? 'Update Profile and basic credentials'
+              : 'Add Profile'}
+          </Button>
         </form>
       </FormProvider>
       <ToastContainer />

@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { PERSIST_KEY_USER, setUserData } from '../slices/authSlice';
 
 export const getProfileById = createAsyncThunk(
   'profiles/getProfileById',
@@ -29,9 +30,39 @@ export const getProfileById = createAsyncThunk(
   },
 );
 
+export const addProfile = createAsyncThunk(
+  'profiles/addProfile',
+  async (profileData, { rejectWithValue, getState }) => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/profiles`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          Authorization: `Bearer ${getState().auth.token}`,
+        },
+        body: JSON.stringify(profileData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        return data;
+      }
+
+      return rejectWithValue(data);
+    } catch (err) {
+      return rejectWithValue(err.message);
+    }
+  },
+);
+
 export const updateProfile = createAsyncThunk(
   'profiles/updateProfile',
-  async ({ profileId, profileData }, { rejectWithValue, getState }) => {
+  async (
+    { profileId, profileData },
+    { rejectWithValue, getState, dispatch },
+  ) => {
     try {
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/profiles/${profileId}`,
@@ -49,6 +80,14 @@ export const updateProfile = createAsyncThunk(
       const data = await response.json();
 
       if (response.ok) {
+        const newUserData = {
+          ...getState().auth.user,
+          username: profileData?.username,
+          email: profileData?.email,
+          profile: profileData,
+        };
+        localStorage.setItem(PERSIST_KEY_USER, JSON.stringify(newUserData));
+        dispatch(setUserData(newUserData));
         return data;
       }
 
@@ -75,13 +114,13 @@ export const deleteProfile = createAsyncThunk(
         },
       );
 
-      const data = await response.json();
-
       if (response.ok) {
-        return data;
+        return { message: 'Profile deleted' };
       }
 
-      return rejectWithValue(data);
+      return rejectWithValue({
+        message: 'There is a problem deleting profile',
+      });
     } catch (err) {
       return rejectWithValue(err.message);
     }
@@ -99,33 +138,6 @@ export const getProfiles = createAsyncThunk(
           'Access-Control-Allow-Origin': '*',
           Authorization: `Bearer ${getState().auth.token}`,
         },
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        return data;
-      }
-
-      return rejectWithValue(data);
-    } catch (err) {
-      return rejectWithValue(err.message);
-    }
-  },
-);
-
-export const addProfile = createAsyncThunk(
-  'profiles/addProfile',
-  async (profileData, { rejectWithValue, getState }) => {
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/profiles`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          Authorization: `Bearer ${getState().auth.token}`,
-        },
-        body: JSON.stringify(profileData),
       });
 
       const data = await response.json();

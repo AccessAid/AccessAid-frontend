@@ -4,6 +4,7 @@ import {
   signup,
   getUserData,
   refreshTokenAction,
+  updateBasicCredentials,
 } from '../actions/authActions';
 import { isDatePassed } from '../../commons/utils/dateUtils';
 
@@ -58,6 +59,9 @@ export const authSlice = createSlice({
       const storageUser = localStorage.getItem(PERSIST_KEY_USER);
 
       state.user = storageUser ? JSON.parse(storageUser) : null;
+    },
+    setUserData: (state, action) => {
+      state.user = action.payload;
     },
     setIsTokenExpired: (state, action) => {
       state.isTokenExpired = action.payload;
@@ -134,7 +138,6 @@ export const authSlice = createSlice({
       // getUserData
       .addCase(getUserData.pending, (state) => {
         state.status = 'loading';
-        state.user = null;
       })
       .addCase(getUserData.fulfilled, (state, { payload }) => {
         state.status = 'succeeded';
@@ -147,7 +150,6 @@ export const authSlice = createSlice({
       })
       .addCase(getUserData.rejected, (state, action) => {
         state.status = 'failed';
-        state.user = null;
         state.error = action.payload
           ? action.payload.message
           : action.error.message;
@@ -198,6 +200,24 @@ export const authSlice = createSlice({
         }
 
         state.error = action.payload.message;
+      })
+      // update basic credentials
+      .addCase(updateBasicCredentials.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(updateBasicCredentials.fulfilled, (state, { payload }) => {
+        state.status = 'succeeded';
+        if (payload?.username) {
+          state.user = payload;
+          state.error = null;
+          localStorage.setItem(PERSIST_KEY_USER, JSON.stringify(payload));
+        }
+      })
+      .addCase(updateBasicCredentials.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload
+          ? action.payload.message
+          : action.error.message;
       });
   },
 });
@@ -219,6 +239,7 @@ export const selectAuthError = (state) => state.auth.error;
 export const {
   persistToken,
   persistUser,
+  setUserData,
   cleanApiError,
   logout,
   setIsTokenExpired,
