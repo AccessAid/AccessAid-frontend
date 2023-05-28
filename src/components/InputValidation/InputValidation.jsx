@@ -20,6 +20,8 @@ const InputValidation = ({
 
   const apiError = useSelector(selectorApiError);
 
+  console.log('apiError****', apiError);
+
   return (
     <>
       <Controller

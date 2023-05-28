@@ -29,6 +29,7 @@ import {
 } from '../../store/actions/authActions';
 import { useNavigate } from 'react-router-dom';
 import {
+  cleanProfileError,
   selectProfileError,
   selectProfileExist,
   setProfileExist,
@@ -115,6 +116,8 @@ const ProfileEditForm = () => {
           );
 
           if (resultRefreshToken?.payload?.token) {
+            dispatch(cleanProfileError());
+
             setDefaultProfileData(resultUpdated?.payload);
             toast.success('Profile Updated Successfully!', {
               autoClose: 1700,
@@ -189,6 +192,7 @@ const ProfileEditForm = () => {
         );
 
         if (resultDelete?.payload?.message.includes('deleted')) {
+          dispatch(cleanProfileError());
           setDefaultProfileData(emptyProfileData);
           toast.success('Profile Removed Successfully!', {
             autoClose: 1700,

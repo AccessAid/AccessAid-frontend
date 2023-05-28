@@ -5,6 +5,7 @@ import { Card, Button, Typography } from '@material-tailwind/react';
 import { InputValidation } from '../../InputValidation/InputValidation';
 import {
   PERSIST_KEY_USER,
+  selectAuthError,
   selectUserData,
 } from '../../../store/slices/authSlice';
 import { useSelector } from 'react-redux';
@@ -13,6 +14,7 @@ import { selectProfileError } from '../../../store/slices/profileSlice';
 
 const GroupInputsCredentials = () => {
   const userData = useSelector(selectUserData);
+  const authError = useSelector(selectAuthError);
   const { reset } = useFormContext();
 
   const validateFillOldPassword = (value, watch) => {
@@ -97,6 +99,11 @@ const GroupInputsCredentials = () => {
               message: 'Password must be at least 8 characters long',
             },
           }}
+          selectorApiError={
+            authError?.includes('oldPassword')
+              ? selectAuthError
+              : selectProfileError
+          }
           customValidation={validateFillOldPassword}
         />
       </div>
