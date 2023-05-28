@@ -1,19 +1,19 @@
 import React from 'react';
 
 import {
+  BellIcon,
+  CurrencyDollarIcon,
+  HomeIcon,
+} from '@heroicons/react/24/solid';
+import {
   Timeline,
-  TimelineItem,
+  TimelineBody,
   TimelineConnector,
   TimelineHeader,
   TimelineIcon,
-  TimelineBody,
+  TimelineItem,
   Typography,
 } from '@material-tailwind/react';
-import {
-  HomeIcon,
-  BellIcon,
-  CurrencyDollarIcon,
-} from '@heroicons/react/24/solid';
 
 import './InfoFeatures.css';
 
@@ -29,15 +29,15 @@ const InfoFeatures = () => {
                 <HomeIcon className='h-4 w-4 text-white' />
               </TimelineIcon>
               <Typography variant='h5' color='white'>
-                Encuentra lugares accesibles
+                Find Accessible Places
               </Typography>
             </TimelineHeader>
             <TimelineBody className='pb-8'>
               <Typography color='white' className='font-normal text-gray-300'>
-                Descubre y explora lugares que ofrecen accesibilidad para
-                personas con discapacidad. Nuestra aplicación te permite buscar
-                y encontrar restaurantes, tiendas, parques y más, asegurándote
-                de que sean accesibles para todos.
+                Discover and explore places that offer accessibility for people
+                with disabilities. Our application allows you to search and find
+                restaurants, stores, parks, and more, ensuring that they are
+                accessible for everyone.
               </Typography>
             </TimelineBody>
           </TimelineItem>
@@ -48,15 +48,14 @@ const InfoFeatures = () => {
                 <BellIcon className='h-4 w-4 text-white' />
               </TimelineIcon>
               <Typography variant='h5' color='white'>
-                Búsqueda intuitiva
+                Intuitive Search
               </Typography>
             </TimelineHeader>
             <TimelineBody className='pb-8'>
               <Typography color='white' className='font-normal text-gray-300'>
-                Nuestra aplicación te ofrece una búsqueda rápida y sencilla.
-                Simplemente ingresa el nombre del lugar o utiliza filtros
-                avanzados para encontrar exactamente lo que necesitas. Ahorra
-                tiempo y encuentra lugares accesibles con facilidad.
+                Our application offers you a quick and easy search. Simply enter
+                the name of the place or use advanced filters to find exactly
+                what you need. Save time and easily find accessible places.
               </Typography>
             </TimelineBody>
           </TimelineItem>
@@ -66,16 +65,16 @@ const InfoFeatures = () => {
                 <CurrencyDollarIcon className='h-4 w-4 text-white' />
               </TimelineIcon>
               <Typography variant='h5' color='white'>
-                Verificación de accesibilidad
+                Accessibility Verification
               </Typography>
             </TimelineHeader>
             <TimelineBody>
               <Typography color='white' className='font-normal text-gray-300'>
-                Nos preocupamos por la calidad de la información que ofrecemos.
-                Nuestra comunidad de usuarios verifica y actualiza
-                constantemente los lugares, asegurando que la información sobre
-                la accesibilidad sea precisa. Confía en nosotros para encontrar
-                lugares accesibles y disfrutar de experiencias inclusivas.
+                We care about the quality of the information we provide. Our
+                community of users constantly verifies and updates the places,
+                ensuring that the information about accessibility is accurate.
+                Trust us to find accessible places and enjoy inclusive
+                experiences.
               </Typography>
             </TimelineBody>
           </TimelineItem>
