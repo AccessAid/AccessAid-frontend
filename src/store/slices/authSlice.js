@@ -75,6 +75,7 @@ export const authSlice = createSlice({
       state.tokenExpiredDate = null;
       state.isTokenExpired = true;
       state.status = 'idle';
+      state.error = null;
       localStorage.removeItem(PERSIST_KEY_AUTH_TOKEN);
       localStorage.removeItem(PERSIST_KEY_TOKEN_EXPIRED_DATE);
       localStorage.removeItem(PERSIST_KEY_USER);
