@@ -1,3 +1,10 @@
+import {
+  Cog6ToothIcon,
+  InboxArrowDownIcon,
+  PowerIcon,
+} from '@heroicons/react/24/outline';
+import { LOGIN, MAP, PROFILE } from '../../../config/routes';
+
 const profileMenuItems = [
   {
     label: 'Edit Profile',

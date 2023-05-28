@@ -8,7 +8,6 @@ import {
   Typography,
   Tooltip,
 } from '@material-tailwind/react';
-import { useDispatch } from 'react-redux';
 
 import MarkerIconImage from '../../../assets/svg/marker-icon.svg';
 import MarkerPurpleIconImage from '../../../assets/svg/marker-icon-purple.svg';

@@ -8,14 +8,17 @@ import {
   Avatar,
 } from '@material-tailwind/react';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
+import { useSelector } from 'react-redux';
 
 import { profileMenuItems } from './utils';
 import { ProfileItem } from './ProfileItem/ProfileItem';
+import { selectCurrentUserProfile } from '../../../store/slices/profileSlice';
 
 import './ProfileMenu.css';
 
 const ProfileMenu = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const profileData = useSelector(selectCurrentUserProfile);
 
   return (
     <Menu open={isMenuOpen} handler={setIsMenuOpen} placement='bottom-end'>
@@ -26,7 +29,9 @@ const ProfileMenu = () => {
             size='sm'
             alt='candice wu'
             className='avatar__img'
-            src='https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80'
+            src={`https://unavatar.io/${
+              profileData?.avatarPath || 'no-avatar'
+            }`}
           />
           <ChevronDownIcon
             strokeWidth={2.5}

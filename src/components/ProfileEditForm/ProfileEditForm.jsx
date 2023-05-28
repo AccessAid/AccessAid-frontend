@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import { useForm, FormProvider } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { Card, Button, Typography } from '@material-tailwind/react';
+import { Card, Button, Typography, Avatar } from '@material-tailwind/react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/ReactToastify.min.css';
 import 'flag-icon-css/css/flag-icons.css';
@@ -30,6 +30,7 @@ import {
 } from '../../store/actions/authActions';
 import {
   cleanProfileError,
+  selectCurrentUserProfile,
   selectProfileExist,
   setProfileExist,
 } from '../../store/slices/profileSlice';
@@ -37,6 +38,7 @@ import { LOGIN } from '../../config/routes';
 
 const ProfileEditForm = () => {
   const userData = useSelector(selectUserData);
+  const profileData = useSelector(selectCurrentUserProfile);
   const profileExist = useSelector(selectProfileExist);
   const refreshToken = useSelector(selectRefreshToken);
   const emptyProfileData = {
@@ -217,9 +219,14 @@ const ProfileEditForm = () => {
       </Typography>
       <Typography color='gray' className='mt-1 font-normal'>
         Update your profile information{' '}
-        <Typography variant='h5' className='font-bold'>
+        <Typography variant='h5' className='py-3 font-bold'>
           {userData?.username}
         </Typography>
+        <Avatar
+          src={`https://unavatar.io/${profileData?.avatarPath || 'no-avatar'}`}
+          alt='avatar profile'
+          size='xxl'
+        />
       </Typography>
 
       {!profileExist && <UserInformationForm />}
@@ -333,12 +340,6 @@ const ProfileEditForm = () => {
               nameField='avatarPath'
               controllerProps={{ defaultValue: defaultProfileData.avatarPath }}
               inputProps={{ size: 'lg', label: 'Avatar URL', type: 'text' }}
-              rules={{
-                pattern: {
-                  value: /^https?:\/\/.*$/i,
-                  message: 'Invalid URL format',
-                },
-              }}
             />
           </div>
 
@@ -364,6 +365,7 @@ const ProfileEditForm = () => {
             <Button
               color='secondary'
               variant='contained'
+              className='mb-4 sm:mb-0'
               onClick={handleDeleteProfile}
             >
               Delete Profile
