@@ -33,11 +33,16 @@ const OpeningHours = ({ weekdayText }) => {
           </AccordionHeader>
           <AccordionBody className='flex justify-center'>
             <Typography color='gray' className='text-left'>
-              {weekdayText.map((day) => (
-                <Typography key={day} variant='small' as='span' color='gray'>
-                  {day}
-                </Typography>
-              ))}
+              {weekdayText.map((day) => {
+                const words = day.split(' ');
+                const firstWord = words[0];
+                const restOfText = words.slice(1).join(' ');
+                return (
+                  <Typography key={day} variant='small' as='span' color='gray'>
+                    <strong>{firstWord}</strong> {restOfText}
+                  </Typography>
+                );
+              })}
             </Typography>
           </AccordionBody>
         </Accordion>
