@@ -1,0 +1,7 @@
+.info-features-container {
+  @apply bg-quaternary py-24 sm:py-16;
+}
+
+.timeline-container {
+  @apply mx-auto px-16 md:w-5/6 lg:w-4/6;
+}
