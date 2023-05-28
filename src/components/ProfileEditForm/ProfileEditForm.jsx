@@ -95,8 +95,6 @@ const ProfileEditForm = () => {
   }, [defaultProfileData]);
 
   const onSubmit = async (data) => {
-    console.log(data);
-
     try {
       if (profileExist && defaultProfileData.id !== 0) {
         const resultUpdated = await dispatch(
@@ -141,6 +139,13 @@ const ProfileEditForm = () => {
           },
         );
       } else {
+        if (Object.values(hookFormMethods.getValues()).every((x) => x === '')) {
+          toast.error('Select at least one field', {
+            autoClose: 2500,
+          });
+          return;
+        }
+
         const resultAdded = await dispatch(
           addProfile({
             ...data,
@@ -232,7 +237,7 @@ const ProfileEditForm = () => {
           <hr className='mb-5 mt-2' />
 
           <Typography color='gray' className='my-8 mt-1 font-normal'>
-            Personal Information
+            Personal Information <span className='font-bold'>(Optional)</span>
           </Typography>
 
           <div className='mb-4 grid grid-cols-1 gap-5 gap-y-5 sm:grid-cols-2'>
