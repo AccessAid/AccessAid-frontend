@@ -75,13 +75,13 @@ export const deleteProfile = createAsyncThunk(
         },
       );
 
-      const data = await response.json();
-
       if (response.ok) {
-        return data;
+        return { message: 'Profile deleted' };
       }
 
-      return rejectWithValue(data);
+      return rejectWithValue({
+        message: 'There is a problem deleting profile',
+      });
     } catch (err) {
       return rejectWithValue(err.message);
     }

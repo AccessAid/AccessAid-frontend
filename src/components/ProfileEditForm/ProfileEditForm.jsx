@@ -5,26 +5,29 @@ import { useSelector } from 'react-redux';
 import { Card, Button, Typography } from '@material-tailwind/react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/ReactToastify.min.css';
-import { SelectorValidation } from '../SelectorValidation/SelectorValidation';
-import { countries } from './countries.js';
 import 'flag-icon-css/css/flag-icons.css';
 import { InputValidation } from '../InputValidation/InputValidation';
 import { selectUserData } from '../../store/slices/authSlice';
-
+import { UserInformationForm } from '../UserInformationForm/UserInformationForm';
 import {
   addProfile,
   deleteProfile,
   getProfileByUser,
   updateProfile,
 } from '../../store/actions/profileActions';
+import { GroupInputsCredentials } from '../UserInformationForm/GroupInputsCredentials/GroupInputsCredentials';
+import { TextareaValidation } from '../TextareaValidation/TextareaValidation';
+import { SelectorValidation } from '../SelectorValidation/SelectorValidation';
+import { countries } from '../../commons/utils/countries';
+import { getUserData } from '../../store/actions/authActions';
+import { useNavigate } from 'react-router-dom';
+import { selectProfileError } from '../../store/slices/profileSlice';
 
 const ProfileEditForm = () => {
   const userData = useSelector(selectUserData);
   const emptyProfileDate = {
     firstName: '',
     lastName: '',
-    email: userData.email,
-    username: userData.username,
     avatarPath: '',
     streetAddress: '',
     city: '',
@@ -35,16 +38,18 @@ const ProfileEditForm = () => {
   };
   const [defaultProfileData, setDefaultProfileData] =
     useState(emptyProfileDate);
-  const [isProfileExist, setIsProfileExist] = useState(false);
   const hookFormMethods = useForm();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
       try {
-        const result = await dispatch(getProfileByUser(userData.id));
+        const resultUserDataAction = await dispatch(
+          getUserData(userData.username),
+        );
 
-        if (result?.payload?.message?.includes('not found')) {
+        if (!resultUserDataAction?.payload?.profile) {
           toast.info(
             'Your profile is empty, we recommend to add more information',
             {
@@ -54,9 +59,8 @@ const ProfileEditForm = () => {
           return;
         }
 
-        if (result?.payload?.id) {
-          setDefaultProfileData(result.payload);
-          setIsProfileExist(true);
+        if (resultUserDataAction?.payload?.profile) {
+          setDefaultProfileData(resultUserDataAction.payload.profile);
         }
       } catch (error) {
         toast.error(
@@ -77,15 +81,13 @@ const ProfileEditForm = () => {
     console.log(data);
 
     try {
-      if (isProfileExist && defaultProfileData.id !== 0) {
+      if (userData?.profile && defaultProfileData.id !== 0) {
         const resultUpdated = await dispatch(
           updateProfile({
             profileId: defaultProfileData.id,
             profileData: {
               ...data,
-              user: {
-                id: userData.id,
-              },
+              userId: userData.id,
             },
           }),
         );
@@ -94,6 +96,7 @@ const ProfileEditForm = () => {
           toast.success('Profile Updated Successfully!', {
             autoClose: 1700,
           });
+          // navigate(0);
         } else {
           toast.error(
             "We're having troubles adding your profile, come back later",
@@ -116,6 +119,7 @@ const ProfileEditForm = () => {
           toast.success('Profile Updated Successfully!', {
             autoClose: 1700,
           });
+          navigate(0);
         } else {
           toast.error(
             "We're having troubles adding your profile, come back later",
@@ -142,19 +146,16 @@ const ProfileEditForm = () => {
           deleteProfile(defaultProfileData.id),
         );
 
-        if (resultDelete) {
-          const { username, email, ...restOfFields } = emptyProfileDate;
-          hookFormMethods.reset(restOfFields);
+        if (resultDelete?.payload?.message.includes('deleted')) {
+          // hookFormMethods.reset(emptyProfileDate);
           toast.success('Profile Removed Successfully!', {
             autoClose: 1700,
           });
+          navigate(0);
         } else {
-          toast.error(
-            "We're having troubles deleting your profile, come back later",
-            {
-              autoClose: 1700,
-            },
-          );
+          toast.error(resultDelete?.payload?.message, {
+            autoClose: 1700,
+          });
         }
       } catch (error) {
         toast.error(
@@ -167,6 +168,13 @@ const ProfileEditForm = () => {
     }
   };
 
+  const validateFillNewPassword = (value, watch) => {
+    if (value !== '' && watch('newPassword') === '') {
+      return 'If you want to update your password, please write the new password'; // return error message if confirm password is null
+    }
+    return true; // return true if validation passes
+  };
+
   return (
     <Card color='transparent' shadow={false}>
       <Typography variant='h4' color='blue-gray'>
@@ -175,9 +183,98 @@ const ProfileEditForm = () => {
       <Typography color='gray' className='mt-1 font-normal'>
         Update your profile information.
       </Typography>
+
+      {!userData?.profile && <UserInformationForm />}
+
       <FormProvider {...hookFormMethods}>
-        <form className='mb-2 mt-8 max-w-screen-lg sm:flex sm:gap-4 '>
-          <div className='mt-3 space-y-4 sm:w-1/2'>
+        <form className='mb-2 mt-2 max-w-screen-xl '>
+          {userData?.profile && (
+            <div className='mb-9'>
+              <Typography color='gray' className='mb-7 mt-9 font-normal'>
+                Basic Credentials
+              </Typography>
+              <div className='mb-4 grid grid-cols-1 gap-5 gap-y-5 sm:grid-cols-2'>
+                <InputValidation
+                  nameField='email'
+                  controllerProps={{
+                    defaultValue: defaultProfileData?.email,
+                  }}
+                  inputProps={{ size: 'lg', label: 'Email', type: 'text' }}
+                  rules={{
+                    pattern: {
+                      value: /\S+@\S+\.\S+/,
+                      message: 'Invalid email address',
+                    },
+                  }}
+                />
+
+                <InputValidation
+                  nameField='username'
+                  controllerProps={{
+                    defaultValue: defaultProfileData?.username,
+                  }}
+                  inputProps={{ size: 'lg', label: 'Username', type: 'text' }}
+                  rules={{
+                    minLength: {
+                      value: 3,
+                      message:
+                        'The username must be at least 3 characters long',
+                    },
+                    maxLength: {
+                      value: 20,
+                      message: 'The username must not exceed 20 characters',
+                    },
+                  }}
+                />
+
+                <InputValidation
+                  nameField='oldPassword'
+                  controllerProps={{
+                    defaultValue: '',
+                  }}
+                  inputProps={{
+                    size: 'lg',
+                    label: 'Old Password',
+                    type: 'password',
+                  }}
+                  rules={{
+                    minLength: {
+                      value: 8,
+                      message: 'Password must be at least 8 characters long',
+                    },
+                  }}
+                  selectorApiError={selectProfileError}
+                  customValidation={validateFillNewPassword}
+                />
+
+                <InputValidation
+                  nameField='newPassword'
+                  controllerProps={{
+                    defaultValue: '',
+                  }}
+                  inputProps={{
+                    size: 'lg',
+                    label: 'New Password',
+                    type: 'password',
+                  }}
+                  rules={{
+                    minLength: {
+                      value: 8,
+                      message: 'Password must be at least 8 characters long',
+                    },
+                  }}
+                />
+              </div>
+            </div>
+          )}
+
+          <hr className='mb-5 mt-2' />
+
+          <Typography color='gray' className='my-8 mt-1 font-normal'>
+            Personal Information
+          </Typography>
+
+          <div className='mb-4 grid grid-cols-1 gap-5 gap-y-5 sm:grid-cols-2'>
             <InputValidation
               nameField='firstName'
               controllerProps={{ defaultValue: defaultProfileData.firstName }}
@@ -189,55 +286,9 @@ const ProfileEditForm = () => {
               controllerProps={{ defaultValue: defaultProfileData.lastName }}
               inputProps={{ size: 'lg', label: 'Last Name', type: 'text' }}
             />
+          </div>
 
-            <InputValidation
-              nameField='email'
-              controllerProps={{ defaultValue: emptyProfileDate?.email }}
-              inputProps={{ size: 'lg', label: 'Email', type: 'text' }}
-              rules={{
-                required: {
-                  value: true,
-                  message: 'Please enter your email address',
-                },
-                pattern: {
-                  value: /\S+@\S+\.\S+/,
-                  message: 'Invalid email address',
-                },
-              }}
-            />
-
-            <InputValidation
-              nameField='username'
-              controllerProps={{ defaultValue: emptyProfileDate?.username }}
-              inputProps={{ size: 'lg', label: 'Username', type: 'text' }}
-              rules={{
-                required: {
-                  value: true,
-                  message: 'Please enter your username',
-                },
-                minLength: {
-                  value: 3,
-                  message: 'The username must be at least 3 characters long',
-                },
-                maxLength: {
-                  value: 20,
-                  message: 'The username must not exceed 20 characters',
-                },
-              }}
-            />
-
-            <InputValidation
-              nameField='avatarPath'
-              controllerProps={{ defaultValue: defaultProfileData.avatarPath }}
-              inputProps={{ size: 'lg', label: 'Avatar URL', type: 'text' }}
-              rules={{
-                pattern: {
-                  value: /^https?:\/\/.*$/i,
-                  message: 'Invalid URL format',
-                },
-              }}
-            />
-
+          <div className='mb-4 grid grid-cols-1 gap-5 gap-y-5 sm:grid-cols-2'>
             <SelectorValidation
               nameField='country'
               controllerProps={{ defaultValue: defaultProfileData.country }}
@@ -258,33 +309,39 @@ const ProfileEditForm = () => {
                 className: 'centered-options',
               }}
             />
+
+            <InputValidation
+              nameField='city'
+              controllerProps={{ defaultValue: defaultProfileData.city }}
+              inputProps={{ size: 'xs', label: 'City', type: 'text' }}
+            />
           </div>
 
-          <div className='mt-3 space-y-4 sm:w-1/2'>
+          <div className='mb-4 grid grid-cols-1 gap-5 gap-y-5 sm:grid-cols-2'>
+            <InputValidation
+              nameField='zipCode'
+              controllerProps={{ defaultValue: defaultProfileData.zipCode }}
+              inputProps={{
+                size: 'xs',
+                label: 'Zip/Code Postal',
+                type: 'number',
+              }}
+            />
+
             <InputValidation
               nameField='streetAddress'
               controllerProps={{
                 defaultValue: defaultProfileData.streetAddress,
               }}
               inputProps={{
-                size: 'lg',
+                size: 'xs',
                 label: 'Street Address',
                 type: 'text',
               }}
             />
+          </div>
 
-            <InputValidation
-              nameField='city'
-              controllerProps={{ defaultValue: defaultProfileData.city }}
-              inputProps={{ size: 'lg', label: 'City', type: 'text' }}
-            />
-
-            <InputValidation
-              nameField='zipCode'
-              controllerProps={{ defaultValue: defaultProfileData.zipCode }}
-              inputProps={{ size: 'lg', label: 'ZIP Code', type: 'number' }}
-            />
-
+          <div className='mb-4 grid grid-cols-1 gap-5 gap-y-5 sm:grid-cols-2'>
             <InputValidation
               nameField='phone'
               controllerProps={{ defaultValue: defaultProfileData.phone }}
@@ -292,43 +349,62 @@ const ProfileEditForm = () => {
               rules={{
                 pattern: {
                   value: /^\+\d{1,3} \d{3,14}$/i,
-                  message: 'Invalid Phone format',
+                  message: 'Invalid Phone format, example: +34 657324511',
                 },
               }}
             />
 
             <InputValidation
-              nameField='about'
-              controllerProps={{ defaultValue: defaultProfileData.about }}
-              inputProps={{
-                size: 'lg',
-                label: 'About',
-                type: 'textarea',
-                rows: 4,
+              nameField='avatarPath'
+              controllerProps={{ defaultValue: defaultProfileData.avatarPath }}
+              inputProps={{ size: 'lg', label: 'Avatar URL', type: 'text' }}
+              rules={{
+                pattern: {
+                  value: /^https?:\/\/.*$/i,
+                  message: 'Invalid URL format',
+                },
               }}
             />
-
-            <Button
-              fullWidth
-              onClick={hookFormMethods.handleSubmit(onSubmit)}
-              disabled={
-                Object.keys(hookFormMethods.formState.errors).length > 0
-              }
-            >
-              {isProfileExist ? 'Update Profile' : 'Add Profile'}
-            </Button>
-
-            {isProfileExist && (
-              <Button
-                color='secondary'
-                variant='contained'
-                fullWidth
-                onClick={handleDeleteProfile}
-              >
-                Delete Profile
-              </Button>
-            )}
           </div>
+
+          <div className='w-full pb-6 pt-2'>
+            <TextareaValidation
+              nameField='about'
+              controllerProps={{ defaultValue: defaultProfileData.about }}
+              inputProps={{ size: 'lg', label: 'About' }}
+              rules={{
+                minLength: {
+                  value: 10,
+                  message: 'Message must have at least 10 characters.',
+                },
+                maxLength: {
+                  value: 200,
+                  message: 'Message can have a maximum of 200 characters.',
+                },
+              }}
+            />
+          </div>
+
+          {userData?.profile && (
+            <Button
+              color='secondary'
+              variant='contained'
+              onClick={handleDeleteProfile}
+            >
+              Delete Profile
+            </Button>
+          )}
+
+          <Button
+            className='ml-2'
+            variant='contained'
+            onClick={hookFormMethods.handleSubmit(onSubmit)}
+            disabled={Object.keys(hookFormMethods.formState.errors).length > 0}
+          >
+            {userData?.profile
+              ? 'Update Profile and basic credentials'
+              : 'Add Profile'}
+          </Button>
         </form>
       </FormProvider>
       <ToastContainer />

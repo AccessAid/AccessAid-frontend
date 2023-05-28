@@ -4,6 +4,7 @@ import {
   signup,
   getUserData,
   refreshTokenAction,
+  updateBasicCredentials,
 } from '../actions/authActions';
 import { isDatePassed } from '../../commons/utils/dateUtils';
 
@@ -198,6 +199,24 @@ export const authSlice = createSlice({
         }
 
         state.error = action.payload.message;
+      })
+      // update basic credentials
+      .addCase(updateBasicCredentials.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(updateBasicCredentials.fulfilled, (state, { payload }) => {
+        state.status = 'succeeded';
+        if (payload?.username) {
+          state.user = payload;
+          state.error = null;
+          localStorage.setItem(PERSIST_KEY_USER, JSON.stringify(payload));
+        }
+      })
+      .addCase(updateBasicCredentials.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload
+          ? action.payload.message
+          : action.error.message;
       });
   },
 });
