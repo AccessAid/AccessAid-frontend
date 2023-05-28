@@ -11,7 +11,7 @@ const CardsInfo = () => {
       <div className='cards-info-container'>
         <div className='-mx-4 flex flex-wrap items-center justify-center'>
           <div className='w-full px-4 md:w-1/2 xl:w-1/3'>
-            <div className='mb-10 overflow-hidden rounded-lg bg-white'>
+            <div className='mb-10 overflow-hidden rounded-lg bg-white '>
               <div
                 className='h-72 bg-cover bg-center'
                 style={{
@@ -19,10 +19,10 @@ const CardsInfo = () => {
                 }}
               />
               <div className='p-8 text-center sm:p-9 md:p-7 xl:p-9'>
-                <h3 className='text-dark mb-4 text-xl font-semibold sm:text-[22px] md:text-xl lg:text-[22px] xl:text-xl 2xl:text-[22px]'>
+                <h3 className='text-dark text-resizable mb-4 text-xl font-semibold sm:text-[22px] md:text-xl lg:text-[22px] xl:text-xl 2xl:text-[22px]'>
                   Discover Accessible Places
                 </h3>
-                <p className='text-body-color mb-7 text-base leading-relaxed'>
+                <p className=' text-body-color text-resizable mb-7 text-base leading-relaxed'>
                   Find and explore accessible locations on the map, specifically
                   designed for individuals with disabilities.
                 </p>
