@@ -182,85 +182,45 @@ const RatingByUser = () => {
     })();
   }, [ratedByUser]);
 
-  //   return (
-  //     <div className='flex flex-col items-center space-y-4 md:flex-row md:justify-around md:space-x-4 md:space-y-0'>
-  //       <div className='flex flex-col items-center md:flex-row md:items-center md:justify-around md:space-x-4'>
-  //         <Button
-  //           className='mt-4 w-full font-medium capitalize '
-  //           variant='gradient'
-  //           color='blue'
-  //           size='small'
-  //           onClick={handleButtonClick}
-  //         >
-  //           {buttonText}
-  //         </Button>
-  //         <div className='mt-4 flex-col items-center space-x-2 md:mt-0'>
-  //           <StyledRating
-  //             value={ratedByUser?.rating}
-  //             onChange={handleRated}
-  //             disabled={disabled}
-  //             getLabelText={(value) => `${value} Heart${value !== 1 ? 's' : ''}`}
-  //             precision={0.25}
-  //             icon={<FavoriteIcon fontSize='inherit' />}
-  //             emptyIcon={<FavoriteBorderIcon fontSize='inherit' />}
-  //           />
-  //           <Typography color='blue-gray' className='text-sm '>
-  //             {ratedByUser?.rating} Rating
-  //           </Typography>
-  //         </div>
-  //         <div className='mt-4 flex items-center space-x-1 md:mt-0'>
-  //           <Button
-  //             onClick={handleResetRating}
-  //             className='flex items-center space-x-1 px-2 py-2'
-  //           >
-  //             <TrashIcon className='h-6 w-6 md:h-8 md:w-8' />
-  //             <Typography className='text-xs capitalize'>Reset Rating</Typography>
-  //           </Button>
-  //         </div>
-  //       </div>
-  //       <ToastContainer className='mb-4 mt-4 md:mb-0 md:mt-0' />
-  //     </div>
-  //   );
-
   return (
-    <div className='flex flex-col items-center space-y-4 md:flex-row md:justify-around md:space-x-4 md:space-y-0'>
-      <div className='flex flex-col items-center md:flex-row md:items-center md:justify-around'>
-        <Button
-          className='w-full font-medium capitalize'
-          variant='gradient'
-          color='blue'
-          size='small'
-          onClick={handleButtonClick}
-        >
-          {buttonText}
-        </Button>
-        <div className='flex items-center space-x-2'>
-          <StyledRating
-            value={ratedByUser?.rating}
-            onChange={handleRated}
-            disabled={disabled}
-            getLabelText={(value) => `${value} Heart${value !== 1 ? 's' : ''}`}
-            precision={0.25}
-            icon={<FavoriteIcon fontSize='inherit' />}
-            emptyIcon={<FavoriteBorderIcon fontSize='inherit' />}
-          />
-          <Typography color='blue-gray' className='text-sm'>
-            {ratedByUser?.rating} Rating
-          </Typography>
-        </div>
-        <div className='flex items-center space-x-1'>
-          <Button
-            onClick={handleResetRating}
-            className='flex items-center space-x-1 px-2 py-2'
-          >
-            <TrashIcon className='h-6 w-6' />
-            <Typography className='text-xs font-medium capitalize'>
-              Reset Rating
-            </Typography>
-          </Button>
-        </div>
+    <div className='flex flex-col items-center space-y-4 border-2 p-6 shadow-xl md:mt-2 md:space-y-2'>
+      <Button
+        className='mt-4 w-full font-medium capitalize md:mt-0'
+        variant='gradient'
+        color='blue'
+        size='small'
+        onClick={handleButtonClick}
+      >
+        {buttonText}
+      </Button>
+      <div className=' flex flex-col items-center px-6'>
+        <Typography color='blue-gray' className='text-s font-normal'>
+          Your Rating
+        </Typography>
+        <StyledRating
+          value={ratedByUser?.rating}
+          onChange={handleRated}
+          disabled={disabled}
+          getLabelText={(value) => `${value} Heart${value !== 1 ? 's' : ''}`}
+          precision={0.25}
+          icon={<FavoriteIcon sx={{ fontSize: '2.5rem' }} />}
+          emptyIcon={<FavoriteBorderIcon sx={{ fontSize: '2.5rem' }} />}
+          className='mb-2 h-8'
+        />
+        <Typography color='blue-gray' className='text-lg font-medium '>
+          {ratedByUser?.rating}
+        </Typography>
       </div>
-      <ToastContainer />
+      <div className='flex items-center space-x-1 '>
+        <Button
+          onClick={handleResetRating}
+          className='mt-0 flex items-center space-x-1 px-2 py-2 md:mt-2  '
+        >
+          <TrashIcon className='h-6 w-6' />
+          <Typography className='text-xs capitalize'>Reset Rating</Typography>
+        </Button>
+      </div>
+      <ToastContainer className='mb-4 mt-4' />
     </div>
   );
 };

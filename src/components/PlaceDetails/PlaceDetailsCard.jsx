@@ -16,7 +16,7 @@ const PlaceDetailsCard = () => {
 
   return (
     <div className='place-detail-container text-center'>
-      <div className='m-auto w-full sm:w-5/6 md:w-3/4 lg:w-1/2 xl:w-3/4'>
+      <div className='m-auto w-full sm:w-5/6'>
         <Card className='custom-card w-full shadow-xl'>
           <div className='relative mx-auto h-[50vh] sm:h-[50vh] md:h-[40vh] lg:h-[30vh] xl:h-[30vh]'>
             <PlacePhoto
@@ -38,18 +38,17 @@ const PlaceDetailsCard = () => {
             </PlacePhoto>
           </div>
           <CardBody>
-            <div className='flex flex-col items-center space-y-4 md:flex-row md:justify-around md:space-x-4 md:space-y-0 lg:justify-center'>
-              <div className='flex w-full items-center justify-center md:w-auto md:justify-start'>
+            <div className='grid grid-flow-row md:grid-cols-2'>
+              <div className='flex items-center justify-center'>
                 <TotalRating />
               </div>
-              <div>
+              <div className='flex items-center justify-center'>
                 <RatingByUser />
               </div>
             </div>
-
             <div className='grid grid-flow-row md:grid-cols-2'>
-              <div className='md:col-span-1'>
-                <div className='md:mb-4'>
+              <div className='-mt-0 md:col-span-1 md:-mt-16'>
+                <div className='mb-4 '>
                   <AddressDetails
                     name={place?.accessibilityData.name}
                     address={place?.formattedAddress}
@@ -57,7 +56,7 @@ const PlaceDetailsCard = () => {
                     website={place?.accessibilityData.website}
                   />
                 </div>
-                <div className='md:mb-4'>
+                <div className='mb-4 mt-4 md:mb-14 md:mt-12 '>
                   <AccessibilityDetails />
                 </div>
               </div>
@@ -70,34 +69,6 @@ const PlaceDetailsCard = () => {
               </div>
             </div>
           </CardBody>
-
-          {/* 
-          <CardBody>
-            <div className='flex flex-col items-center justify-center md:flex-row lg:justify-around'>
-              <div className='flex items-center justify-start'>
-                <TotalRating />
-              </div>
-              <div className='flex items-center justify-around'>
-                <RatingByUser />
-              </div>
-            </div>
-            <div className='grid grid-flow-row md:grid-cols-2'>
-              <div className='justify-center'>
-                <AddressDetails
-                  name={place?.accessibilityData.name}
-                  address={place?.formattedAddress}
-                  phone={place?.accessibilityData.phone}
-                  website={place?.accessibilityData.website}
-                />
-              </div>
-              <OpeningHours
-                weekdayText={
-                  place?.accessibilityData?.openingHours?.weekdayText
-                }
-              />
-            </div>
-            <AccessibilityDetails />
-          </CardBody>*/}
         </Card>
       </div>
     </div>
