@@ -1,8 +1,7 @@
+import { TrashIcon } from '@heroicons/react/24/outline';
 import { Button, Typography } from '@material-tailwind/react';
-import DeleteIcon from '@mui/icons-material/Delete';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-//import Button from '@mui/material/Button';
 import Rating from '@mui/material/Rating';
 import { styled } from '@mui/material/styles';
 
@@ -183,11 +182,51 @@ const RatingByUser = () => {
     })();
   }, [ratedByUser]);
 
+  //   return (
+  //     <div className='flex flex-col items-center space-y-4 md:flex-row md:justify-around md:space-x-4 md:space-y-0'>
+  //       <div className='flex flex-col items-center md:flex-row md:items-center md:justify-around md:space-x-4'>
+  //         <Button
+  //           className='mt-4 w-full font-medium capitalize '
+  //           variant='gradient'
+  //           color='blue'
+  //           size='small'
+  //           onClick={handleButtonClick}
+  //         >
+  //           {buttonText}
+  //         </Button>
+  //         <div className='mt-4 flex-col items-center space-x-2 md:mt-0'>
+  //           <StyledRating
+  //             value={ratedByUser?.rating}
+  //             onChange={handleRated}
+  //             disabled={disabled}
+  //             getLabelText={(value) => `${value} Heart${value !== 1 ? 's' : ''}`}
+  //             precision={0.25}
+  //             icon={<FavoriteIcon fontSize='inherit' />}
+  //             emptyIcon={<FavoriteBorderIcon fontSize='inherit' />}
+  //           />
+  //           <Typography color='blue-gray' className='text-sm '>
+  //             {ratedByUser?.rating} Rating
+  //           </Typography>
+  //         </div>
+  //         <div className='mt-4 flex items-center space-x-1 md:mt-0'>
+  //           <Button
+  //             onClick={handleResetRating}
+  //             className='flex items-center space-x-1 px-2 py-2'
+  //           >
+  //             <TrashIcon className='h-6 w-6 md:h-8 md:w-8' />
+  //             <Typography className='text-xs capitalize'>Reset Rating</Typography>
+  //           </Button>
+  //         </div>
+  //       </div>
+  //       <ToastContainer className='mb-4 mt-4 md:mb-0 md:mt-0' />
+  //     </div>
+  //   );
+
   return (
-    <div className='flex flex-col items-center justify-center md:flex-row lg:justify-around'>
-      <div className='flex items-center justify-around'>
+    <div className='flex flex-col items-center space-y-4 md:flex-row md:justify-around md:space-x-4 md:space-y-0'>
+      <div className='flex flex-col items-center md:flex-row md:items-center md:justify-around'>
         <Button
-          className='mt-3 w-full font-medium capitalize'
+          className='w-full font-medium capitalize'
           variant='gradient'
           color='blue'
           size='small'
@@ -195,7 +234,7 @@ const RatingByUser = () => {
         >
           {buttonText}
         </Button>
-        <div className='flex items-center justify-end'>
+        <div className='flex items-center space-x-2'>
           <StyledRating
             value={ratedByUser?.rating}
             onChange={handleRated}
@@ -205,29 +244,20 @@ const RatingByUser = () => {
             icon={<FavoriteIcon fontSize='inherit' />}
             emptyIcon={<FavoriteBorderIcon fontSize='inherit' />}
           />
-          <Typography color='blue-gray' className='text-s'>
+          <Typography color='blue-gray' className='text-sm'>
             {ratedByUser?.rating} Rating
           </Typography>
-
+        </div>
+        <div className='flex items-center space-x-1'>
           <Button
-            className='mt-3 w-full font-medium capitalize'
-            variant='gradient'
-            color='blue'
-            size='small'
             onClick={handleResetRating}
-            startIcon={<DeleteIcon color='primary' />}
+            className='flex items-center space-x-1 px-2 py-2'
           >
-            Reset Rating
+            <TrashIcon className='h-6 w-6' />
+            <Typography className='text-xs font-medium capitalize'>
+              Reset Rating
+            </Typography>
           </Button>
-          {/* <IconButton
-            aria-label='delete'
-            color='primary'
-            onClick={handleResetRating}
-            size='large'
-          >
-            <DeleteIcon />
-            <Typography className='text-xs'>Reset Rating</Typography>
-          </IconButton> */}
         </div>
       </div>
       <ToastContainer />

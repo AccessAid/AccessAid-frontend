@@ -1,4 +1,4 @@
-import { Card, CardBody, CardFooter } from '@material-tailwind/react';
+import { Card, CardBody } from '@material-tailwind/react';
 import React from 'react';
 
 import { useSelector } from 'react-redux';
@@ -37,7 +37,41 @@ const PlaceDetailsCard = () => {
               }}
             </PlacePhoto>
           </div>
+          <CardBody>
+            <div className='flex flex-col items-center space-y-4 md:flex-row md:justify-around md:space-x-4 md:space-y-0 lg:justify-center'>
+              <div className='flex w-full items-center justify-center md:w-auto md:justify-start'>
+                <TotalRating />
+              </div>
+              <div>
+                <RatingByUser />
+              </div>
+            </div>
 
+            <div className='grid grid-flow-row md:grid-cols-2'>
+              <div className='md:col-span-1'>
+                <div className='md:mb-4'>
+                  <AddressDetails
+                    name={place?.accessibilityData.name}
+                    address={place?.formattedAddress}
+                    phone={place?.accessibilityData.phone}
+                    website={place?.accessibilityData.website}
+                  />
+                </div>
+                <div className='md:mb-4'>
+                  <AccessibilityDetails />
+                </div>
+              </div>
+              <div className='md:col-span-1 md:mt-4'>
+                <OpeningHours
+                  weekdayText={
+                    place?.accessibilityData?.openingHours?.weekdayText
+                  }
+                />
+              </div>
+            </div>
+          </CardBody>
+
+          {/* 
           <CardBody>
             <div className='flex flex-col items-center justify-center md:flex-row lg:justify-around'>
               <div className='flex items-center justify-start'>
@@ -63,7 +97,7 @@ const PlaceDetailsCard = () => {
               />
             </div>
             <AccessibilityDetails />
-          </CardBody>
+          </CardBody>*/}
         </Card>
       </div>
     </div>

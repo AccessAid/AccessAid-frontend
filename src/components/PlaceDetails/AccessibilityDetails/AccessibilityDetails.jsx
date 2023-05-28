@@ -21,9 +21,8 @@ const AccessibilityDetails = () => {
           }}
         >
           <Chip
-            color='indigo'
             value={name}
-            className='flex w-full justify-center p-1 text-lg font-medium capitalize'
+            className='flex w-full justify-center bg-quaternary p-1 text-lg font-medium capitalize'
           />
         </Tooltip>
       ))}
