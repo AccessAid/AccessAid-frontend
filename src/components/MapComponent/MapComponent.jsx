@@ -9,7 +9,6 @@ import { Card, Button, Typography } from '@material-tailwind/react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/ReactToastify.min.css';
 
-import { login, getUserData } from './../../store/actions/authActions';
 import { cleanApiError } from '../../store/slices/authSlice';
 import { InputValidation } from '../InputValidation/InputValidation';
 import { HOME, PLACE_DETAIL, SIGNUP } from '../../config/routes';

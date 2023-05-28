@@ -5,11 +5,13 @@ import { Typography, MenuItem } from '@material-tailwind/react';
 import { Link } from 'react-router-dom';
 
 import { logout } from '../../../../store/slices/authSlice';
+import { cleanProfileError } from '../../../../store/slices/profileSlice';
 
 const ProfileItem = ({ label, icon, link, isLastItem }) => {
   const dispatch = useDispatch();
 
   const logoutHandle = () => {
+    dispatch(cleanProfileError());
     dispatch(logout());
   };
 
