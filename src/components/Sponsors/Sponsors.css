@@ -1,17 +1,17 @@
 .sponsors__container {
-  @apply bg-white py-24 sm:py-16;
+  @apply bg-white py-24 sm:py-16 -m-14;
 }
 
 .sponsors__content {
-  @apply mx-auto max-w-7xl px-6 lg:px-8;
+  @apply mx-auto max-w-7xl px-6 lg:px-8  -m-8;
 }
 
 .sponsors__title {
-  @apply text-center text-3xl font-semibold leading-8 text-gray-900;
+  @apply text-center text-3xl font-semibold leading-8 text-gray-900 mb-4;
 }
 
 .sponsors__logos {
-  @apply mx-auto mt-10 grid max-w-lg grid-cols-2 items-center gap-x-8 gap-y-1 sm:max-w-xl sm:grid-cols-2 sm:gap-x-10 lg:mx-auto lg:max-w-lg lg:grid-cols-2;
+  @apply mx-auto mt-14 grid max-w-lg grid-cols-2 items-center gap-x-8 gap-y-1 sm:max-w-xl sm:grid-cols-2 sm:gap-x-10 lg:mx-auto lg:max-w-lg lg:grid-cols-2;
 }
 
 .sponsors__logo {
