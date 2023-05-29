@@ -1,7 +1,7 @@
 import AccessAidLogo from '../../assets/svg/brand_access.svg';
 import CristobalLogo from '../../assets/img/Cristobal.png';
 import FidelLogo from '../../assets/img/Fidel.png';
-import MatLogo from '../../assets/img/Mat.png';
+import MatLogo from '../../assets/img/mat.png';
 import OthamaeLogo from '../../assets/img/Vero.png';
 import YagoLogo from '../../assets/img/Yago.png';
 
