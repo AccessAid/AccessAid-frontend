@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 
 import { PlaceDetailsCard } from '../../components/PlaceDetails/PlaceDetailsCard';
 import { useNavigate } from 'react-router';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/ReactToastify.min.css';
 
@@ -18,7 +18,6 @@ const PlaceDetail = () => {
   useEffect(() => {
     (async () => {
       const persistPlaceData = await dispatch(persistCurrentPlaceDetails());
-      console.log('persistPlaceData*****', persistPlaceData);
       if (persistPlaceData?.payload?.message) {
         navigate(MAP);
         toast.info('Remember first select a place on the map', {
@@ -29,10 +28,13 @@ const PlaceDetail = () => {
   }, [persistCurrentPlaceDetails]);
 
   return (
-    <>
-      <PlaceDetailsCard />
-      <ToastContainer />
-    </>
+    <div className='place-detail-container'>
+      <div className='content-container'>
+        {' '}
+        <PlaceDetailsCard />
+        <ToastContainer />
+      </div>
+    </div>
   );
 };
 
