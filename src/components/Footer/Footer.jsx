@@ -19,7 +19,13 @@ const Footer = () => {
         <ul className='footer__list'>
           <li>
             <Typography color='blue-gray' className='footer__link'>
-              <a href='#'>About Us</a>
+              <a
+                href='https://programacion-es.dev/devathon-edition/'
+                target='_blank'
+                rel='noopener noreferrer'
+              >
+                About Devathon
+              </a>
             </Typography>
           </li>
 
