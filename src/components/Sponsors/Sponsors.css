@@ -1,5 +1,5 @@
 .sponsors__container {
-  @apply -m-14 bg-white py-24 sm:py-16 mx-3 sm:mx-auto;
+  @apply -m-14 mx-3 bg-white py-24 sm:mx-auto sm:py-16;
 }
 
 .sponsors__content {
@@ -19,11 +19,3 @@
   min-height: 10vh;
   border-radius: 20%;
 }
-
-/* .sponsors__logo-4 {
-  @apply col-span-2 max-h-12 w-full object-contain sm:col-start-2 lg:col-span-1;
-}
-
-.sponsors__logo-5 {
-  @apply col-span-2 col-start-2 max-h-12 w-full object-contain sm:col-start-auto lg:col-span-1;
-} */

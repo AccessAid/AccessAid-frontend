@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { useForm, FormProvider } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
@@ -23,7 +24,6 @@ const LoginForm = () => {
       if (resultAction?.payload?.token) {
         const userDataAction = await dispatch(getUserData(data.username));
         if (userDataAction.payload) {
-          console.log(`userDataAction =`, userDataAction.payload);
           navigate(HOME);
         }
       }
@@ -31,7 +31,6 @@ const LoginForm = () => {
       toast.error('There was an error sending the form!', {
         autoClose: 2000,
       });
-      console.log(error);
     }
   };
 

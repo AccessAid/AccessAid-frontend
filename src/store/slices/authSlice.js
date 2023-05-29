@@ -42,7 +42,6 @@ export const authSlice = createSlice({
         state.isTokenExpired = isExpired;
 
         if (isExpired) {
-          console.log('PERSIST TOKEN, isExpired TRUE');
           localStorage.removeItem(PERSIST_KEY_AUTH_TOKEN);
           localStorage.removeItem(PERSIST_KEY_TOKEN_EXPIRED_DATE);
           localStorage.removeItem(PERSIST_KEY_USER);
@@ -90,7 +89,7 @@ export const authSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, { payload }) => {
         state.status = 'succeeded';
-        console.log('payload', payload);
+
         if (payload?.token) {
           state.token = payload.token;
           localStorage.setItem(PERSIST_KEY_AUTH_TOKEN, payload.token);
@@ -142,7 +141,7 @@ export const authSlice = createSlice({
       })
       .addCase(getUserData.fulfilled, (state, { payload }) => {
         state.status = 'succeeded';
-        console.log('payload getUserData', payload);
+
         if (payload?.username) {
           state.user = payload;
           state.error = null;
@@ -161,7 +160,7 @@ export const authSlice = createSlice({
       })
       .addCase(refreshTokenAction.fulfilled, (state, { payload }) => {
         state.status = 'succeeded';
-        console.log('payload', payload);
+
         if (payload?.token) {
           state.token = payload.token;
           localStorage.setItem(PERSIST_KEY_AUTH_TOKEN, payload.token);
@@ -184,7 +183,6 @@ export const authSlice = createSlice({
         }
       })
       .addCase(refreshTokenAction.rejected, (state, action) => {
-        console.log('action refreshTokenAction.rejected', action);
         state.status = 'failed';
         state.token = null;
         state.refreshToken = null;

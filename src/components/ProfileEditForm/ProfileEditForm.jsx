@@ -1,22 +1,23 @@
 import React, { useState, useEffect } from 'react';
+
 import { useForm, FormProvider } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
-import { Card, Button, Typography } from '@material-tailwind/react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Card, Button, Typography, Avatar } from '@material-tailwind/react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/ReactToastify.min.css';
 import 'flag-icon-css/css/flag-icons.css';
+import { useNavigate } from 'react-router-dom';
+
 import { InputValidation } from '../InputValidation/InputValidation';
+import { UserInformationForm } from '../UserInformationForm/UserInformationForm';
 import {
   logout,
   selectRefreshToken,
   selectUserData,
 } from '../../store/slices/authSlice';
-import { UserInformationForm } from '../UserInformationForm/UserInformationForm';
 import {
   addProfile,
   deleteProfile,
-  getProfileByUser,
   updateProfile,
 } from '../../store/actions/profileActions';
 import { GroupInputsCredentials } from '../UserInformationForm/GroupInputsCredentials/GroupInputsCredentials';
@@ -27,10 +28,9 @@ import {
   getUserData,
   refreshTokenAction,
 } from '../../store/actions/authActions';
-import { useNavigate } from 'react-router-dom';
 import {
   cleanProfileError,
-  selectProfileError,
+  selectCurrentUserProfile,
   selectProfileExist,
   setProfileExist,
 } from '../../store/slices/profileSlice';
@@ -38,6 +38,7 @@ import { LOGIN } from '../../config/routes';
 
 const ProfileEditForm = () => {
   const userData = useSelector(selectUserData);
+  const profileData = useSelector(selectCurrentUserProfile);
   const profileExist = useSelector(selectProfileExist);
   const refreshToken = useSelector(selectRefreshToken);
   const emptyProfileData = {
@@ -56,6 +57,9 @@ const ProfileEditForm = () => {
   const hookFormMethods = useForm();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const avatarPath =
+    profileData?.avatarPath || userData?.profile?.avatarPath || 'no-avatar';
 
   useEffect(() => {
     (async () => {
@@ -90,8 +94,6 @@ const ProfileEditForm = () => {
   }, []);
 
   useEffect(() => {
-    console.log('defaultProfileData?.payload', defaultProfileData);
-
     hookFormMethods.reset(defaultProfileData);
   }, [defaultProfileData]);
 
@@ -220,10 +222,16 @@ const ProfileEditForm = () => {
       </Typography>
       <Typography color='gray' className='mt-1 font-normal'>
         Update your profile information{' '}
-        <Typography variant='h5' className='font-bold'>
-          {userData?.username}
-        </Typography>
       </Typography>
+      <Typography variant={'h5'} className='py-3 font-bold'>
+        {userData?.username}
+      </Typography>
+      <Avatar
+        src={`https://unavatar.io/${avatarPath}`}
+        alt='avatar profile'
+        size='xxl'
+        className='mx-auto'
+      />
 
       {!profileExist && <UserInformationForm />}
 
@@ -283,7 +291,7 @@ const ProfileEditForm = () => {
             <InputValidation
               nameField='city'
               controllerProps={{ defaultValue: defaultProfileData.city }}
-              inputProps={{ size: 'xs', label: 'City', type: 'text' }}
+              inputProps={{ size: 'lg', label: 'City', type: 'text' }}
             />
           </div>
 
@@ -292,7 +300,7 @@ const ProfileEditForm = () => {
               nameField='zipCode'
               controllerProps={{ defaultValue: defaultProfileData.zipCode }}
               inputProps={{
-                size: 'xs',
+                size: 'lg',
                 label: 'Zip/Code Postal',
                 type: 'number',
               }}
@@ -304,7 +312,7 @@ const ProfileEditForm = () => {
                 defaultValue: defaultProfileData.streetAddress,
               }}
               inputProps={{
-                size: 'xs',
+                size: 'lg',
                 label: 'Street Address',
                 type: 'text',
               }}
@@ -336,12 +344,6 @@ const ProfileEditForm = () => {
               nameField='avatarPath'
               controllerProps={{ defaultValue: defaultProfileData.avatarPath }}
               inputProps={{ size: 'lg', label: 'Avatar URL', type: 'text' }}
-              rules={{
-                pattern: {
-                  value: /^https?:\/\/.*$/i,
-                  message: 'Invalid URL format',
-                },
-              }}
             />
           </div>
 
@@ -365,8 +367,9 @@ const ProfileEditForm = () => {
 
           {profileExist && (
             <Button
-              color='secondary'
-              variant='contained'
+              color='blue'
+              variant='filled'
+              className='mb-4 sm:mb-0'
               onClick={handleDeleteProfile}
             >
               Delete Profile
@@ -375,7 +378,7 @@ const ProfileEditForm = () => {
 
           <Button
             className='ml-2'
-            variant='contained'
+            variant='filled'
             onClick={hookFormMethods.handleSubmit(onSubmit)}
             disabled={Object.keys(hookFormMethods.formState.errors).length > 0}
           >

@@ -31,7 +31,6 @@ export const mapSlice = createSlice({
   name: 'map',
   initialState,
   reducers: {
-    // Otros reducers relacionados con "Map" si los necesitas
     setCurrentSearch: (state, action) => {
       state.currentSearch = action.payload;
       state.currentSearchCoordinates = {
@@ -69,7 +68,7 @@ export const mapSlice = createSlice({
           ? action.payload.message
           : action.error.message;
       })
-      // builders get place details
+      // get place details
       .addCase(getAccessiblePlaceDetails.pending, (state) => {
         state.status = 'loading';
       })
@@ -91,7 +90,6 @@ export const mapSlice = createSlice({
           ? action.payload.message
           : action.error.message;
       });
-    // Agregar otros casos extraReducers para los demás actions según tus necesidades
   },
 });
 
@@ -106,7 +104,6 @@ export const selectCoordinatesMap = (state) => state.map.coordinatesMap;
 export const selectFirstTimeRenderMap = (state) => state.map.firstTimeRenderMap;
 
 export const {
-  /* Otros reducers relacionados con el mapa si los necesitas */
   setCurrentSearch,
   setCoordinatesMap,
   setFirstTimeRenderMap,

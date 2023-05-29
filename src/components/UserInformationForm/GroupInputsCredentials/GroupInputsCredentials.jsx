@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
-import { Card, Button, Typography } from '@material-tailwind/react';
+import { useFormContext } from 'react-hook-form';
 
 import { InputValidation } from '../../InputValidation/InputValidation';
 import {
@@ -9,7 +9,6 @@ import {
   selectUserData,
 } from '../../../store/slices/authSlice';
 import { useSelector } from 'react-redux';
-import { useForm, useFormContext } from 'react-hook-form';
 import { selectProfileError } from '../../../store/slices/profileSlice';
 
 const GroupInputsCredentials = () => {
@@ -21,14 +20,14 @@ const GroupInputsCredentials = () => {
     if (value === '' && watch('newPassword') !== '') {
       return 'If you want to update your password, please write the old password';
     }
-    return true; // return true if validation passes
+    return true;
   };
 
   const validateFillNewPassword = (value, watch) => {
     if (value === '' && watch('oldPassword') !== '') {
       return 'If you want to update your password, please write the new password';
     }
-    return true; // return true if validation passes
+    return true;
   };
 
   useEffect(() => {

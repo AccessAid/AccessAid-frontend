@@ -1,9 +1,11 @@
-import PropTypes from 'prop-types';
 import React from 'react';
-import './CardDev.css';
+
+import PropTypes from 'prop-types';
 
 import GitHubImage from '../../../assets/svg/github.svg';
 import LinkedInImage from '../../../assets/svg/linkedin.svg';
+
+import './CardDev.css';
 
 const CardDev = ({ name, role, srcLogo, socialMedia }) => {
   return (

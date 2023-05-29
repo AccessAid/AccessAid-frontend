@@ -1,9 +1,10 @@
 import React from 'react';
+
+import { Sponsors } from '../../components/Sponsors/Sponsors';
+import { GroupCards } from '../../components/GroupCards/GroupCards';
 import { Banner } from '../../components/Banner/Banner';
 import { CardsInfo } from '../../components/CardsInfo/CardsInfo';
-import { GroupCards } from '../../components/GroupCards/GroupCards';
 import { InfoFeatures } from '../../components/InfoFeatures/InfoFeatures';
-import { Sponsors } from '../../components/Sponsors/Sponsors';
 
 import './Home.css';
 

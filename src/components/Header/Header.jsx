@@ -1,3 +1,5 @@
+import React, { useEffect, useRef, useState } from 'react';
+
 import { Bars2Icon } from '@heroicons/react/24/outline';
 import {
   Collapse,
@@ -5,7 +7,6 @@ import {
   Navbar,
   Typography,
 } from '@material-tailwind/react';
-import React, { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 import { HOME, MAP } from '../../config/routes';

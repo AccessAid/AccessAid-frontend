@@ -15,8 +15,6 @@ export const refreshJwt = ({ dispatch, getState }) => {
         return false;
       });
 
-      console.log('isExcludedAction****************', isExcludedAction);
-
       if (
         !isExcludedAction &&
         action?.type.includes('pending') &&
@@ -26,7 +24,6 @@ export const refreshJwt = ({ dispatch, getState }) => {
         const isExpired = isDatePassed(getState().auth.refreshTokenDate);
 
         if (isExpired && getState().auth.user) {
-          console.log('SE REFRESCARÁ EL TOKEN');
           dispatch(setIsTokenExpired(isExpired));
           try {
             const resultAction = await dispatch(
@@ -35,12 +32,9 @@ export const refreshJwt = ({ dispatch, getState }) => {
                 password: '123456789',
               }),
             );
-            console.log('HA IDO BIEN EL REFRESH!!');
             dispatch(setIsTokenExpired(false));
             return next(action); // Ejecuta next(action) solo si unwrap se resuelve correctamente
-          } catch (error) {
-            console.log('Error al refrescar el token:', error);
-          }
+          } catch (error) {}
         }
       }
     }

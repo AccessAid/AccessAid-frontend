@@ -1,4 +1,5 @@
 import React from 'react';
+
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { Controller, useFormContext } from 'react-hook-form';
@@ -19,8 +20,6 @@ const InputValidation = ({
   } = useFormContext();
 
   const apiError = useSelector(selectorApiError);
-
-  console.log('apiError****', apiError);
 
   return (
     <>

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { useForm, FormProvider } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, Link } from 'react-router-dom';
 
+import { useForm, FormProvider } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import { useNavigate, Link } from 'react-router-dom';
 import { Card, Button, Typography } from '@material-tailwind/react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/ReactToastify.min.css';
@@ -28,7 +28,6 @@ const RegistrationForm = () => {
   const onSubmit = async (data) => {
     try {
       const resultAction = await dispatch(signup(data));
-      console.log(`resultAction =`, resultAction);
 
       if (resultAction?.payload?.message.includes('correctly')) {
         toast.success('Sign Up Successfully!', {
@@ -40,8 +39,6 @@ const RegistrationForm = () => {
       toast.error('There is an error!', {
         autoClose: 2000,
       });
-
-      console.log(error);
     }
   };
 

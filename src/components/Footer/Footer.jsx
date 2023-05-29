@@ -1,13 +1,13 @@
-import { Typography } from '@material-tailwind/react';
 import React from 'react';
+
+import { Typography } from '@material-tailwind/react';
 import { Link } from 'react-router-dom';
 
+import { CONTACT } from '../../config/routes/index';
 import BrandImage from '../../assets/svg/brand_access.svg';
 import GitHubImage from '../../assets/svg/github.svg';
 import ReactImage from '../../assets/svg/react.svg';
 import SpringImage from '../../assets/svg/spring.svg';
-
-import { CONTACT } from '../../config/routes/index';
 
 import './Footer.css';
 

@@ -94,7 +94,6 @@ export const commentSlice = createSlice({
           ? action.payload.message
           : action.error.message;
       });
-    // Agregar otros casos extraReducers para los demás actions según tus necesidades
   },
 });
 

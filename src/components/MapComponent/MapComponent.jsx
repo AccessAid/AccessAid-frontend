@@ -1,24 +1,14 @@
 /* eslint-disable react/no-unknown-property */
-import GoogleMapReact from 'google-map-react';
-import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
+
+import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
+import GoogleMapReact from 'google-map-react';
 import { useNavigate } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/ReactToastify.min.css';
 
-import { cleanApiError } from '../../store/slices/authSlice';
-import { InputValidation } from '../InputValidation/InputValidation';
-import { HOME, PLACE_DETAIL, SIGNUP } from '../../config/routes';
-
-import {
-  getAccessiblePlaceDetails,
-  getAccessiblePlaces,
-} from '../../store/actions/mapActions';
-import {
-  addPlace,
-  getPlaceDetailsFromMapSlide,
-} from '../../store/actions/placesActions';
+import { PLACE_DETAIL } from '../../config/routes';
 import {
   selectAccessiblePlaces,
   selectCoordinatesMap,
@@ -29,9 +19,29 @@ import {
   setCurrentSearch,
   setFirstTimeRenderMap,
 } from '../../store/slices/mapSlice';
+import {
+  getAccessiblePlaces,
+  getAccessiblePlaceDetails,
+} from '../../store/actions/mapActions';
+import {
+  addPlace,
+  getPlaceDetailsFromMapSlide,
+  getTotalRatingByPlace,
+} from '../../store/actions/placesActions';
 import { selectCurrentIdSelected } from '../../store/slices/placesSlice';
 import './MapComponent.css';
 import { MarkerComponent } from './MarkerComponent/MarkerComponent';
+
+import './MapComponent.css';
+
+// eslint-disable-next-line react/prop-types
+const MarkerBasic = ({ children, lat, lng }) => {
+  return (
+    <div lat={lat} lng={lng}>
+      {children}
+    </div>
+  );
+};
 
 const MapComponent = ({ setMapObject }) => {
   const navigate = useNavigate();
@@ -51,7 +61,6 @@ const MapComponent = ({ setMapObject }) => {
   useEffect(() => {
     if (!firstTimeRenderMap) {
       const onSuccess = ({ coords: { latitude, longitude } }) => {
-        console.log('FUNCIONA LA GEO!');
         dispatch(
           setCurrentSearch({
             ...currentSearchData,
@@ -89,12 +98,6 @@ const MapComponent = ({ setMapObject }) => {
     }
   }, []);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     await dispatch(getAccessiblePlaces());
-  //   })();
-  // }, [currentSearchData]);
-
   return (
     <div className={'map-container-component'}>
       <GoogleMapReact
@@ -110,12 +113,12 @@ const MapComponent = ({ setMapObject }) => {
         }}
         yesIWantToUseGoogleMapApiInternals
         onGoogleApiLoaded={({ map, maps }) => {
-          console.log('mappp', map);
           setMapObject(map);
         }}
       >
         {/* Marcador para la ubicación del usuario */}
-        <div lat={currentSearchData.lat} lng={currentSearchData.lng}>
+        <MarkerBasic lat={currentSearchData.lat} lng={currentSearchData.lng}>
+          {' '}
           <MarkerComponent
             onlyShowTooltip
             placesDetails={{
@@ -126,10 +129,11 @@ const MapComponent = ({ setMapObject }) => {
               longitude: currentSearchData.lng,
             }}
           />
-        </div>
+        </MarkerBasic>
+
         {/* Marcadores para los lugares relacionados con la búsqueda */}
         {currentAccessiblePlaces?.map((place) => (
-          <div
+          <MarkerBasic
             key={place.placeId}
             lat={place.latitude ? place.latitude : place.lat}
             lng={place.longitude ? place.longitude : place.lng}
@@ -139,7 +143,6 @@ const MapComponent = ({ setMapObject }) => {
               isPlace
               onClickIcon={async (openCardDetails = () => {}) => {
                 try {
-                  // Procesar los resultados de getAccessiblePlaceDetails
                   const placeDetailsResult = await dispatch(
                     getAccessiblePlaceDetails(place.placeId),
                   );
@@ -154,7 +157,6 @@ const MapComponent = ({ setMapObject }) => {
 
                       return;
                     }
-                    // Procesar los resultados de addPlace
                     const addPlaceResult = await dispatch(
                       addPlace({ apiPlaceId: place.placeId }),
                     );
@@ -182,7 +184,6 @@ const MapComponent = ({ setMapObject }) => {
                     });
                   }
                 } catch (error) {
-                  console.log(error);
                   toast.error(
                     "We're suffering problems on load this place, come back later",
                     {
@@ -195,7 +196,7 @@ const MapComponent = ({ setMapObject }) => {
                 navigate(PLACE_DETAIL);
               }}
             />
-          </div>
+          </MarkerBasic>
         ))}
       </GoogleMapReact>
       <ToastContainer />

@@ -1,11 +1,12 @@
-import { Button, Card, Typography } from '@material-tailwind/react';
 import React from 'react';
+
+import { Button, Card, Typography } from '@material-tailwind/react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-
 import { toast } from 'react-toastify';
 import 'react-toastify/ReactToastify.min.css';
+
 import { HOME } from '../../config/routes';
 import { contactAddAction } from '../../store/actions/contactActions';
 import { InputValidation } from '../InputValidation/InputValidation';
@@ -17,7 +18,6 @@ const ContactForm = () => {
   const navigate = useNavigate();
 
   const onSubmit = (data) => {
-    console.log('data contact', data);
     dispatch(contactAddAction(data))
       .then((result) => {
         if (result?.payload?.id) {
@@ -35,7 +35,6 @@ const ContactForm = () => {
         );
       })
       .catch((error) => {
-        console.log(error);
         toast.error(
           'There was a problem sending your message. Come back later',
           {

@@ -1,26 +1,22 @@
 import React, { useEffect, Fragment, useState } from 'react';
-import PropTypes from 'prop-types';
 
-import { Link } from 'react-router-dom';
-import { SIGNUP } from '../../config/routes';
+import PropTypes from 'prop-types';
 import {
-  Button,
   Dialog,
   DialogHeader,
   DialogBody,
-  DialogFooter,
   Typography,
 } from '@material-tailwind/react';
 
 const TermAndConditions = ({ open, handleOpen }) => {
-  const [size, setSize] = useState('md'); // Tamaño inicial del Dialog
+  const [size, setSize] = useState('md');
 
   useEffect(() => {
     const handleResize = () => {
       const viewportWidth = window.innerWidth;
       const dialogWidth = Math.floor(viewportWidth * 0.85); // Calcula el 85% del ancho del viewport
 
-      let newSize = 'md'; // Valor predeterminado si el tamaño calculado no coincide con los valores disponibles
+      let newSize = 'md';
 
       if (dialogWidth <= 768) {
         newSize = 'xl';
@@ -30,15 +26,15 @@ const TermAndConditions = ({ open, handleOpen }) => {
         newSize = 'md';
       }
 
-      setSize(newSize); // Establece el tamaño del Dialog según el tamaño calculado
+      setSize(newSize);
     };
 
-    handleResize(); // Llama a la función inicialmente para establecer el tamaño correcto
+    handleResize();
 
-    window.addEventListener('resize', handleResize); // Agrega un listener para manejar los cambios de tamaño de la pantalla
+    window.addEventListener('resize', handleResize);
 
     return () => {
-      window.removeEventListener('resize', handleResize); // Limpia el listener cuando el componente se desmonta
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 

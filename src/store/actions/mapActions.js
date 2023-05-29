@@ -1,12 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-// {
-//   pageable: {
-//     page: 1,
-//     size: 15,
-//   },
-// }
-
 export const getAccessiblePlaces = createAsyncThunk(
   'map/getAccessiblePlaces',
   async (_, { rejectWithValue, getState }) => {

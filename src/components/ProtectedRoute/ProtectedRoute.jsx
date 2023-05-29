@@ -1,8 +1,10 @@
 import React from 'react';
+
 import PropTypes from 'prop-types';
+import { Navigate, useLocation, Outlet } from 'react-router-dom';
+
 import { LOGIN, HOME } from '../../config/routes';
 import useAuthCheck from '../../hooks/useAuthCheck';
-import { Navigate, useLocation, Outlet } from 'react-router-dom';
 
 const ProtectedRoute = ({ children, excludedRoutes, redirectTo }) => {
   const isAuthenticated = useAuthCheck();

@@ -1,5 +1,7 @@
 import React from 'react';
+
 import BannerMapImage from '../../assets/svg/banner_map.svg';
+
 import './Banner.css';
 
 const Banner = () => {
