@@ -1,13 +1,13 @@
 .navlist {
-  @apply mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:-ml-24;
+  @apply mb-4 mt-2 flex flex-col gap-2 lg:-ml-24 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center;
 }
 
 .navlist .navlist__link {
-  @apply font-normal ;
+  @apply font-normal;
 }
 
 .navlist .navlist__link .navlist__menuitem {
-  @apply flex items-center gap-2 lg:rounded-full ;
+  @apply flex items-center gap-2 lg:rounded-full;
 }
 
 .navlist .navlist__link .navlist__menuitem .navlist__link_icon {

@@ -1,5 +1,5 @@
 .sponsors__container {
-  @apply -m-14 bg-white py-24 sm:py-16;
+  @apply -m-14 bg-white py-24 sm:py-16 mx-3 sm:mx-auto;
 }
 
 .sponsors__content {

@@ -9,7 +9,7 @@
 }
 
 .header .header__container {
-  @apply mx-auto flex flex-grow items-center justify-between md:mx-16 ;
+  @apply mx-auto flex flex-grow items-center justify-between md:mx-16;
 }
 
 .header .header__container .header__brand {
