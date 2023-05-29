@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { useForm, FormProvider } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
@@ -14,25 +15,22 @@ import { HOME, SIGNUP } from '../../config/routes';
 const LoginForm = () => {
   const hookFormMethods = useForm();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     try {
-      const resultAction = await dispatch(login(data)).unwrap();
-      console.log(`resultAction =`, resultAction);
+      const resultAction = await dispatch(login(data));
 
-      if (resultAction?.token) {
-        const userDataAction = await dispatch(
-          getUserData(data.username),
-        ).unwrap();
-        if (userDataAction) {
-          console.log(`userDataAction =`, userDataAction);
+      if (resultAction?.payload?.token) {
+        const userDataAction = await dispatch(getUserData(data.username));
+        if (userDataAction.payload) {
+          navigate(HOME);
         }
       }
     } catch (error) {
-      toast.error('¡There is an error', {
+      toast.error('There was an error sending the form!', {
         autoClose: 2000,
       });
-      console.log(error);
     }
   };
 
@@ -54,17 +52,15 @@ const LoginForm = () => {
               rules={{
                 required: {
                   value: true,
-                  message: 'Por favor, escriba su nombre de usuario.',
+                  message: 'Please enter your username',
                 },
                 minLength: {
                   value: 3,
-                  message:
-                    'El nombre de usuario debe tener al menos 3 caracteres.',
+                  message: 'The user name must be at least 3 characters long.',
                 },
                 maxLength: {
                   value: 20,
-                  message:
-                    'El nombre de usuario debe tener como máximo 20 caracteres.',
+                  message: 'The user name must be no longer than 20 characters',
                 },
               }}
             />
@@ -76,7 +72,7 @@ const LoginForm = () => {
               rules={{
                 required: {
                   value: true,
-                  message: 'Please enter your password.',
+                  message: 'Please enter your password',
                 },
                 minLength: {
                   value: 8,

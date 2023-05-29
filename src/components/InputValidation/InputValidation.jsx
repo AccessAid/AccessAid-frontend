@@ -1,16 +1,25 @@
 import React from 'react';
+
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Input, Typography } from '@material-tailwind/react';
 
-const InputValidation = ({ nameField, controllerProps, rules, inputProps }) => {
+const InputValidation = ({
+  nameField,
+  controllerProps,
+  rules,
+  inputProps,
+  selectorApiError,
+  customValidation,
+}) => {
   const {
     control,
+    watch,
     formState: { errors },
   } = useFormContext();
 
-  const apiError = useSelector((state) => state.auth.error);
+  const apiError = useSelector(selectorApiError);
 
   return (
     <>
@@ -18,7 +27,10 @@ const InputValidation = ({ nameField, controllerProps, rules, inputProps }) => {
         {...controllerProps}
         control={control}
         name={nameField}
-        rules={rules}
+        rules={{
+          ...rules,
+          validate: (value) => customValidation(value, watch),
+        }}
         render={({ field }) => (
           <Input
             {...field}
@@ -55,12 +67,16 @@ InputValidation.propTypes = {
   controllerProps: PropTypes.object,
   rules: PropTypes.object,
   inputProps: PropTypes.object,
+  selectorApiError: PropTypes.func,
+  customValidation: PropTypes.func,
 };
 
 InputValidation.defaultProps = {
   controllerProps: {},
   rules: {},
   inputProps: {},
+  selectorApiError: (state) => state.auth.error,
+  customValidation: (value, control) => {},
 };
 
 export { InputValidation };

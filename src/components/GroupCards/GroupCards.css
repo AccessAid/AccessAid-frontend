@@ -1,13 +1,13 @@
 .group-cards-container {
-  @apply container mx-auto px-6 py-28;
+  @apply container -m-14 mx-auto px-6 py-28;
 }
 
 .group-cards-title {
-  @apply text-3xl font-semibold capitalize text-gray-800 dark:text-white lg:text-4xl;
+  @apply text-center text-3xl font-semibold capitalize text-gray-800 dark:text-white lg:text-4xl;
 }
 
 .group-cards-description {
-  @apply my-6 max-w-2xl text-gray-500 dark:text-gray-300;
+  @apply my-6  w-full text-center text-gray-500 dark:text-gray-300;
 }
 
 .group-cards-grid {

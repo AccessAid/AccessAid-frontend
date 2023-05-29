@@ -1,5 +1,9 @@
 import React from 'react';
 
+import { Link } from 'react-router-dom';
+
+import { HOME } from '../../config/routes';
+
 import './NotFound.css';
 
 const NotFound = () => {
@@ -12,12 +16,9 @@ const NotFound = () => {
           {"Sorry, we couldn't find the page you're looking for."}
         </p>
         <div className='notfound-links'>
-          <a href='#' className='notfound-link-1'>
-            Go back home
-          </a>
-          <a href='#' className='notfound-link-2'>
-            Contact support <span aria-hidden='true'>&rarr;</span>
-          </a>
+          <div className='notfound-link-1'>
+            <Link to={HOME}>Go back Home</Link>
+          </div>
         </div>
       </div>
     </main>

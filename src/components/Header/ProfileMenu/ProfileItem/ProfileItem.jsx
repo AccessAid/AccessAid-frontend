@@ -1,15 +1,18 @@
 import React from 'react';
+
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { Typography, MenuItem } from '@material-tailwind/react';
 import { Link } from 'react-router-dom';
 
 import { logout } from '../../../../store/slices/authSlice';
+import { cleanProfileError } from '../../../../store/slices/profileSlice';
 
 const ProfileItem = ({ label, icon, link, isLastItem }) => {
   const dispatch = useDispatch();
 
   const logoutHandle = () => {
+    dispatch(cleanProfileError());
     dispatch(logout());
   };
 
@@ -19,7 +22,6 @@ const ProfileItem = ({ label, icon, link, isLastItem }) => {
       to={link}
       onClick={() => {
         if (label === 'Sign Out') {
-          console.log('SALIR!!');
           logoutHandle();
         }
       }}

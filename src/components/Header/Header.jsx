@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useRef, useState } from 'react';
+
+import { Bars2Icon } from '@heroicons/react/24/outline';
 import {
-  Navbar,
-  MobileNav,
+  Collapse,
   IconButton,
+  Navbar,
   Typography,
 } from '@material-tailwind/react';
-import { Bars2Icon } from '@heroicons/react/24/outline';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
+import { HOME, MAP } from '../../config/routes';
 import useAuthCheck from '../../hooks/useAuthCheck';
-import { ProfileMenu } from './ProfileMenu/ProfileMenu';
 import { NavList } from './NavList/NavList';
-import { HOME } from '../../config/routes';
+import { ProfileMenu } from './ProfileMenu/ProfileMenu';
 import { navListAuthItems, navListItems } from './utils';
 
 import BrandImage from '../../assets/svg/brand_access.svg';
@@ -20,17 +20,28 @@ import BrandImage from '../../assets/svg/brand_access.svg';
 import './Header.css';
 
 const Header = () => {
+  const headerRef = useRef(null);
+  const location = useLocation();
   const [isNavOpen, setIsNavOpen] = useState(false);
-  const [headerColor, setHeaderColor] = useState('bg-transparent');
+  const [headerColor, setHeaderColor] = useState(
+    location.pathname === MAP ? 'bg-secondary-dark' : 'bg-transparent',
+  );
 
   const isAuthenticated = useAuthCheck();
-  const dispatch = useDispatch();
 
   const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
 
   useEffect(() => {
+    if (location.pathname === MAP) {
+      setHeaderColor('bg-secondary-dark');
+      return;
+    } else {
+      setHeaderColor('bg-transparent');
+    }
+
     const handleScroll = () => {
       const scrolled = window.scrollY;
+
       if (scrolled > 0) {
         setHeaderColor('bg-secondary-dark');
       } else {
@@ -43,7 +54,7 @@ const Header = () => {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [location.pathname]);
 
   useEffect(() => {
     window.addEventListener(
@@ -52,8 +63,21 @@ const Header = () => {
     );
   }, []);
 
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (headerRef.current && !headerRef.current.contains(event.target)) {
+        setIsNavOpen(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [headerRef]);
+
   return (
-    <Navbar className={`header ${headerColor}`}>
+    <Navbar ref={headerRef} className={`header ${headerColor}`}>
       <div className='header__container'>
         <Link to={HOME}>
           <div className='header__brand'>
@@ -86,13 +110,13 @@ const Header = () => {
           </div>
         )}
       </div>
-      <MobileNav open={isNavOpen} className='header__mobile'>
+      <Collapse open={isNavOpen} className='header__mobile'>
         {isAuthenticated ? (
           <NavList navList={navListItems} />
         ) : (
           <NavList navList={[...navListItems, ...navListAuthItems]} />
         )}
-      </MobileNav>
+      </Collapse>
     </Navbar>
   );
 };

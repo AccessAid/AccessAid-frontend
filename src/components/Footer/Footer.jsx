@@ -1,7 +1,9 @@
 import React from 'react';
-import { Typography } from '@material-tailwind/react';
-import { Bars2Icon } from '@heroicons/react/24/outline';
 
+import { Typography } from '@material-tailwind/react';
+import { Link } from 'react-router-dom';
+
+import { CONTACT } from '../../config/routes/index';
 import BrandImage from '../../assets/svg/brand_access.svg';
 import GitHubImage from '../../assets/svg/github.svg';
 import ReactImage from '../../assets/svg/react.svg';
@@ -16,43 +18,31 @@ const Footer = () => {
         <img src={BrandImage} alt='logo-ct' className='w-16' />
         <ul className='footer__list'>
           <li>
-            <Typography
-              as='a'
-              href='#'
-              color='blue-gray'
-              className='footer__link'
-            >
-              About Us
+            <Typography color='blue-gray' className='footer__link'>
+              <a
+                href='https://programacion-es.dev/devathon-edition/'
+                target='_blank'
+                rel='noopener noreferrer'
+              >
+                About Devathon
+              </a>
+            </Typography>
+          </li>
+
+          <li>
+            <Typography color='blue-gray' className='footer__link'>
+              <a
+                href='https://github.com/AccessAid'
+                target='_blank'
+                rel='noopener noreferrer'
+              >
+                Contribute
+              </a>
             </Typography>
           </li>
           <li>
-            <Typography
-              as='a'
-              href='#'
-              color='blue-gray'
-              className='footer__link'
-            >
-              License
-            </Typography>
-          </li>
-          <li>
-            <Typography
-              as='a'
-              href='#'
-              color='blue-gray'
-              className='footer__link'
-            >
-              Contribute
-            </Typography>
-          </li>
-          <li>
-            <Typography
-              as='a'
-              href='#'
-              color='blue-gray'
-              className='footer__link'
-            >
-              Contact Us
+            <Typography color='blue-gray' className='footer__link'>
+              <Link to={CONTACT}>Contact Us</Link>
             </Typography>
           </li>
         </ul>
@@ -69,10 +59,14 @@ const Footer = () => {
           >
             <img src={GitHubImage} alt='logo-ct' className='w-10' />
           </Typography>
-          <Typography as='a' href='#' className='social-media'>
+          <Typography as='a' href='https://react.dev/' className='social-media'>
             <img src={ReactImage} alt='logo-ct' className='w-10' />
           </Typography>
-          <Typography as='a' href='#' className='social-media'>
+          <Typography
+            as='a'
+            href='https://spring.io/projects/spring-boot'
+            className='social-media'
+          >
             <img src={SpringImage} alt='logo-ct' className='w-10' />
           </Typography>
         </div>

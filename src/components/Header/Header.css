@@ -5,6 +5,7 @@
   border-color: 0 !important;
   border-radius: 0 !important;
   border-width: 0 !important;
+  --tw-bg-opacity: 100% !important;
 }
 
 .header .header__container {
@@ -20,11 +21,11 @@
 }
 
 .header .header__container .header__brand .brand__title {
-  @apply hidden sm:block text-lg text-blue-gray-900  hover:text-quaternary md:text-xl;
+  @apply hidden text-lg text-blue-gray-900 hover:text-quaternary  sm:block md:text-xl;
 }
 
 .header .header__container .header__links {
-  @apply hidden lg:ml-14 lg:block;
+  @apply hidden lg:block;
 }
 
 .header .header__container .button_links {
@@ -36,5 +37,5 @@
 }
 
 .header .header__mobile {
-  @apply overflow-scroll;
+  @apply flex justify-center bg-tertiary-light;
 }

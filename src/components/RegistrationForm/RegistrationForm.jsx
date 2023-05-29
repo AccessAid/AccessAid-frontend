@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { useForm, FormProvider } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, Link } from 'react-router-dom';
 
+import { useForm, FormProvider } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import { useNavigate, Link } from 'react-router-dom';
 import { Card, Button, Typography } from '@material-tailwind/react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/ReactToastify.min.css';
@@ -12,38 +12,34 @@ import { cleanApiError } from '../../store/slices/authSlice';
 import { InputValidation } from '../InputValidation/InputValidation';
 import { RadioValidation } from '../RadioValidation/RadioValidation';
 import { LOGIN } from '../../config/routes';
+import { TermAndConditions } from '../TermsAndConditions/TermAndConditions';
 
 const RegistrationForm = () => {
   const hookFormMethods = useForm();
 
   const dispatch = useDispatch();
-
   const navigate = useNavigate();
 
-  const onSubmit = (data) => {
-    dispatch(signup(data))
-      .unwrap()
-      .then((resultAction) => {
-        console.log(`resultAction =`, resultAction);
+  const [openTermsAndConditions, setOpenTermsAndConditions] = useState(false);
 
-        if (resultAction?.message.includes('correctly')) {
-          toast.success('¡Sign Up Successfully!', {
-            autoClose: 1700,
-          });
-          toast.onChange((payload) => {
-            if (payload.status === 'removed') {
-              navigate(LOGIN);
-            }
-          });
-        }
-      })
-      .catch((error) => {
-        toast.error('¡There is an error', {
-          autoClose: 2000,
+  const handleOpenTermsAndConditions = () =>
+    setOpenTermsAndConditions(!openTermsAndConditions);
+
+  const onSubmit = async (data) => {
+    try {
+      const resultAction = await dispatch(signup(data));
+
+      if (resultAction?.payload?.message.includes('correctly')) {
+        toast.success('Sign Up Successfully!', {
+          autoClose: 1000,
         });
-        toast.onChange((payload) => {});
-        console.log(error);
+        navigate(LOGIN);
+      }
+    } catch (error) {
+      toast.error('There is an error!', {
+        autoClose: 2000,
       });
+    }
   };
 
   return (
@@ -64,17 +60,15 @@ const RegistrationForm = () => {
               rules={{
                 required: {
                   value: true,
-                  message: 'Por favor, escriba su nombre de usuario.',
+                  message: 'Please enter your username',
                 },
                 minLength: {
                   value: 3,
-                  message:
-                    'El nombre de usuario debe tener al menos 3 caracteres.',
+                  message: 'The user name must be at least 3 characters long',
                 },
                 maxLength: {
                   value: 20,
-                  message:
-                    'El nombre de usuario debe tener como máximo 20 caracteres.',
+                  message: 'The user name must not exceed 20 characters',
                 },
               }}
             />
@@ -86,7 +80,7 @@ const RegistrationForm = () => {
               rules={{
                 required: {
                   value: true,
-                  message: 'Por favor, escriba su email.',
+                  message: 'Please enter your email address.',
                 },
                 pattern: {
                   value: /\S+@\S+\.\S+/,
@@ -102,7 +96,7 @@ const RegistrationForm = () => {
               rules={{
                 required: {
                   value: true,
-                  message: 'Por favor, escriba su contraseña',
+                  message: 'Please enter your password',
                 },
                 minLength: {
                   value: 8,
@@ -125,20 +119,25 @@ const RegistrationForm = () => {
                   color='gray'
                   className='flex items-center font-normal'
                 >
-                  I agree the
-                  <a
+                  I agree the{' '}
+                  <span
                     href='#'
                     className='font-medium transition-colors hover:text-blue-500'
+                    onClick={handleOpenTermsAndConditions}
                   >
                     &nbsp;Terms and Conditions
-                  </a>
+                  </span>
+                  <TermAndConditions
+                    open={openTermsAndConditions}
+                    handleOpen={handleOpenTermsAndConditions}
+                  />
                 </Typography>
               ),
             }}
             rules={{
               required: {
                 value: true,
-                message: 'Por favor, seleccione esta casilla para continuar.',
+                message: 'Please check this box to continue',
               },
             }}
           />

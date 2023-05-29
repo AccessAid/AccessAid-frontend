@@ -1,49 +1,31 @@
 import React, { useState } from 'react';
 
 import {
-  Typography,
   Button,
   Menu,
   MenuHandler,
   MenuList,
-  MenuItem,
   Avatar,
 } from '@material-tailwind/react';
-import {
-  UserCircleIcon,
-  Cog6ToothIcon,
-  InboxArrowDownIcon,
-  LifebuoyIcon,
-  PowerIcon,
-  ChevronDownIcon,
-} from '@heroicons/react/24/outline';
+import { ChevronDownIcon } from '@heroicons/react/24/outline';
+import { useSelector } from 'react-redux';
+
+import { profileMenuItems } from './utils';
+import { ProfileItem } from './ProfileItem/ProfileItem';
+import { selectCurrentUserProfile } from '../../../store/slices/profileSlice';
+import { selectUserData } from '../../../store/slices/authSlice';
 
 import './ProfileMenu.css';
-import { LOGIN, MAP, PROFILE } from '../../../config/routes';
-import { Link } from 'react-router-dom';
-import { ProfileItem } from './ProfileItem/ProfileItem';
 
-// profile menu component
-const profileMenuItems = [
-  {
-    label: 'Edit Profile',
-    icon: Cog6ToothIcon,
-    link: PROFILE,
-  },
-  {
-    label: 'Map',
-    icon: InboxArrowDownIcon,
-    link: MAP,
-  },
-  {
-    label: 'Sign Out',
-    icon: PowerIcon,
-    link: LOGIN,
-  },
-];
+import './ProfileMenu.css';
 
 const ProfileMenu = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const profileData = useSelector(selectCurrentUserProfile);
+  const userData = useSelector(selectUserData);
+
+  const avatarPath =
+    profileData?.avatarPath || userData?.profile?.avatarPath || 'no-avatar';
 
   return (
     <Menu open={isMenuOpen} handler={setIsMenuOpen} placement='bottom-end'>
@@ -54,7 +36,7 @@ const ProfileMenu = () => {
             size='sm'
             alt='candice wu'
             className='avatar__img'
-            src='https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80'
+            src={`https://unavatar.io/${avatarPath}`}
           />
           <ChevronDownIcon
             strokeWidth={2.5}
