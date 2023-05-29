@@ -6,7 +6,4 @@
 
 .place-detail-container .content-container {
   @apply mx-auto flex w-full justify-center;
-  background-color: red !important;
-
-
 }
