@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { Chip, Tooltip, Typography } from '@material-tailwind/react';
 import { accessibilityListDescription } from '../../MapComponent/MarkerComponent/util';
 
@@ -8,7 +10,7 @@ const AccessibilityDetails = () => {
         <Tooltip
           key={name}
           content={
-            <div className='z-10 '>
+            <div className='w-[70vw] sm:w-[40vw] md:w-auto'>
               <Typography color='white' className='font-medium'>
                 {description}
               </Typography>
@@ -22,7 +24,7 @@ const AccessibilityDetails = () => {
         >
           <Chip
             value={name}
-            className='flex w-full justify-center bg-quaternary p-1 text-lg font-medium capitalize'
+            className='flex w-full cursor-not-allowed justify-center bg-quaternary p-1 text-lg font-medium capitalize'
           />
         </Tooltip>
       ))}

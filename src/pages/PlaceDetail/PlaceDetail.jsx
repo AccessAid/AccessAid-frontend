@@ -6,10 +6,10 @@ import { useDispatch } from 'react-redux';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/ReactToastify.min.css';
 
-import './PlaceDetail.css';
 import { MAP } from '../../config/routes';
-
 import { persistCurrentPlaceDetails } from '../../store/actions/placesActions';
+
+import './PlaceDetail.css';
 
 const PlaceDetail = () => {
   const dispatch = useDispatch();
@@ -28,13 +28,10 @@ const PlaceDetail = () => {
   }, [persistCurrentPlaceDetails]);
 
   return (
-    <div className='place-detail-container'>
-      <div className='content-container'>
-        {' '}
-        <PlaceDetailsCard />
-        <ToastContainer />
-      </div>
-    </div>
+    <>
+      <PlaceDetailsCard />
+      <ToastContainer />
+    </>
   );
 };
 

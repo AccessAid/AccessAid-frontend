@@ -1,9 +1,0 @@
-
-.place-detail-container {
-  @apply container flex h-screen items-center bg-white-dark px-6;
-  min-width: 100vw;
-}
-
-.place-detail-container .content-container {
-  @apply mx-auto flex w-full justify-center;
-}

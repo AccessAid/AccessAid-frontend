@@ -1,14 +1,16 @@
+import React from 'react';
+
 import { Typography } from '@material-tailwind/react';
 import { Rating } from '@mui/material';
-import React from 'react';
 import { useSelector } from 'react-redux';
+
 import { selectTotalRatingByPlace } from '../../../store/slices/placesSlice';
 
 const TotalRating = () => {
   const totalRating = useSelector(selectTotalRatingByPlace);
   return (
     <div className='flex flex-col items-center justify-center md:flex-row lg:justify-around'>
-      <div className='mb-4 flex flex-col items-center justify-start md:mb-12'>
+      <div className='mb-8 mt-6 flex flex-col items-center justify-start lg:mb-0'>
         <Typography
           color='blue-gray'
           className='mb-2 cursor-default text-2xl font-normal md:mt-3 '

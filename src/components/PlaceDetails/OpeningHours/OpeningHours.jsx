@@ -1,16 +1,16 @@
+import React, { useState } from 'react';
+
+import PropTypes from 'prop-types';
 import {
   Accordion,
   AccordionBody,
   AccordionHeader,
   Typography,
 } from '@material-tailwind/react';
-import PropTypes from 'prop-types';
-import React, { useState } from 'react';
-
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
 
 const OpeningHours = ({ weekdayText }) => {
-  const [open, setOpen] = useState(1);
+  const [open, setOpen] = useState(2);
   const handleOpen = (value) => {
     setOpen(open === value ? 0 : value);
   };
@@ -39,7 +39,7 @@ const OpeningHours = ({ weekdayText }) => {
                 const restOfText = words.slice(1).join(' ');
                 return (
                   <Typography key={day} variant='small' as='span' color='gray'>
-                    <strong>{firstWord}</strong> {restOfText}
+                    <span className='font-bold'>{firstWord}</span> {restOfText}
                   </Typography>
                 );
               })}

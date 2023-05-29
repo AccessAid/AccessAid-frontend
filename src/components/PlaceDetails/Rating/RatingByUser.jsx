@@ -185,16 +185,16 @@ const RatingByUser = () => {
   return (
     <div className='flex flex-col items-center space-y-4 border-2 p-6 shadow-xl md:mt-2 md:space-y-2'>
       <Button
-        className='mt-4 w-full font-medium capitalize md:mt-0'
+        className='mt-4 w-full font-medium  md:mt-0'
         variant='gradient'
         color='blue'
-        size='small'
+        size='lg'
         onClick={handleButtonClick}
       >
         {buttonText}
       </Button>
       <div className=' flex flex-col items-center px-6'>
-        <Typography color='blue-gray' className='text-s font-normal'>
+        <Typography color='blue-gray' className='text-lg font-bold'>
           Your Rating
         </Typography>
         <StyledRating
@@ -217,7 +217,7 @@ const RatingByUser = () => {
           className='mt-0 flex items-center space-x-1 px-2 py-2 md:mt-2  '
         >
           <TrashIcon className='h-6 w-6' />
-          <Typography className='text-xs capitalize'>Reset Rating</Typography>
+          <Typography className='text-xs'>Reset Rating</Typography>
         </Button>
       </div>
       <ToastContainer className='mb-4 mt-4' />

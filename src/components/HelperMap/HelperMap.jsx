@@ -9,7 +9,7 @@ import './HelperMap.css';
 const HelperMap = () => {
   return (
     <>
-      <Typography color='gray' className='mt-1 font-normal'>
+      <Typography color='gray' className='mt-1 font-bold'>
         Map Legend
       </Typography>
       <Chip

@@ -6,10 +6,10 @@ const AddressDetails = ({ name, address, phone, website }) => {
   return (
     <>
       <div className='m-9 text-center'>
-        <Typography variant='h4' color='gray' className='mb-6 font-bold'>
+        <Typography variant='h4' color='gray' className='mb-2 font-bold'>
           {name}
         </Typography>
-        <Typography variant='paragraph' color='gray'>
+        <Typography variant='paragraph' color='gray' className='font-normal'>
           {address}
         </Typography>
         <Typography variant='paragraph' color='gray' className='font-bold'>
@@ -22,9 +22,9 @@ const AddressDetails = ({ name, address, phone, website }) => {
           href={website}
           target='_blank'
           color='gray'
-          className='flex cursor-pointer items-center justify-center gap-1 text-sm font-bold'
+          className='flex cursor-pointer items-center justify-center gap-1 text-xl font-bold text-primary-dark'
         >
-          @Website
+          {website ? '@Website' : "This place don't have a website"}
         </Typography>
       </div>
     </>
@@ -32,9 +32,16 @@ const AddressDetails = ({ name, address, phone, website }) => {
 };
 
 AddressDetails.propTypes = {
-  name: PropTypes.string.isRequired,
-  address: PropTypes.string.isRequired,
+  name: PropTypes.string,
+  address: PropTypes.string,
   phone: PropTypes.string,
   website: PropTypes.string,
 };
+
+AddressDetails.defaultProps = {
+  name: '',
+  address: '',
+  phone: '',
+};
+
 export default AddressDetails;
