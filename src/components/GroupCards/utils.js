@@ -1,4 +1,9 @@
+import AccessAidLogo from '../../assets/img/accessaid.svg';
+import CristobalLogo from '../../assets/img/Cristobal.png';
+import FidelLogo from '../../assets/img/fidel.png';
 import MatLogo from '../../assets/img/mat.png';
+import OthamaeLogo from '../../assets/img/vero.png';
+import YagoLogo from '../../assets/img/yago.png';
 
 const cardItems = [
   {
@@ -10,60 +15,80 @@ const cardItems = [
         label: 'Github',
         url: 'https://github.com/matdevcoder',
       },
+      {
+        label: 'LinkedIn',
+        url: 'https://www.linkedin.com/in/mateogarciag/',
+      },
     ],
   },
   {
     name: 'Dev_ficho',
     role: 'Frontend Developer',
-    srcLogo: MatLogo,
+    srcLogo: FidelLogo,
     socialMedia: [
       {
         label: 'Github',
         url: 'https://github.com/fidelChoqueDev',
       },
+      {
+        label: 'LinkedIn',
+        url: 'https://www.linkedin.com/in/fichovis/',
+      },
     ],
   },
   {
-    name: 'Aakerdev',
+    name: 'YagoESP',
     role: 'Frontend Developer',
-    srcLogo: MatLogo,
+    srcLogo: YagoLogo,
     socialMedia: [
       {
         label: 'Github',
-        url: 'https://github.com/agomezjuan',
+        url: 'https://github.com/YagoESP',
+      },
+      {
+        label: 'LinkedIn',
+        url: 'https://www.linkedin.com/in/santiagogg03/',
       },
     ],
   },
   {
     name: 'Othamae',
     role: 'Backend Developer',
-    srcLogo: MatLogo,
+    srcLogo: OthamaeLogo,
     socialMedia: [
       {
         label: 'Github',
         url: 'https://github.com/Othamae',
+      },
+      {
+        label: 'LinkedIn',
+        url: 'https://www.linkedin.com/in/veronica-conesa-gomez/',
       },
     ],
   },
   {
     name: 'Jcaido',
     role: 'Backend Developer',
-    srcLogo: MatLogo,
+    srcLogo: CristobalLogo,
     socialMedia: [
       {
         label: 'Github',
         url: 'https://github.com/jcaido',
       },
+      {
+        label: 'LinkedIn',
+        url: 'https://www.linkedin.com/in/cristobal-rosa-arjona-45195124a/',
+      },
     ],
   },
   {
-    name: 'EvaTriceratops',
-    role: 'Backend Developer',
-    srcLogo: MatLogo,
+    name: 'Access Aid',
+    role: 'Organization',
+    srcLogo: AccessAidLogo,
     socialMedia: [
       {
         label: 'Github',
-        url: 'https://github.com/evatriceratops',
+        url: 'https://github.com/AccessAid',
       },
     ],
   },

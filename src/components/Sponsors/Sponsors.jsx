@@ -1,7 +1,5 @@
 import React from 'react';
-
-import ProgramacionEsImage from '../../assets/img/programacion_es.png';
-import DonWebImage from '../../assets/img/donweb.png';
+import { sponsorImages } from './utils';
 
 import './Sponsors.css';
 
@@ -9,23 +7,20 @@ const Sponsors = () => {
   return (
     <>
       <div className='sponsors__container'>
-        <div className='sponsors__content'>
+        <div className='sponsors__content '>
           <h2 className='sponsors__title'>Devathon Sponsors</h2>
-          <div className='sponsors__logos'>
-            <img
-              className='sponsors__logo'
-              src={ProgramacionEsImage}
-              alt='Transistor'
-              width='258'
-              height='8'
-            />
-            <img
-              className='sponsors__logo'
-              src={DonWebImage}
-              alt='Reform'
-              width='158'
-              height='48'
-            />
+          <div className='grid w-full grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4'>
+            {sponsorImages.map((image, index) => (
+              <img
+                key={index}
+                className='sponsors__logo px-10'
+                src={image.src}
+                alt={image.alt}
+                width={image.width}
+                height={image.height}
+                style={image.hasWhiteText ? { backgroundColor: 'black' } : null}
+              />
+            ))}
           </div>
         </div>
       </div>

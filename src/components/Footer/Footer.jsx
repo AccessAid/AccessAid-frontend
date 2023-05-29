@@ -1,5 +1,5 @@
-import React from 'react';
 import { Typography } from '@material-tailwind/react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 import BrandImage from '../../assets/svg/brand_access.svg';
@@ -19,17 +19,25 @@ const Footer = () => {
         <ul className='footer__list'>
           <li>
             <Typography color='blue-gray' className='footer__link'>
-              About Us
+              <a
+                href='https://programacion-es.dev/devathon-edition/'
+                target='_blank'
+                rel='noopener noreferrer'
+              >
+                About Devathon
+              </a>
             </Typography>
           </li>
+
           <li>
             <Typography color='blue-gray' className='footer__link'>
-              License
-            </Typography>
-          </li>
-          <li>
-            <Typography color='blue-gray' className='footer__link'>
-              Contribute
+              <a
+                href='https://github.com/AccessAid'
+                target='_blank'
+                rel='noopener noreferrer'
+              >
+                Contribute
+              </a>
             </Typography>
           </li>
           <li>
@@ -51,10 +59,14 @@ const Footer = () => {
           >
             <img src={GitHubImage} alt='logo-ct' className='w-10' />
           </Typography>
-          <Typography as='a' href='#' className='social-media'>
+          <Typography as='a' href='https://react.dev/' className='social-media'>
             <img src={ReactImage} alt='logo-ct' className='w-10' />
           </Typography>
-          <Typography as='a' href='#' className='social-media'>
+          <Typography
+            as='a'
+            href='https://spring.io/projects/spring-boot'
+            className='social-media'
+          >
             <img src={SpringImage} alt='logo-ct' className='w-10' />
           </Typography>
         </div>
