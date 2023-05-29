@@ -13,16 +13,12 @@ const Sponsors = () => {
             {sponsorImages.map((image, index) => (
               <img
                 key={index}
-                className='sponsors__logo'
+                className='sponsors__logo px-10'
                 src={image.src}
                 alt={image.alt}
                 width={image.width}
                 height={image.height}
-                style={
-                  image.hasWhiteText
-                    ? { backgroundColor: 'lightskyblue' }
-                    : null
-                }
+                style={image.hasWhiteText ? { backgroundColor: 'black' } : null}
               />
             ))}
           </div>

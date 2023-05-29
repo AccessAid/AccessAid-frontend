@@ -53,15 +53,15 @@ export const sponsorImages = [
   {
     src: CTPImage,
     alt: 'Reform',
-    width: '158',
-    height: '48',
+    width: '126',
+    height: '38',
     hasWhiteText: false,
   },
   {
     src: MaltImage,
     alt: 'Reform',
-    width: '58',
-    height: '28',
+    width: '158',
+    height: '48',
     hasWhiteText: false,
   },
 ];
