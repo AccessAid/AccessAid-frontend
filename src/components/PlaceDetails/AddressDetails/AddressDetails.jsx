@@ -1,6 +1,7 @@
-import { Typography } from '@material-tailwind/react';
-import PropTypes from 'prop-types';
 import React from 'react';
+
+import PropTypes from 'prop-types';
+import { Typography } from '@material-tailwind/react';
 
 const AddressDetails = ({ name, address, phone, website }) => {
   return (

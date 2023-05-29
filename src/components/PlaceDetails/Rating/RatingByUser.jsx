@@ -1,14 +1,15 @@
+import React, { useEffect, useState } from 'react';
+
+import { useDispatch, useSelector } from 'react-redux';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import { Button, Typography } from '@material-tailwind/react';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import Rating from '@mui/material/Rating';
 import { styled } from '@mui/material/styles';
-
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/ReactToastify.min.css';
+
 import { getTotalRatingByPlace } from '../../../store/actions/placesActions';
 import {
   addRating,
@@ -42,7 +43,6 @@ const RatingByUser = () => {
   const [buttonText, setButtonText] = useState('Give a Rating!');
 
   const handleRated = async (event, newValue) => {
-    console.log('newValue', newValue);
     try {
       if (ratedByUser.id === -1) {
         const addRatingResult = await dispatch(
@@ -113,7 +113,6 @@ const RatingByUser = () => {
   const handleResetRating = async () => {
     if (ratedByUser.id !== -1) {
       const deleteRatingResult = await dispatch(deleteRating(ratedByUser.id));
-      console.log('deleteRatingResult', deleteRatingResult, ratedByUser.id);
       if (deleteRatingResult?.payload?.message.includes('deleted')) {
         setDisabled(true);
         setRatedByUser(defaultRatedByUser);
@@ -131,14 +130,12 @@ const RatingByUser = () => {
       try {
         if (place?.id) {
           const result = await dispatch(getRatingsByPlace(place?.id));
-          console.log('result!!!!!!!!', result);
           if (result && result?.payload?.content?.length > 0) {
             const getRatingByOneUser = result.payload.content.find(
               (rating) =>
                 rating.userId === userData.id && rating.placeId === place.id,
             );
 
-            console.log('getRatingByOneUser', getRatingByOneUser);
             if (getRatingByOneUser) {
               setRatedByUser(getRatingByOneUser);
               setButtonText('Update Rating');

@@ -19,8 +19,6 @@ const useRefreshToken = () => {
 
   useEffect(() => {
     if (tokenExpiredDate && userData) {
-      console.log('estoy dentro de: tokenExpiredDate');
-
       const minutes = 7;
       const interval = minutes * 60 * 1000;
       const intervalRefreshToken = setInterval(async () => {
@@ -35,10 +33,8 @@ const useRefreshToken = () => {
 
             if (resultAction?.payload?.token) {
               setIsRefreshTokenDone(true);
-              console.log('fue bien');
             } else {
               setIsRefreshTokenDone(false);
-              console.log('fue mal');
               location.reload();
             }
           } catch (error) {

@@ -75,8 +75,6 @@ export const deleteRating = createAsyncThunk(
         },
       );
 
-      console.log('response deleteRating', response);
-
       if (response.ok) {
         return { message: 'Rating deleted' };
       }
