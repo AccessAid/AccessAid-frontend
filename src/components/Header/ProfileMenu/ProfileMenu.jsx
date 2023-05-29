@@ -17,6 +17,8 @@ import { selectUserData } from '../../../store/slices/authSlice';
 
 import './ProfileMenu.css';
 
+import './ProfileMenu.css';
+
 const ProfileMenu = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const profileData = useSelector(selectCurrentUserProfile);

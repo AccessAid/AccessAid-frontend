@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import GitHubImage from '../../../assets/svg/github.svg';
+import LinkedInImage from '../../../assets/svg/linkedin.svg';
 
 import './CardDev.css';
 
@@ -18,7 +19,11 @@ const CardDev = ({ name, role, srcLogo, socialMedia }) => {
       <div className='social-links'>
         {socialMedia?.map(({ label, url }) => (
           <a key={url} href={url} className='social-link' aria-label={label}>
-            <img src={GitHubImage} alt='logo-ct' className='w-10' />
+            <img
+              src={label === 'Github' ? GitHubImage : LinkedInImage}
+              alt='logo-ct'
+              className='h-10 w-10'
+            />
           </a>
         ))}
       </div>

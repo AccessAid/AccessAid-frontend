@@ -9,8 +9,6 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/ReactToastify.min.css';
 
 import { PLACE_DETAIL } from '../../config/routes';
-
-import { MarkerComponent } from './MarkerComponent/MarkerComponent';
 import {
   selectAccessiblePlaces,
   selectCoordinatesMap,
@@ -31,6 +29,8 @@ import {
   getTotalRatingByPlace,
 } from '../../store/actions/placesActions';
 import { selectCurrentIdSelected } from '../../store/slices/placesSlice';
+import './MapComponent.css';
+import { MarkerComponent } from './MarkerComponent/MarkerComponent';
 
 import './MapComponent.css';
 
@@ -192,39 +192,8 @@ const MapComponent = ({ setMapObject }) => {
                   );
                 }
               }}
-              onClickMoreDetail={async () => {
-                try {
-                  if (currentIdSelected) {
-                    const totalRating = await dispatch(
-                      getTotalRatingByPlace(currentIdSelected),
-                    );
-
-                    if (totalRating?.payload?.placeId) {
-                      navigate(PLACE_DETAIL);
-                    } else {
-                      toast.error(
-                        "We're suffering problems on load total rating of this place, come back later",
-                        {
-                          autoClose: 3500,
-                        },
-                      );
-                    }
-                  } else {
-                    toast.error(
-                      "We're suffering problems on load total rating of this place, come back later",
-                      {
-                        autoClose: 3500,
-                      },
-                    );
-                  }
-                } catch (error) {
-                  toast.error(
-                    "We're suffering problems on load total rating of this place, come back later",
-                    {
-                      autoClose: 3500,
-                    },
-                  );
-                }
+              onClickMoreDetail={() => {
+                navigate(PLACE_DETAIL);
               }}
             />
           </MarkerBasic>

@@ -3,6 +3,6 @@
   min-width: 100vw;
 }
 
-.content-container {
+.login-container .content-container {
   @apply mx-auto max-w-lg;
 }

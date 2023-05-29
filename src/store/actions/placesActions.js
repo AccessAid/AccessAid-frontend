@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { PERSIST_KEY_CURRENT_PLACE } from '../slices/placesSlice';
 
 export const addPlace = createAsyncThunk(
   'places/addPlace',
@@ -74,6 +75,23 @@ export const getPlaceDetailsFromMapSlide = createAsyncThunk(
     return rejectWithValue({
       message:
         'There is a problem, come back later when the problem has been solved.',
+    });
+  },
+);
+
+export const persistCurrentPlaceDetails = createAsyncThunk(
+  'places/persistCurrentPlaceDetails',
+  async (_, { rejectWithValue }) => {
+    const storagePlaceDetails = sessionStorage.getItem(
+      PERSIST_KEY_CURRENT_PLACE,
+    );
+
+    if (storagePlaceDetails) {
+      return JSON.parse(storagePlaceDetails);
+    }
+    return rejectWithValue({
+      message:
+        'There is a problem with this place, come back later when the problem has been solved.',
     });
   },
 );
@@ -155,7 +173,8 @@ export const getTotalRatingByPlace = createAsyncThunk(
       const data = await response.json();
 
       if (response.ok) {
-        return data;
+        const { totalRating } = data;
+        return totalRating;
       }
       return rejectWithValue(data);
     } catch (err) {

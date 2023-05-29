@@ -1,18 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import {
-  Navbar,
-  IconButton,
-  Typography,
-  Collapse,
-} from '@material-tailwind/react';
 import { Bars2Icon } from '@heroicons/react/24/outline';
+import {
+  Collapse,
+  IconButton,
+  Navbar,
+  Typography,
+} from '@material-tailwind/react';
 import { Link, useLocation } from 'react-router-dom';
 
-import useAuthCheck from '../../hooks/useAuthCheck';
-import { ProfileMenu } from './ProfileMenu/ProfileMenu';
-import { NavList } from './NavList/NavList';
 import { HOME, MAP } from '../../config/routes';
+import useAuthCheck from '../../hooks/useAuthCheck';
+import { NavList } from './NavList/NavList';
+import { ProfileMenu } from './ProfileMenu/ProfileMenu';
 import { navListAuthItems, navListItems } from './utils';
 
 import BrandImage from '../../assets/svg/brand_access.svg';

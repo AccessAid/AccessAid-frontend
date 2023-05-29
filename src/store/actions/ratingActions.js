@@ -75,13 +75,13 @@ export const deleteRating = createAsyncThunk(
         },
       );
 
-      const data = await response.json();
+      console.log('response deleteRating', response);
 
       if (response.ok) {
-        return data;
+        return { message: 'Rating deleted' };
       }
 
-      return rejectWithValue(data);
+      return rejectWithValue({ message: 'There is a problem deleting rating' });
     } catch (err) {
       return rejectWithValue(err.message);
     }

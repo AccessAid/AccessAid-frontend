@@ -3,6 +3,6 @@
   min-width: 100vw;
 }
 
-.content-container {
-  @apply mx-auto h-2/4 max-w-lg;
+.profile-container .content-container {
+  @apply mx-auto max-w-lg;
 }

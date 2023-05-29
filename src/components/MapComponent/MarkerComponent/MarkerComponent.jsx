@@ -117,7 +117,7 @@ const MarkerComponent = ({
                     {(imageUrl) => {
                       return (
                         <img
-                          className='  w-full rounded-lg '
+                          className='h-[20vh] w-full rounded-lg '
                           src={imageUrl}
                           alt='Place Image'
                         />

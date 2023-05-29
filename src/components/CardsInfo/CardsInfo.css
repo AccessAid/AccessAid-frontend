@@ -1,0 +1,7 @@
+.section-cards-info {
+  @apply bg-quaternary pb-24 pt-12 sm:py-16;
+}
+
+.cards-info-container {
+  @apply mx-auto w-full px-8 lg:w-4/6;
+}
