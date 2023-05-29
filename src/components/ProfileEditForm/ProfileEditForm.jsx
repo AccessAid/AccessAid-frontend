@@ -222,15 +222,16 @@ const ProfileEditForm = () => {
       </Typography>
       <Typography color='gray' className='mt-1 font-normal'>
         Update your profile information{' '}
-        <Typography variant='h5' className='py-3 font-bold'>
-          {userData?.username}
-        </Typography>
-        <Avatar
-          src={`https://unavatar.io/${avatarPath}`}
-          alt='avatar profile'
-          size='xxl'
-        />
       </Typography>
+      <Typography variant={'h5'} className='py-3 font-bold'>
+        {userData?.username}
+      </Typography>
+      <Avatar
+        src={`https://unavatar.io/${avatarPath}`}
+        alt='avatar profile'
+        size='xxl'
+        className='mx-auto'
+      />
 
       {!profileExist && <UserInformationForm />}
 
