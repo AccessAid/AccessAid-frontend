@@ -58,6 +58,9 @@ const ProfileEditForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const avatarPath =
+    profileData?.avatarPath || userData?.profile?.avatarPath || 'no-avatar';
+
   useEffect(() => {
     (async () => {
       try {
@@ -223,7 +226,7 @@ const ProfileEditForm = () => {
           {userData?.username}
         </Typography>
         <Avatar
-          src={`https://unavatar.io/${profileData?.avatarPath || 'no-avatar'}`}
+          src={`https://unavatar.io/${avatarPath}`}
           alt='avatar profile'
           size='xxl'
         />
@@ -287,7 +290,7 @@ const ProfileEditForm = () => {
             <InputValidation
               nameField='city'
               controllerProps={{ defaultValue: defaultProfileData.city }}
-              inputProps={{ size: 'xs', label: 'City', type: 'text' }}
+              inputProps={{ size: 'lg', label: 'City', type: 'text' }}
             />
           </div>
 
@@ -296,7 +299,7 @@ const ProfileEditForm = () => {
               nameField='zipCode'
               controllerProps={{ defaultValue: defaultProfileData.zipCode }}
               inputProps={{
-                size: 'xs',
+                size: 'lg',
                 label: 'Zip/Code Postal',
                 type: 'number',
               }}
@@ -308,7 +311,7 @@ const ProfileEditForm = () => {
                 defaultValue: defaultProfileData.streetAddress,
               }}
               inputProps={{
-                size: 'xs',
+                size: 'lg',
                 label: 'Street Address',
                 type: 'text',
               }}
@@ -363,8 +366,8 @@ const ProfileEditForm = () => {
 
           {profileExist && (
             <Button
-              color='secondary'
-              variant='contained'
+              color='blue'
+              variant='filled'
               className='mb-4 sm:mb-0'
               onClick={handleDeleteProfile}
             >
@@ -374,7 +377,7 @@ const ProfileEditForm = () => {
 
           <Button
             className='ml-2'
-            variant='contained'
+            variant='filled'
             onClick={hookFormMethods.handleSubmit(onSubmit)}
             disabled={Object.keys(hookFormMethods.formState.errors).length > 0}
           >

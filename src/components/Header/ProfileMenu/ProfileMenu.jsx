@@ -13,12 +13,17 @@ import { useSelector } from 'react-redux';
 import { profileMenuItems } from './utils';
 import { ProfileItem } from './ProfileItem/ProfileItem';
 import { selectCurrentUserProfile } from '../../../store/slices/profileSlice';
+import { selectUserData } from '../../../store/slices/authSlice';
 
 import './ProfileMenu.css';
 
 const ProfileMenu = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const profileData = useSelector(selectCurrentUserProfile);
+  const userData = useSelector(selectUserData);
+
+  const avatarPath =
+    profileData?.avatarPath || userData?.profile?.avatarPath || 'no-avatar';
 
   return (
     <Menu open={isMenuOpen} handler={setIsMenuOpen} placement='bottom-end'>
@@ -29,9 +34,7 @@ const ProfileMenu = () => {
             size='sm'
             alt='candice wu'
             className='avatar__img'
-            src={`https://unavatar.io/${
-              profileData?.avatarPath || 'no-avatar'
-            }`}
+            src={`https://unavatar.io/${avatarPath}`}
           />
           <ChevronDownIcon
             strokeWidth={2.5}
