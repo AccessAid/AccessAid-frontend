@@ -25,7 +25,7 @@
 }
 
 .header .header__container .header__links {
-  @apply hidden lg:ml-14 lg:block;
+  @apply hidden lg:block;
 }
 
 .header .header__container .button_links {
