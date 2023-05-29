@@ -7,7 +7,9 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/ReactToastify.min.css';
 
-import { PLACE_DETAIL } from '../../config/routes';
+import { cleanApiError } from '../../store/slices/authSlice';
+import { InputValidation } from '../InputValidation/InputValidation';
+import { HOME, PLACE_DETAIL, SIGNUP } from '../../config/routes';
 
 import {
   getAccessiblePlaceDetails,

@@ -1,12 +1,15 @@
+import { Button, Card, Typography } from '@material-tailwind/react';
 import React from 'react';
-import { useForm, FormProvider } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
-import { useNavigate, Link } from 'react-router-dom';
-import { Card, Button, Typography } from '@material-tailwind/react';
+import { useNavigate } from 'react-router-dom';
 
+import { toast } from 'react-toastify';
+import 'react-toastify/ReactToastify.min.css';
+import { HOME } from '../../config/routes';
+import { contactAddAction } from '../../store/actions/contactActions';
 import { InputValidation } from '../InputValidation/InputValidation';
 import { TextareaValidation } from '../TextareaValidation/TextareaValidation';
-import { LOGIN } from '../../config/routes';
 
 const ContactForm = () => {
   const hookFormMethods = useForm();
@@ -15,13 +18,31 @@ const ContactForm = () => {
 
   const onSubmit = (data) => {
     console.log('data contact', data);
-    // dispatch(contactAction(data))
-    //   .then(() => {
-    //     navigate(LOGIN);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
+    dispatch(contactAddAction(data))
+      .then((result) => {
+        if (result?.payload?.id) {
+          toast.success('Message sent, thanks for contact us', {
+            autoClose: 2500,
+          });
+          navigate(HOME);
+          return;
+        }
+        toast.error(
+          'There was a problem sending your message. Come back later',
+          {
+            autoClose: 2500,
+          },
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error(
+          'There was a problem sending your message. Come back later',
+          {
+            autoClose: 2500,
+          },
+        );
+      });
   };
 
   return (

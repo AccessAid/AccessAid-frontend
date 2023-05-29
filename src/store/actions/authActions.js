@@ -125,3 +125,33 @@ export const refreshTokenAction = createAsyncThunk(
     }
   },
 );
+
+export const updateBasicCredentials = createAsyncThunk(
+  'auth/updateBasicCredentials',
+  async ({ userId, userBasicData }, { rejectWithValue, getState }) => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/users/${userId}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            Authorization: `Bearer ${getState().auth.token}`,
+          },
+          body: JSON.stringify(userBasicData),
+        },
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        return data;
+      }
+
+      return rejectWithValue(data);
+    } catch (err) {
+      return rejectWithValue(err.message);
+    }
+  },
+);

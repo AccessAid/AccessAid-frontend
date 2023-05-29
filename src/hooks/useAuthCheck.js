@@ -7,15 +7,9 @@ import {
 
 const useAuthCheck = () => {
   const userToken = useSelector(selectToken) || '';
-  const userData = useSelector(selectUserData) || {};
   const isTokenExpired = useSelector(selectIsTokenExpired);
 
-  return (
-    userToken.length > 0 &&
-    userData &&
-    Object.keys(userData).length > 0 &&
-    !isTokenExpired
-  );
+  return userToken.length > 0 && !isTokenExpired;
 };
 
 export default useAuthCheck;
